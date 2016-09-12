@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {findDOMNode} from 'react-dom';
 
-import DatetimePicker from './Picker';
+import DatetimePicker from './Picker.jsx';
 
 
 class Trigger extends Component {

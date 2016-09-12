@@ -2,10 +2,8 @@ import React, {Component} from 'react';
 import classNames from 'classnames/bind';
 import blacklist from 'blacklist';
 
-import Calendar from './Calendar';
-import Time from './Time';
-
-import './picker.less';
+import Calendar from './Calendar.jsx';
+import Time from './Time.jsx';
 
 
 class Picker extends Component {

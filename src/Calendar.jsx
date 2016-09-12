@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import moment from 'moment';
 import classNames from 'classnames/bind';
 
-import {WEEKS} from './contants';
+import {WEEKS} from './contants.js';
 
 
 const range = (start, end) => {
