@@ -1,6 +1,6 @@
 {
   "name": "rc-datetime-picker",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "React datetime picker by momentjs",
   "main": "dist/rc-datetime-picker.cjs.js",
   "scripts": {
@@ -8,7 +8,8 @@
     "build-css": "lessc --clean-css src/less/picker.less dist/picker.min.css && lessc src/less/picker.less dist/picker.css",
     "build-js": "node build/build.js",
     "build": "npm run build-css && npm run build-js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "release": "bash build/release.sh"
   },
   "repository": {
     "type": "git",
