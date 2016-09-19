@@ -25,7 +25,7 @@ let config = {
         loader: 'babel'
       },
       {
-        test: /\.less$/,
+        test: /\.(less|css)$/,
         exclude: /node_modules/,
         loader: 'style!css!less'
       }

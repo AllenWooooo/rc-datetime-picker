@@ -21,7 +21,15 @@ var reactDom = require('react-dom');
 
 var WEEKS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-var range = function (start, end) {
+var _createClass$1 = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck$1(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn$1(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits$1(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var range = function range(start, end) {
   var length = Math.max(end - start, 0);
   var result = [];
 
@@ -32,7 +40,7 @@ var range = function (start, end) {
   return result;
 };
 
-var chunk = function (array, size) {
+var chunk = function chunk(array, size) {
   var length = array.length;
   var index = 0;
   var resIndex = -1;
@@ -46,12 +54,12 @@ var chunk = function (array, size) {
 };
 
 var Calendar = function (_Component) {
-  babelHelpers.inherits(Calendar, _Component);
+  _inherits$1(Calendar, _Component);
 
   function Calendar(props) {
-    babelHelpers.classCallCheck(this, Calendar);
+    _classCallCheck$1(this, Calendar);
 
-    var _this = babelHelpers.possibleConstructorReturn(this, (Calendar.__proto__ || Object.getPrototypeOf(Calendar)).call(this, props));
+    var _this = _possibleConstructorReturn$1(this, (Calendar.__proto__ || Object.getPrototypeOf(Calendar)).call(this, props));
 
     _this.changeMonth = function (dir) {
       _this.setState({
@@ -83,7 +91,7 @@ var Calendar = function (_Component) {
     return _this;
   }
 
-  babelHelpers.createClass(Calendar, [{
+  _createClass$1(Calendar, [{
     key: '_renderWeek',
     value: function _renderWeek(week) {
       return React__default.createElement(
@@ -110,7 +118,7 @@ var Calendar = function (_Component) {
 
       return React__default.createElement(
         'td',
-        { key: day, className: className, onClick: function () {
+        { key: day, className: className, onClick: function onClick() {
             return _this2.selectDate(day, isSelected, isPrevMonth, isNextMonth);
           } },
         day
@@ -137,7 +145,7 @@ var Calendar = function (_Component) {
           { className: 'calendar-nav' },
           React__default.createElement(
             'button',
-            { type: 'button', className: 'prev-month', onClick: function () {
+            { type: 'button', className: 'prev-month', onClick: function onClick() {
                 return _this3.changeMonth('prev');
               } },
             React__default.createElement('i', { className: 'fa fa-angle-left' })
@@ -149,7 +157,7 @@ var Calendar = function (_Component) {
           ),
           React__default.createElement(
             'button',
-            { type: 'button', className: 'next-month', onClick: function () {
+            { type: 'button', className: 'next-month', onClick: function onClick() {
                 return _this3.changeMonth('next');
               } },
             React__default.createElement('i', { className: 'fa fa-angle-right' })
@@ -186,16 +194,25 @@ var Calendar = function (_Component) {
       );
     }
   }]);
+
   return Calendar;
 }(React.Component);
 
+var _createClass$2 = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck$2(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn$2(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits$2(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 var Time = function (_Component) {
-  babelHelpers.inherits(Time, _Component);
+  _inherits$2(Time, _Component);
 
   function Time(props) {
-    babelHelpers.classCallCheck(this, Time);
+    _classCallCheck$2(this, Time);
 
-    var _this = babelHelpers.possibleConstructorReturn(this, (Time.__proto__ || Object.getPrototypeOf(Time)).call(this, props));
+    var _this = _possibleConstructorReturn$2(this, (Time.__proto__ || Object.getPrototypeOf(Time)).call(this, props));
 
     _this.handleChange = function (value, type) {
       var moment$$1 = _this.props.moment;
@@ -215,7 +232,7 @@ var Time = function (_Component) {
     return _this;
   }
 
-  babelHelpers.createClass(Time, [{
+  _createClass$2(Time, [{
     key: 'render',
     value: function render() {
       var _this2 = this;
@@ -253,7 +270,7 @@ var Time = function (_Component) {
             { className: 'slider-text' },
             'Hours:'
           ),
-          React__default.createElement(ReactSlider, { min: 0, max: 23, value: moment$$1.hour(), onChange: function (value) {
+          React__default.createElement(ReactSlider, { min: 0, max: 23, value: moment$$1.hour(), onChange: function onChange(value) {
               return _this2.handleChange(value, 'hours');
             } }),
           React__default.createElement(
@@ -261,23 +278,32 @@ var Time = function (_Component) {
             { className: 'slider-text' },
             'Minutes:'
           ),
-          React__default.createElement(ReactSlider, { min: 0, max: 59, value: moment$$1.minute(), onChange: function (value) {
+          React__default.createElement(ReactSlider, { min: 0, max: 59, value: moment$$1.minute(), onChange: function onChange(value) {
               return _this2.handleChange(value, 'minutes');
             } })
         )
       );
     }
   }]);
+
   return Time;
 }(React.Component);
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 var Picker = function (_Component) {
-  babelHelpers.inherits(Picker, _Component);
+  _inherits(Picker, _Component);
 
   function Picker() {
-    babelHelpers.classCallCheck(this, Picker);
+    _classCallCheck(this, Picker);
 
-    var _this = babelHelpers.possibleConstructorReturn(this, (Picker.__proto__ || Object.getPrototypeOf(Picker)).call(this));
+    var _this = _possibleConstructorReturn(this, (Picker.__proto__ || Object.getPrototypeOf(Picker)).call(this));
 
     _this.changePanel = function (panel) {
       _this.setState({
@@ -291,7 +317,7 @@ var Picker = function (_Component) {
     return _this;
   }
 
-  babelHelpers.createClass(Picker, [{
+  _createClass(Picker, [{
     key: 'render',
     value: function render() {
       var _this2 = this;
@@ -312,7 +338,7 @@ var Picker = function (_Component) {
           { className: 'panel-nav' },
           React__default.createElement(
             'button',
-            { type: 'button', onClick: function () {
+            { type: 'button', onClick: function onClick() {
                 return _this2.changePanel('calendar');
               } },
             React__default.createElement('i', { className: 'fa fa-calendar-o' }),
@@ -320,7 +346,7 @@ var Picker = function (_Component) {
           ),
           React__default.createElement(
             'button',
-            { type: 'button', onClick: function () {
+            { type: 'button', onClick: function onClick() {
                 return _this2.changePanel('time');
               } },
             React__default.createElement('i', { className: 'fa fa-clock-o' }),
@@ -332,16 +358,25 @@ var Picker = function (_Component) {
       );
     }
   }]);
+
   return Picker;
 }(React.Component);
 
+var _createClass$3 = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck$3(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn$3(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits$3(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 var Trigger = function (_Component) {
-  babelHelpers.inherits(Trigger, _Component);
+  _inherits$3(Trigger, _Component);
 
   function Trigger() {
-    babelHelpers.classCallCheck(this, Trigger);
+    _classCallCheck$3(this, Trigger);
 
-    var _this = babelHelpers.possibleConstructorReturn(this, (Trigger.__proto__ || Object.getPrototypeOf(Trigger)).call(this));
+    var _this = _possibleConstructorReturn$3(this, (Trigger.__proto__ || Object.getPrototypeOf(Trigger)).call(this));
 
     _this.handleDocumentClick = function (evt) {
       if (!reactDom.findDOMNode(_this).contains(evt.target)) {
@@ -361,7 +396,7 @@ var Trigger = function (_Component) {
     return _this;
   }
 
-  babelHelpers.createClass(Trigger, [{
+  _createClass$3(Trigger, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
       document.addEventListener('click', this.handleDocumentClick, false);
@@ -387,7 +422,7 @@ var Trigger = function (_Component) {
         { className: 'datetime-trigger' },
         React__default.createElement(
           'div',
-          { onClick: function () {
+          { onClick: function onClick() {
               return _this2.togglePicker(true);
             } },
           children
@@ -396,8 +431,9 @@ var Trigger = function (_Component) {
       );
     }
   }]);
+
   return Trigger;
 }(React.Component);
 
-exports.Picker = Picker;
-exports.Trigger = Trigger;
+exports.DatetimePicker = Picker;
+exports.DatetimePickerTrigger = Trigger;

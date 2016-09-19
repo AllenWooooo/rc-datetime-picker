@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 .hide {
   display: none;
 }
@@ -8,6 +12,7 @@
   background-color: #fff;
   border-radius: 4px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
+  font-family: Tahoma,sans-serif;
   font-size: 14px;
   color: #4a4a4a;
   width: 250px;
@@ -24,7 +29,7 @@
     height: 10px;
     z-index: -1;
     left: 10px;
-    bottom: ~"calc(100% - 4px)";
+    top: -6px;
     transform: rotate(315deg);
   }
 
@@ -48,6 +53,7 @@
         height: 32px;
         border-radius: 4px;
         outline: none;
+        cursor: pointer;
 
         .fa {
           font-size: 18px;
@@ -194,7 +200,10 @@
         align-items: center;
         font-size: 11px;
         height: 17px;
-        background: linear-gradient(to right, #dedede, #dedede) left ~"50%/100%" 1px no-repeat;
+        background-image: linear-gradient(to right, #dedede, #dedede);
+        background-position: 0 50%;
+        background-size: 100% 1px;
+        background-repeat: no-repeat;
 
         .handle {
           width: 12px;

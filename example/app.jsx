@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import {render} from 'react-dom';
 import moment from 'moment';
 
-import DatetimePicker from '../src/Picker';
-import DatetimePickerTrigger from '../src/Trigger';
+import {DatetimePicker, DatetimePickerTrigger} from '../dist/rc-datetime-picker.cjs.js';
+import "../dist/picker.css";
 
 
 class App extends Component {

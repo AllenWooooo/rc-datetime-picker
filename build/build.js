@@ -17,20 +17,11 @@ var banner =
 
 var babelOptions = {
   babelrc: false,
-  presets: ['stage-0', 'react'],
-  plugins: [
-    'transform-es2015-destructuring',
-    'transform-es2015-computed-properties',
-    'transform-es2015-shorthand-properties',
-    'transform-es2015-template-literals',
-    'transform-es2015-block-scoping',
-    'transform-es2015-arrow-functions',
-    'transform-class-properties',
-    'transform-es2015-classes',
-    'transform-es2015-spread',
-    'external-helpers'
-  ],
-  externalHelpers: true
+  presets: [
+    ['es2015', {modules: false}],
+    'stage-0',
+    'react'
+  ]
 };
 
 function main() {
