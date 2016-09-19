@@ -1,0 +1,230 @@
+* {
+  box-sizing: border-box;
+}
+
+.hide {
+  display: none;
+}
+
+.datetime-picker {
+  position: relative;
+  border: 1px solid #dbdbdb;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
+  font-family: Tahoma,sans-serif;
+  font-size: 14px;
+  color: #4a4a4a;
+  width: 250px;
+  box-sizing: content-box;
+  z-index: 100;
+
+  &:before {
+    content: "";
+    position: absolute;
+    background: #fff;
+    border-top: 1px solid #dbdbdb;
+    border-right: 1px solid #dbdbdb;
+    width: 10px;
+    height: 10px;
+    z-index: -1;
+    left: 10px;
+    top: -6px;
+    transform: rotate(315deg);
+  }
+
+  .panel-nav {
+    display: none;
+  }
+
+  .calendar {
+
+    .calendar-nav {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #efefef;
+      min-height: 32px;
+      padding: 4px;
+
+      button {
+        background: none;
+        border: 0;
+        width: 32px;
+        height: 32px;
+        border-radius: 4px;
+        outline: none;
+        cursor: pointer;
+
+        .fa {
+          font-size: 18px;
+        }
+
+        &:hover {
+          background-color: #f0f0f0;
+        }
+      }
+
+      .current-date {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        padding: 0 8px;
+
+        &:hover {
+          background-color: #f0f0f0;
+        }
+      }
+    }
+
+    table {
+      display: block;
+      margin: 4px;
+
+      th, td {
+        padding: 0;
+      }
+
+      thead {
+        display: block;
+        margin: 8px 0 3px;
+
+        tr {
+          display: flex;
+          flex-wrap: wrap;
+        }
+
+        th {
+          color: #FF9A19;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex: 1;
+          text-align: center;
+          text-transform: uppercase;
+          font-size: .8em;
+          font-weight: 400;
+        }
+      }
+
+      tbody {
+        display: block;
+
+        tr {
+          display: flex;
+          flex-wrap: wrap;
+
+          td {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100% / 7;
+            height: 32px;
+            border-radius: 4px;
+            cursor: pointer;
+
+            &:hover {
+              background-color: #f0f0f0;
+            }
+
+            &.prev-month,
+            &.next-month {
+              color: #dedede;
+
+              &:hover {
+                color: #c5c5c5;
+              }
+            }
+
+            &.today {
+              color: #5cc4ef;
+              font-weight: 400;
+            }
+
+            &.selected {
+              background-color: #5cc4ef;
+              color: #fff;
+              font-weight: 400;
+
+              &:hover {
+                background-color: darken(#5cc4ef, 2%);
+                color: #fff;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .time {
+    border-top: 1px solid #efefef;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    .show-time {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      font-size: 14px;
+      text-align: center;
+      margin: 0 0 0 10px;
+
+      .text {
+        line-height: 1;
+        font-size: 19px;
+        font-family: "Century Gothic",CenturyGothic,AppleGothic,sans-serif;
+        position: relative;
+        z-index: 1;
+      }
+
+      .separater {
+        margin: 0 2px 3px;
+        line-height: 1;
+      }
+    }
+
+    .sliders {
+      flex: 0 1 153px;
+      margin-right: 10px;
+      max-width: 153px;
+
+      .slider-text {
+        display: none;
+      }
+
+      .slider {
+        display: flex;
+        align-items: center;
+        font-size: 11px;
+        height: 17px;
+        background-image: linear-gradient(to right, #dedede, #dedede);
+        background-position: 0 50%;
+        background-size: 100% 1px;
+        background-repeat: no-repeat;
+
+        .handle {
+          width: 12px;
+          height: 12px;
+          background-color: #fff;
+          border: 1px solid #dedede;
+          border-radius: 3px;
+          cursor: pointer;
+
+          &:hover {
+            border-color: #b8b8b8;
+          }
+
+          &:focus,
+          &:active {
+            background-color: #5cc4ef;
+            border-color: #5cc4ef;
+          }
+        }
+      }
+    }
+
+  }
+}
