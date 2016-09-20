@@ -3,13 +3,23 @@
   "version": "1.0.0",
   "description": "React datetime picker by momentjs",
   "main": "dist/rc-datetime-picker.cjs.js",
+  "keywords": [
+    "react",
+    "datetime",
+    "picker",
+    "moment"
+  ],
   "scripts": {
     "dev": "webpack-dev-server --hot --inline --progress --colors --content-base ./example",
     "build-css": "lessc --clean-css src/less/picker.less dist/picker.min.css && lessc src/less/picker.less dist/picker.css",
     "build-js": "node build/build.js",
     "build": "npm run build-css && npm run build-js",
+    "deploy": "npm run build && webpack -p && github-pages-deploy",
     "test": "echo \"Error: no test specified\" && exit 1",
     "release": "bash build/release.sh"
+  },
+  "github-pages-deploy": {
+    "src": "example"
   },
   "repository": {
     "type": "git",
