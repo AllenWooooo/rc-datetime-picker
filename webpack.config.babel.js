@@ -1,4 +1,5 @@
 import webpack from 'webpack';
+import path from 'path';
 
 
 let config = {
@@ -7,7 +8,7 @@ let config = {
     app: ['webpack/hot/only-dev-server', './example/app.jsx']
   },
   output: {
-    path: __dirname,
+    path: path.resolve(__dirname, './example'),
     filename: 'app.js'
   },
   module: {

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import moment from 'moment';
 import classNames from 'classnames/bind';
 
-import {WEEKS} from './contants.js';
+import {WEEKS} from '../contants.js';
 
 
 const range = (start, end) => {
@@ -103,7 +103,7 @@ class Calendar extends Component {
           <button type="button" className="prev-month" onClick={() => this.changeMonth('prev')}>
             <i className="fa fa-angle-left"/>
           </button>
-          <span className="current-date">{m.format('MMMM YYYY')}</span>
+          <span className="current-date">{m.format('MMMM, YYYY')}</span>
           <button type="button" className="next-month" onClick={() => this.changeMonth('next')}>
             <i className="fa fa-angle-right"/>
           </button>
