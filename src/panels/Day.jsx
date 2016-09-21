@@ -15,6 +15,13 @@ class Day extends Component {
     };
   }
 
+  componentWillReceiveProps(props) {
+    this.setState({
+      moment: props.moment.clone(),
+      selected: props.moment.clone()
+    });
+  }
+
   changeMonth = (dir) => {
     this.setState({
       moment: this.state.moment[dir === 'prev' ? 'subtract' : 'add'](1, 'month')
@@ -35,7 +42,7 @@ class Day extends Component {
       moment: _moment.clone(),
       selected: _moment.clone()
     });
-    this.props.onChange && this.props.onChange(_moment);
+    this.props.onSelect(_moment);
   }
 
   _renderWeek(week) {
@@ -76,12 +83,12 @@ class Day extends Component {
     const weeks = WEEKS;
 
     return (
-      <div className="calendar-days">
+      <div className="calendar-days" style={this.props.style}>
         <div className="calendar-nav">
           <button type="button" className="prev-month" onClick={() => this.changeMonth('prev')}>
             <i className="fa fa-angle-left"/>
           </button>
-          <span className="current-date">{_moment.format('MMMM, YYYY')}</span>
+          <span className="current-date" onClick={() => this.props.changePanel('month', _moment)}>{_moment.format('MMMM, YYYY')}</span>
           <button type="button" className="next-month" onClick={() => this.changeMonth('next')}>
             <i className="fa fa-angle-right"/>
           </button>

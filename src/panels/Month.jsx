@@ -15,15 +15,20 @@ class Month extends Component {
     };
   }
 
+  componentWillReceiveProps(props) {
+    this.setState({
+      moment: props.moment.clone(),
+      selected: props.moment.clone()
+    });
+  }
+
   changeYear = (dir) => {
     this.setState({
       moment: this.state.moment[dir === 'prev' ? 'subtract' : 'add'](1, 'year')
     });
   }
 
-  select = (month, isSelected) => {
-    if (isSelected) return;
-
+  select = (month) => {
     const _moment = this.state.moment;
 
     _moment.month(month);
@@ -32,7 +37,7 @@ class Month extends Component {
       moment: _moment.clone(),
       selected: _moment.clone()
     });
-    this.props.onChange && this.props.onChange(_moment);
+    this.props.onSelect(_moment);
   }
 
   _renderMonth(month) {
@@ -47,7 +52,7 @@ class Month extends Component {
     });
 
     return (
-      <td key={month} className={className} onClick={() => this.select(_month, isSelected)}>{month}</td>
+      <td key={month} className={className} onClick={() => this.select(_month)}>{month}</td>
     );
   }
 
@@ -56,7 +61,7 @@ class Month extends Component {
     const months = MONTHS;
 
     return (
-      <div className="calendar-months">
+      <div className="calendar-months" style={this.props.style}>
         <div className="calendar-nav">
           <button type="button" className="prev-month" onClick={() => this.changeYear('prev')}>
             <i className="fa fa-angle-left"/>
