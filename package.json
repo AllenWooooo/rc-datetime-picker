@@ -10,7 +10,7 @@
     "moment"
   ],
   "scripts": {
-    "dev": "webpack-dev-server --hot --inline --progress --colors --content-base ./example",
+    "dev": "webpack-dev-server --hot --inline --progress --colors --content-base ./docs --ENV=development",
     "build-css": "lessc --clean-css src/less/picker.less dist/picker.min.css && lessc src/less/picker.less dist/picker.css",
     "build-js": "node build/build.js",
     "build": "npm run build-css && npm run build-js",
@@ -50,6 +50,7 @@
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
     "less-plugin-clean-css": "^1.5.1",
+    "minimist": "^1.2.0",
     "react-hot-loader": "^3.0.0-beta.3",
     "rollup": "^0.35.9",
     "rollup-plugin-babel": "^2.6.1",
