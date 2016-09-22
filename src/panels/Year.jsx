@@ -2,11 +2,10 @@ import React, {Component} from 'react';
 import moment from 'moment';
 import classNames from 'classnames/bind';
 
-import {MONTHS} from '../contants';
-import {chunk} from '../utils';
+import {chunk, range} from '../utils';
 
 
-class Month extends Component {
+class Year extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,16 +21,16 @@ class Month extends Component {
     });
   }
 
-  changeYear = (dir) => {
+  changePeriod = (dir) => {
     this.setState({
-      moment: this.state.moment[dir === 'prev' ? 'subtract' : 'add'](1, 'year')
+      moment: this.state.moment[dir === 'prev' ? 'subtract' : 'add'](10, 'year')
     });
   }
 
-  select = (month) => {
+  select = (year) => {
     const _moment = this.state.moment;
 
-    _moment.month(month);
+    _moment.year(year);
 
     this.setState({
       moment: _moment.clone(),
@@ -40,44 +39,47 @@ class Month extends Component {
     this.props.onSelect(_moment);
   }
 
-  _renderMonth(month) {
+  _renderYear(year) {
     const now = moment();
-    const _month = moment().month(month).month();
     const _moment = this.state.moment;
+    const firstYear = Math.floor(_moment.year() / 10) * 10;
     const {selected} = this.state;
-    const isSelected = _moment.isSame(selected, 'year') && selected.month() === _month;
+    const isSelected = selected.year() === year;
     const className = classNames({
       'selected': isSelected,
-      'now': _moment.isSame(now, 'year') && now.month() === _month
+      'now': now.year() === year,
+      'prev': firstYear - 1 === year,
+      'next': firstYear + 10 === year
     });
 
     return (
-      <td key={month} className={className} onClick={() => this.select(_month)}>{month}</td>
+      <td key={year} className={className} onClick={() => this.select(year)}>{year}</td>
     );
   }
 
   render() {
     const _moment = this.state.moment;
-    const months = MONTHS;
+    const firstYear = Math.floor(_moment.year() / 10) * 10;
+    const years = range(firstYear - 1, firstYear + 11);
 
     return (
-      <div className="calendar-months" style={this.props.style}>
+      <div className="calendar-years" style={this.props.style}>
         <div className="calendar-nav">
-          <button type="button" className="prev-month" onClick={() => this.changeYear('prev')}>
+          <button type="button" className="prev-month" onClick={() => this.changePeriod('prev')}>
             <i className="fa fa-angle-left"/>
           </button>
-          <span className="current-date" onClick={() => this.props.changePanel('year', _moment)}>{_moment.format('YYYY')}</span>
-          <button type="button" className="next-month" onClick={() => this.changeYear('next')}>
+          <span className="current-date disabled">{firstYear} - {firstYear + 9}</span>
+          <button type="button" className="next-month" onClick={() => this.changePeriod('next')}>
             <i className="fa fa-angle-right"/>
           </button>
         </div>
         <table>
           <tbody>
-            {chunk(months, 3).map((_months, idx) => {
+            {chunk(years, 4).map((_years, idx) => {
               return (
                 <tr key={idx}>
-                  {_months.map((month) => {
-                    return this._renderMonth(month);
+                  {_years.map((year) => {
+                    return this._renderYear(year);
                   })}
                 </tr>
               );
@@ -90,4 +92,4 @@ class Month extends Component {
 }
 
 
-export default Month;
+export default Year;

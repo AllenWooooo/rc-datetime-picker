@@ -3,6 +3,7 @@ import classNames from 'classnames/bind';
 
 import Day from './Day';
 import Month from './Month';
+import Year from './Year';
 
 
 class Calendar extends Component {
@@ -42,6 +43,8 @@ class Calendar extends Component {
           style={{display: this.state.panel === 'day' ? 'block' : 'none'}} />
         <Month {...props} 
           style={{display: this.state.panel === 'month' ? 'block' : 'none'}} />
+        <Year {...props} 
+          style={{display: this.state.panel === 'year' ? 'block' : 'none'}} />
       </div>
     );
   }

@@ -70,9 +70,14 @@
         justify-content: center;
         border-radius: 4px;
         padding: 0 8px;
+        cursor: pointer;
 
         &:hover {
           background-color: #f0f0f0;
+        }
+
+        &.disabled {
+          cursor: default;
         }
       }
     }
@@ -161,6 +166,12 @@
 
     .calendar-months table tbody tr td {
       width: 100% / 3;
+      height: 40px;
+    }
+
+    .calendar-years table tbody tr td {
+      width: 100% / 4;
+      height: 60px;
     }
 
   }
