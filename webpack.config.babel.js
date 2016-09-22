@@ -1,14 +1,17 @@
 import webpack from 'webpack';
 import path from 'path';
+import minimist from 'minimist';
 
+
+let env = minimist(process.argv.slice(2)).ENV;
 
 let config = {
   devtool: 'eval',
   entry: {
-    app: ['webpack/hot/only-dev-server', './example/app.jsx']
+    app: ['./docs/app.jsx']
   },
   output: {
-    path: path.resolve(__dirname, './example'),
+    path: path.resolve(__dirname, './docs'),
     filename: 'app.js'
   },
   module: {
@@ -21,7 +24,7 @@ let config = {
     ],
     loaders: [
       {
-        test: /\.jsx$/,
+        test: /\.(jsx|js)$/,
         exclude: /node_modules/,
         loader: 'babel'
       },
@@ -36,6 +39,10 @@ let config = {
     extensions: ['', '.js', '.jsx', '.json']
   }
 };
+
+if (env === 'development') {
+  config.entry.app.unshift('webpack/hot/only-dev-server');
+}
 
 
 export default config;

@@ -12,7 +12,7 @@
   background-color: #fff;
   border-radius: 4px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
-  font-family: Tahoma,sans-serif;
+  font-family: Tahoma, sans-serif;
   font-size: 14px;
   color: #4a4a4a;
   width: 250px;
@@ -70,9 +70,14 @@
         justify-content: center;
         border-radius: 4px;
         padding: 0 8px;
+        cursor: pointer;
 
         &:hover {
           background-color: #f0f0f0;
+        }
+
+        &.disabled {
+          cursor: default;
         }
       }
     }
@@ -118,7 +123,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 100% / 7;
             height: 32px;
             border-radius: 4px;
             cursor: pointer;
@@ -127,8 +131,8 @@
               background-color: #f0f0f0;
             }
 
-            &.prev-month,
-            &.next-month {
+            &.prev,
+            &.next {
               color: #dedede;
 
               &:hover {
@@ -136,7 +140,7 @@
               }
             }
 
-            &.today {
+            &.now {
               color: #5cc4ef;
               font-weight: 400;
             }
@@ -155,6 +159,21 @@
         }
       }
     }
+
+    .calendar-days table tbody tr td {
+      width: 100% / 7;
+    }
+
+    .calendar-months table tbody tr td {
+      width: 100% / 3;
+      height: 40px;
+    }
+
+    .calendar-years table tbody tr td {
+      width: 100% / 4;
+      height: 60px;
+    }
+
   }
 
   .time {
@@ -175,7 +194,7 @@
       .text {
         line-height: 1;
         font-size: 19px;
-        font-family: "Century Gothic",CenturyGothic,AppleGothic,sans-serif;
+        font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
         position: relative;
         z-index: 1;
       }

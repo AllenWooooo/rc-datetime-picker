@@ -11,7 +11,7 @@ class Time extends Component {
   }
 
   handleChange = (value, type) => {
-    let {moment} = this.props;
+    const {moment} = this.props;
 
     moment[type](value);
 
