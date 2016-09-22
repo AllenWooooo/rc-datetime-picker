@@ -61,9 +61,13 @@
   justify-content: center;
   border-radius: 4px;
   padding: 0 8px;
+  cursor: pointer;
 }
 .datetime-picker .calendar .calendar-nav .current-date:hover {
   background-color: #f0f0f0;
+}
+.datetime-picker .calendar .calendar-nav .current-date.disabled {
+  cursor: default;
 }
 .datetime-picker .calendar table {
   display: block;
@@ -103,7 +107,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 14.28571429%;
   height: 32px;
   border-radius: 4px;
   cursor: pointer;
@@ -111,15 +114,15 @@
 .datetime-picker .calendar table tbody tr td:hover {
   background-color: #f0f0f0;
 }
-.datetime-picker .calendar table tbody tr td.prev-month,
-.datetime-picker .calendar table tbody tr td.next-month {
+.datetime-picker .calendar table tbody tr td.prev,
+.datetime-picker .calendar table tbody tr td.next {
   color: #dedede;
 }
-.datetime-picker .calendar table tbody tr td.prev-month:hover,
-.datetime-picker .calendar table tbody tr td.next-month:hover {
+.datetime-picker .calendar table tbody tr td.prev:hover,
+.datetime-picker .calendar table tbody tr td.next:hover {
   color: #c5c5c5;
 }
-.datetime-picker .calendar table tbody tr td.today {
+.datetime-picker .calendar table tbody tr td.now {
   color: #5cc4ef;
   font-weight: 400;
 }
@@ -131,6 +134,17 @@
 .datetime-picker .calendar table tbody tr td.selected:hover {
   background-color: #53c1ee;
   color: #fff;
+}
+.datetime-picker .calendar .calendar-days table tbody tr td {
+  width: 14.28571429%;
+}
+.datetime-picker .calendar .calendar-months table tbody tr td {
+  width: 33.33333333%;
+  height: 40px;
+}
+.datetime-picker .calendar .calendar-years table tbody tr td {
+  width: 25%;
+  height: 60px;
 }
 .datetime-picker .time {
   border-top: 1px solid #efefef;

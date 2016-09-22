@@ -8,6 +8,9 @@ echo
 if [[ "${REPLY}" =~ ^[Yy]$ ]]; then
     echo "Releasing ${VERSION}..."
 
+    # docs
+    webpack -p
+
     # build
     VERSION=${VERSION} npm run build
     git add -A
