@@ -13,11 +13,11 @@ class Trigger extends Component {
   }
 
   componentDidMount() {
-    document.addEventListener('click', this.handleDocumentClick, false);
+    window.addEventListener('click', this.handleDocumentClick, false);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleDocumentClick, false);
+    window.removeEventListener('click', this.handleDocumentClick, false);
   }
 
   handleDocumentClick = (evt) => {
