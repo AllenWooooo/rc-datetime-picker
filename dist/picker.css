@@ -1,9 +1,6 @@
 * {
   box-sizing: border-box;
 }
-.hide {
-  display: none;
-}
 .datetime-picker {
   position: relative;
   border: 1px solid #dbdbdb;
@@ -29,9 +26,6 @@
   left: 10px;
   top: -6px;
   transform: rotate(315deg);
-}
-.datetime-picker .panel-nav {
-  display: none;
 }
 .datetime-picker .calendar .calendar-nav {
   display: flex;
