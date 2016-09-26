@@ -22,25 +22,22 @@ class Picker extends Component {
 
   render() {
     const className = classNames('datetime-picker', {
-      hide: !this.props.isOpen,
-      split: this.props.splitPanel,
-      'calendar-panel': this.state.panel === 'calendar',
-      'time-panel': this.state.panel === 'time',
+      split: this.props.splitPanel
     });
-    const props = blacklist(this.props, 'className', 'isOpen');
+    const props = blacklist(this.props, 'className', 'isOpen', 'splitPanel');
 
     return (
-      <div className={className}>
-        <div className="panel-nav">
-          <button type="button" onClick={() => this.changePanel('calendar')}>
+      <div className={className} style={{display: this.props.isOpen ? 'block' : 'none'}}>
+        <div className="panel-nav" style={{display: this.props.splitPanel ? 'block' : 'none'}}>
+          <button type="button" onClick={() => this.changePanel('calendar')} className={this.state.panel === 'calendar' ? 'active' : ''}>
             <i className="fa fa-calendar-o"></i>Date
           </button>
-          <button type="button" onClick={() => this.changePanel('time')}>
+          <button type="button" onClick={() => this.changePanel('time')} className={this.state.panel === 'time' ? 'active' : ''}>
             <i className="fa fa-clock-o"></i>Time
           </button>
         </div>
-        <Calendar {...props} />
-        <Time {...props} />
+        <Calendar {...props} style={{display: this.state.panel === 'calendar' || !this.props.splitPanel ? 'block' : 'none'}} />
+        <Time {...props} style={{display: this.state.panel === 'time' || !this.props.splitPanel ? 'block' : 'none'}} />
       </div>
     );
   }

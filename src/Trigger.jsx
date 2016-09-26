@@ -33,12 +33,12 @@ class Trigger extends Component {
   }
 
   render() {
-    const {moment, onChange, children} = this.props;
+    const {moment, onChange, children, splitPanel} = this.props;
 
     return (
       <div className="datetime-trigger">
         <div onClick={() => this.togglePicker(true)}>{children}</div>
-        <DatetimePicker isOpen={this.state.isOpen} moment={moment} onChange={onChange} />
+        <DatetimePicker isOpen={this.state.isOpen} moment={moment} onChange={onChange} splitPanel={splitPanel}/>
       </div>
     );
   }
