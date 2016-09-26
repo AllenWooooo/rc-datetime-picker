@@ -15,6 +15,12 @@ class Calendar extends Component {
     };
   }
 
+  componentWillReceiveProps(props) {
+    this.setState({
+      panel: 'day'
+    });
+  }
+
   handleSelect = (moment) => {
     const nextPanel = this.state.panel === 'year' ? 'month' : 'day';
 
@@ -38,13 +44,15 @@ class Calendar extends Component {
     };
 
     return (
-      <div className={className}>
-        <Day {...props} 
-          style={{display: this.state.panel === 'day' ? 'block' : 'none'}} />
-        <Month {...props} 
-          style={{display: this.state.panel === 'month' ? 'block' : 'none'}} />
-        <Year {...props} 
-          style={{display: this.state.panel === 'year' ? 'block' : 'none'}} />
+      <div style={this.props.style}>
+        <div className={className}>
+          <Day {...props}
+            style={{display: this.state.panel === 'day' ? 'block' : 'none'}} />
+          <Month {...props}
+            style={{display: this.state.panel === 'month' ? 'block' : 'none'}} />
+          <Year {...props}
+            style={{display: this.state.panel === 'year' ? 'block' : 'none'}} />
+        </div>
       </div>
     );
   }
