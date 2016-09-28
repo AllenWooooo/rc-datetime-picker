@@ -25,9 +25,10 @@ class Picker extends Component {
       split: this.props.splitPanel
     });
     const props = blacklist(this.props, 'className', 'isOpen', 'splitPanel');
+    const {isOpen = true} = this.props;
 
     return (
-      <div className={className} style={{display: this.props.isOpen ? 'block' : 'none'}} onClick={(evt) => evt.stopPropagation()}>
+      <div className={className} style={{display: isOpen ? 'block' : 'none'}} onClick={(evt) => evt.stopPropagation()}>
         <div className="panel-nav" style={{display: this.props.splitPanel ? 'block' : 'none'}}>
           <button type="button" onClick={() => this.changePanel('calendar')} className={this.state.panel === 'calendar' ? 'active' : ''}>
             <i className="fa fa-calendar-o"></i>Date

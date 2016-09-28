@@ -7,27 +7,12 @@
   border: 1px solid #dbdbdb;
   background-color: #fff;
   border-radius: 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
   font-family: Tahoma, sans-serif;
   font-size: 14px;
   color: #4a4a4a;
   width: 250px;
   box-sizing: content-box;
   z-index: 100;
-
-  &:before {
-    content: "";
-    position: absolute;
-    background: #fff;
-    border-top: 1px solid #dbdbdb;
-    border-right: 1px solid #dbdbdb;
-    width: 10px;
-    height: 10px;
-    z-index: -1;
-    left: 10px;
-    top: -6px;
-    transform: rotate(315deg);
-  }
 
   .calendar {
 
@@ -237,5 +222,29 @@
       }
     }
 
+  }
+}
+
+.datetime-trigger {
+  position: relative;
+
+  .datetime-picker {
+    position: absolute;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
+    top: ~"calc(100% + 8px)";
+
+    &:before {
+      content: "";
+      position: absolute;
+      background: #fff;
+      border-top: 1px solid #dbdbdb;
+      border-right: 1px solid #dbdbdb;
+      width: 10px;
+      height: 10px;
+      z-index: -1;
+      left: 10px;
+      top: -6px;
+      transform: rotate(315deg);
+    }
   }
 }

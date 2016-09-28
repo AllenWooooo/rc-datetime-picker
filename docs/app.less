@@ -1,0 +1,108 @@
+@import "../src/less/picker.less";
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Tahoma, sans-serif;
+  font-size: 14px;
+  color: #333;
+}
+
+pre {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 16px 0;
+  font-size: 13px;
+}
+
+code {
+  font-family: Consolas, monospace;
+  line-height: 1.2;
+}
+
+.title {
+  text-align: center;
+  font-weight: 100;
+  text-transform: uppercase;
+
+  .buttons {
+    display: inline-block;
+  }
+}
+
+.content {
+  width: 1000px;
+  margin: 0 auto;
+  padding-bottom: 50px;
+}
+
+.heading,
+.caption {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 100;
+  line-height: 1;
+}
+
+.heading {
+  font-size: 26px;
+  margin-top: 50px;
+}
+
+.caption {
+  font-size: 18px;
+  margin-top: 15px;
+}
+
+.example-code {
+  overflow: hidden;
+
+  pre {
+    float: left;
+    width: 650px;
+  }
+
+  .example {
+    margin-left: 650px;
+    text-align: center;
+    padding-top: 50px;
+
+    #inline-picker,
+    #popup-picker {
+      display: inline-block;
+    }
+
+    #inline-picker {
+
+      .text {
+        display: block;
+        text-align: left;
+        padding: 10px 0;
+      }
+    }
+
+    #popup-picker {
+
+      .datetime-trigger {
+        text-align: left;
+        cursor: pointer;
+      }
+
+      input {
+        height: 30px;
+        padding: 0 8px;
+        border: 1px solid #ddd;
+      }
+
+      .fa-calendar-o {
+        background-color: #f5f5f5;
+        border: 1px solid #ddd;
+        height: 30px;
+        line-height: 30px;
+        padding: 0 8px;
+        margin-left: -1px;
+        vertical-align: middle;
+      }
+    }
+  }
+}
