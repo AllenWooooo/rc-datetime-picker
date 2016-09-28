@@ -21,6 +21,9 @@ var babelOptions = {
     ['es2015', {modules: false}],
     'stage-0',
     'react'
+  ],
+  "plugins": [
+    "external-helpers"
   ]
 };
 

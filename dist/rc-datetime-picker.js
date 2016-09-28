@@ -1,5 +1,5 @@
 /*
- * rc-datetime-picker v1.0.0
+ * rc-datetime-picker v1.1.2
  * https://github.com/AllenWooooo/rc-datetime-picker
  *
  * (c) 2016 Allen Wu
@@ -18,14 +18,7 @@ moment = 'default' in moment ? moment['default'] : moment;
 ReactSlider = 'default' in ReactSlider ? ReactSlider['default'] : ReactSlider;
 
 var WEEKS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-var _createClass$1 = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck$1(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn$1(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits$1(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 var range = function range(start, end) {
   var length = Math.max(end - start, 0);
@@ -51,13 +44,140 @@ var chunk = function chunk(array, size) {
   return result;
 };
 
-var Calendar = function (_Component) {
-  _inherits$1(Calendar, _Component);
+var classCallCheck = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
 
-  function Calendar(props) {
-    _classCallCheck$1(this, Calendar);
+var createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
 
-    var _this = _possibleConstructorReturn$1(this, (Calendar.__proto__ || Object.getPrototypeOf(Calendar)).call(this, props));
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+
+
+
+
+
+
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+};
+
+var get = function get(object, property, receiver) {
+  if (object === null) object = Function.prototype;
+  var desc = Object.getOwnPropertyDescriptor(object, property);
+
+  if (desc === undefined) {
+    var parent = Object.getPrototypeOf(object);
+
+    if (parent === null) {
+      return undefined;
+    } else {
+      return get(parent, property, receiver);
+    }
+  } else if ("value" in desc) {
+    return desc.value;
+  } else {
+    var getter = desc.get;
+
+    if (getter === undefined) {
+      return undefined;
+    }
+
+    return getter.call(receiver);
+  }
+};
+
+var inherits = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+};
+
+
+
+
+
+
+
+
+
+
+
+var possibleConstructorReturn = function (self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return call && (typeof call === "object" || typeof call === "function") ? call : self;
+};
+
+
+
+var set = function set(object, property, value, receiver) {
+  var desc = Object.getOwnPropertyDescriptor(object, property);
+
+  if (desc === undefined) {
+    var parent = Object.getPrototypeOf(object);
+
+    if (parent !== null) {
+      set(parent, property, value, receiver);
+    }
+  } else if ("value" in desc && desc.writable) {
+    desc.value = value;
+  } else {
+    var setter = desc.set;
+
+    if (setter !== undefined) {
+      setter.call(receiver, value);
+    }
+  }
+
+  return value;
+};
+
+var Day = function (_Component) {
+  inherits(Day, _Component);
+
+  function Day(props) {
+    classCallCheck(this, Day);
+
+    var _this = possibleConstructorReturn(this, (Day.__proto__ || Object.getPrototypeOf(Day)).call(this, props));
 
     _this.changeMonth = function (dir) {
       _this.setState({
@@ -65,21 +185,21 @@ var Calendar = function (_Component) {
       });
     };
 
-    _this.selectDate = function (day, isSelected, isPrevMonth, isNextMonth) {
+    _this.select = function (day, isSelected, isPrevMonth, isNextMonth) {
       if (isSelected) return;
 
-      var m = _this.state.moment;
+      var _moment = _this.state.moment;
 
-      if (isPrevMonth) m.subtract(1, 'month');
-      if (isNextMonth) m.add(1, 'month');
+      if (isPrevMonth) _moment.subtract(1, 'month');
+      if (isNextMonth) _moment.add(1, 'month');
 
-      m.date(day);
+      _moment.date(day);
 
       _this.setState({
-        moment: m.clone(),
-        selected: m.clone()
+        moment: _moment.clone(),
+        selected: _moment.clone()
       });
-      _this.props.onChange && _this.props.onChange(m);
+      _this.props.onSelect(_moment);
     };
 
     _this.state = {
@@ -89,7 +209,15 @@ var Calendar = function (_Component) {
     return _this;
   }
 
-  _createClass$1(Calendar, [{
+  createClass(Day, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(props) {
+      this.setState({
+        moment: props.moment.clone(),
+        selected: props.moment.clone()
+      });
+    }
+  }, {
     key: '_renderWeek',
     value: function _renderWeek(week) {
       return React__default.createElement(
@@ -104,20 +232,23 @@ var Calendar = function (_Component) {
       var _this2 = this;
 
       var now = moment();
+      var _moment = this.state.moment;
+      var selected = this.state.selected;
+
       var isPrevMonth = week === 0 && day > 7;
       var isNextMonth = week >= 4 && day <= 14;
-      var isSelected = this.state.moment.isSame(this.state.selected, 'month') && this.state.selected.date() === day;
+      var isSelected = !isPrevMonth && !isNextMonth && _moment.isSame(selected, 'month') && selected.date() === day;
       var className = classNames({
-        'prev-month': isPrevMonth,
-        'next-month': isNextMonth,
-        'selected': !isPrevMonth && !isNextMonth && isSelected,
-        'today': !isPrevMonth && !isNextMonth && this.state.moment.isSame(now, 'month') && now.date() === day
+        'prev': isPrevMonth,
+        'next': isNextMonth,
+        'selected': isSelected,
+        'now': !isPrevMonth && !isNextMonth && _moment.isSame(now, 'month') && now.date() === day
       });
 
       return React__default.createElement(
         'td',
         { key: day, className: className, onClick: function onClick() {
-            return _this2.selectDate(day, isSelected, isPrevMonth, isNextMonth);
+            return _this2.select(day, isSelected, isPrevMonth, isNextMonth);
           } },
         day
       );
@@ -127,17 +258,16 @@ var Calendar = function (_Component) {
     value: function render() {
       var _this3 = this;
 
-      var m = this.state.moment;
-      var firstDay = m.clone().date(1).day();
-      var endOfThisMonth = m.clone().endOf('month').date();
-      var endOfLastMonth = m.clone().subtract(1, 'month').endOf('month').date();
+      var _moment = this.state.moment;
+      var firstDay = _moment.clone().date(1).day();
+      var endOfThisMonth = _moment.clone().endOf('month').date();
+      var endOfLastMonth = _moment.clone().subtract(1, 'month').endOf('month').date();
       var days = [].concat(range(endOfLastMonth - firstDay + 1, endOfLastMonth + 1), range(1, endOfThisMonth + 1), range(1, 42 - endOfThisMonth - firstDay + 1));
       var weeks = WEEKS;
-      var className = classNames('calendar', this.props.className);
 
       return React__default.createElement(
         'div',
-        { className: className },
+        { className: 'calendar-days', style: this.props.style },
         React__default.createElement(
           'div',
           { className: 'calendar-nav' },
@@ -150,8 +280,10 @@ var Calendar = function (_Component) {
           ),
           React__default.createElement(
             'span',
-            { className: 'current-date' },
-            m.format('MMMM YYYY')
+            { className: 'current-date', onClick: function onClick() {
+                return _this3.props.changePanel('month', _moment);
+              } },
+            _moment.format('MMMM, YYYY')
           ),
           React__default.createElement(
             'button',
@@ -178,12 +310,12 @@ var Calendar = function (_Component) {
           React__default.createElement(
             'tbody',
             null,
-            chunk(days, 7).map(function (week, weekIdx) {
+            chunk(days, 7).map(function (week, idx) {
               return React__default.createElement(
                 'tr',
-                { key: weekIdx },
+                { key: idx },
                 week.map(function (day) {
-                  return _this3._renderDay(day, weekIdx);
+                  return _this3._renderDay(day, idx);
                 })
               );
             })
@@ -192,25 +324,334 @@ var Calendar = function (_Component) {
       );
     }
   }]);
+  return Day;
+}(React.Component);
 
+var Month = function (_Component) {
+  inherits(Month, _Component);
+
+  function Month(props) {
+    classCallCheck(this, Month);
+
+    var _this = possibleConstructorReturn(this, (Month.__proto__ || Object.getPrototypeOf(Month)).call(this, props));
+
+    _this.changeYear = function (dir) {
+      _this.setState({
+        moment: _this.state.moment[dir === 'prev' ? 'subtract' : 'add'](1, 'year')
+      });
+    };
+
+    _this.select = function (month) {
+      var _moment = _this.state.moment;
+
+      _moment.month(month);
+
+      _this.setState({
+        moment: _moment.clone(),
+        selected: _moment.clone()
+      });
+      _this.props.onSelect(_moment);
+    };
+
+    _this.state = {
+      moment: props.moment.clone(),
+      selected: props.moment.clone()
+    };
+    return _this;
+  }
+
+  createClass(Month, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(props) {
+      this.setState({
+        moment: props.moment.clone(),
+        selected: props.moment.clone()
+      });
+    }
+  }, {
+    key: '_renderMonth',
+    value: function _renderMonth(month) {
+      var _this2 = this;
+
+      var now = moment();
+      var _month = moment().month(month).month();
+      var _moment = this.state.moment;
+      var selected = this.state.selected;
+
+      var isSelected = _moment.isSame(selected, 'year') && selected.month() === _month;
+      var className = classNames({
+        'selected': isSelected,
+        'now': _moment.isSame(now, 'year') && now.month() === _month
+      });
+
+      return React__default.createElement(
+        'td',
+        { key: month, className: className, onClick: function onClick() {
+            return _this2.select(_month);
+          } },
+        month
+      );
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this3 = this;
+
+      var _moment = this.state.moment;
+      var months = MONTHS;
+
+      return React__default.createElement(
+        'div',
+        { className: 'calendar-months', style: this.props.style },
+        React__default.createElement(
+          'div',
+          { className: 'calendar-nav' },
+          React__default.createElement(
+            'button',
+            { type: 'button', className: 'prev-month', onClick: function onClick() {
+                return _this3.changeYear('prev');
+              } },
+            React__default.createElement('i', { className: 'fa fa-angle-left' })
+          ),
+          React__default.createElement(
+            'span',
+            { className: 'current-date', onClick: function onClick() {
+                return _this3.props.changePanel('year', _moment);
+              } },
+            _moment.format('YYYY')
+          ),
+          React__default.createElement(
+            'button',
+            { type: 'button', className: 'next-month', onClick: function onClick() {
+                return _this3.changeYear('next');
+              } },
+            React__default.createElement('i', { className: 'fa fa-angle-right' })
+          )
+        ),
+        React__default.createElement(
+          'table',
+          null,
+          React__default.createElement(
+            'tbody',
+            null,
+            chunk(months, 3).map(function (_months, idx) {
+              return React__default.createElement(
+                'tr',
+                { key: idx },
+                _months.map(function (month) {
+                  return _this3._renderMonth(month);
+                })
+              );
+            })
+          )
+        )
+      );
+    }
+  }]);
+  return Month;
+}(React.Component);
+
+var Year = function (_Component) {
+  inherits(Year, _Component);
+
+  function Year(props) {
+    classCallCheck(this, Year);
+
+    var _this = possibleConstructorReturn(this, (Year.__proto__ || Object.getPrototypeOf(Year)).call(this, props));
+
+    _this.changePeriod = function (dir) {
+      _this.setState({
+        moment: _this.state.moment[dir === 'prev' ? 'subtract' : 'add'](10, 'year')
+      });
+    };
+
+    _this.select = function (year) {
+      var _moment = _this.state.moment;
+
+      _moment.year(year);
+
+      _this.setState({
+        moment: _moment.clone(),
+        selected: _moment.clone()
+      });
+      _this.props.onSelect(_moment);
+    };
+
+    _this.state = {
+      moment: props.moment.clone(),
+      selected: props.moment.clone()
+    };
+    return _this;
+  }
+
+  createClass(Year, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(props) {
+      this.setState({
+        moment: props.moment.clone(),
+        selected: props.moment.clone()
+      });
+    }
+  }, {
+    key: '_renderYear',
+    value: function _renderYear(year) {
+      var _this2 = this;
+
+      var now = moment();
+      var _moment = this.state.moment;
+      var firstYear = Math.floor(_moment.year() / 10) * 10;
+      var selected = this.state.selected;
+
+      var isSelected = selected.year() === year;
+      var className = classNames({
+        'selected': isSelected,
+        'now': now.year() === year,
+        'prev': firstYear - 1 === year,
+        'next': firstYear + 10 === year
+      });
+
+      return React__default.createElement(
+        'td',
+        { key: year, className: className, onClick: function onClick() {
+            return _this2.select(year);
+          } },
+        year
+      );
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this3 = this;
+
+      var _moment = this.state.moment;
+      var firstYear = Math.floor(_moment.year() / 10) * 10;
+      var years = range(firstYear - 1, firstYear + 11);
+
+      return React__default.createElement(
+        'div',
+        { className: 'calendar-years', style: this.props.style },
+        React__default.createElement(
+          'div',
+          { className: 'calendar-nav' },
+          React__default.createElement(
+            'button',
+            { type: 'button', className: 'prev-month', onClick: function onClick() {
+                return _this3.changePeriod('prev');
+              } },
+            React__default.createElement('i', { className: 'fa fa-angle-left' })
+          ),
+          React__default.createElement(
+            'span',
+            { className: 'current-date disabled' },
+            firstYear,
+            ' - ',
+            firstYear + 9
+          ),
+          React__default.createElement(
+            'button',
+            { type: 'button', className: 'next-month', onClick: function onClick() {
+                return _this3.changePeriod('next');
+              } },
+            React__default.createElement('i', { className: 'fa fa-angle-right' })
+          )
+        ),
+        React__default.createElement(
+          'table',
+          null,
+          React__default.createElement(
+            'tbody',
+            null,
+            chunk(years, 4).map(function (_years, idx) {
+              return React__default.createElement(
+                'tr',
+                { key: idx },
+                _years.map(function (year) {
+                  return _this3._renderYear(year);
+                })
+              );
+            })
+          )
+        )
+      );
+    }
+  }]);
+  return Year;
+}(React.Component);
+
+var Calendar = function (_Component) {
+  inherits(Calendar, _Component);
+
+  function Calendar(props) {
+    classCallCheck(this, Calendar);
+
+    var _this = possibleConstructorReturn(this, (Calendar.__proto__ || Object.getPrototypeOf(Calendar)).call(this, props));
+
+    _this.handleSelect = function (moment$$1) {
+      var nextPanel = _this.state.panel === 'year' ? 'month' : 'day';
+
+      _this.changePanel(nextPanel, moment$$1);
+      _this.props.onChange && _this.props.onChange(moment$$1);
+    };
+
+    _this.changePanel = function (panel) {
+      var moment$$1 = arguments.length <= 1 || arguments[1] === undefined ? _this.state.moment : arguments[1];
+
+      _this.setState({
+        moment: moment$$1,
+        panel: panel
+      });
+    };
+
+    _this.state = {
+      moment: props.moment.clone(),
+      panel: 'day'
+    };
+    return _this;
+  }
+
+  createClass(Calendar, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(props) {
+      this.setState({
+        panel: 'day'
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var className = classNames('calendar', this.props.className);
+      var props = {
+        moment: this.state.moment,
+        onSelect: this.handleSelect,
+        changePanel: this.changePanel
+      };
+
+      return React__default.createElement(
+        'div',
+        { style: this.props.style },
+        React__default.createElement(
+          'div',
+          { className: className },
+          React__default.createElement(Day, _extends({}, props, {
+            style: { display: this.state.panel === 'day' ? 'block' : 'none' } })),
+          React__default.createElement(Month, _extends({}, props, {
+            style: { display: this.state.panel === 'month' ? 'block' : 'none' } })),
+          React__default.createElement(Year, _extends({}, props, {
+            style: { display: this.state.panel === 'year' ? 'block' : 'none' } }))
+        )
+      );
+    }
+  }]);
   return Calendar;
 }(React.Component);
 
-var _createClass$2 = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck$2(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn$2(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits$2(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
 var Time = function (_Component) {
-  _inherits$2(Time, _Component);
+  inherits(Time, _Component);
 
   function Time(props) {
-    _classCallCheck$2(this, Time);
+    classCallCheck(this, Time);
 
-    var _this = _possibleConstructorReturn$2(this, (Time.__proto__ || Object.getPrototypeOf(Time)).call(this, props));
+    var _this = possibleConstructorReturn(this, (Time.__proto__ || Object.getPrototypeOf(Time)).call(this, props));
 
     _this.handleChange = function (value, type) {
       var moment$$1 = _this.props.moment;
@@ -230,7 +671,7 @@ var Time = function (_Component) {
     return _this;
   }
 
-  _createClass$2(Time, [{
+  createClass(Time, [{
     key: 'render',
     value: function render() {
       var _this2 = this;
@@ -240,68 +681,63 @@ var Time = function (_Component) {
 
       return React__default.createElement(
         'div',
-        { className: 'time' },
+        { style: this.props.style },
         React__default.createElement(
           'div',
-          { className: 'show-time' },
+          { className: 'time' },
           React__default.createElement(
-            'span',
-            { className: 'text' },
-            moment$$1.format('HH')
+            'div',
+            { className: 'show-time' },
+            React__default.createElement(
+              'span',
+              { className: 'text' },
+              moment$$1.format('HH')
+            ),
+            React__default.createElement(
+              'span',
+              { className: 'separater' },
+              ':'
+            ),
+            React__default.createElement(
+              'span',
+              { className: 'text' },
+              moment$$1.format('mm')
+            )
           ),
           React__default.createElement(
-            'span',
-            { className: 'separater' },
-            ':'
-          ),
-          React__default.createElement(
-            'span',
-            { className: 'text' },
-            moment$$1.format('mm')
+            'div',
+            { className: 'sliders' },
+            React__default.createElement(
+              'span',
+              { className: 'slider-text' },
+              'Hours:'
+            ),
+            React__default.createElement(ReactSlider, { min: 0, max: 23, value: moment$$1.hour(), onChange: function onChange(value) {
+                return _this2.handleChange(value, 'hours');
+              }, withBars: true }),
+            React__default.createElement(
+              'span',
+              { className: 'slider-text' },
+              'Minutes:'
+            ),
+            React__default.createElement(ReactSlider, { min: 0, max: 59, value: moment$$1.minute(), onChange: function onChange(value) {
+                return _this2.handleChange(value, 'minutes');
+              }, withBars: true })
           )
-        ),
-        React__default.createElement(
-          'div',
-          { className: 'sliders' },
-          React__default.createElement(
-            'span',
-            { className: 'slider-text' },
-            'Hours:'
-          ),
-          React__default.createElement(ReactSlider, { min: 0, max: 23, value: moment$$1.hour(), onChange: function onChange(value) {
-              return _this2.handleChange(value, 'hours');
-            } }),
-          React__default.createElement(
-            'span',
-            { className: 'slider-text' },
-            'Minutes:'
-          ),
-          React__default.createElement(ReactSlider, { min: 0, max: 59, value: moment$$1.minute(), onChange: function onChange(value) {
-              return _this2.handleChange(value, 'minutes');
-            } })
         )
       );
     }
   }]);
-
   return Time;
 }(React.Component);
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
 var Picker = function (_Component) {
-  _inherits(Picker, _Component);
+  inherits(Picker, _Component);
 
   function Picker() {
-    _classCallCheck(this, Picker);
+    classCallCheck(this, Picker);
 
-    var _this = _possibleConstructorReturn(this, (Picker.__proto__ || Object.getPrototypeOf(Picker)).call(this));
+    var _this = possibleConstructorReturn(this, (Picker.__proto__ || Object.getPrototypeOf(Picker)).call(this));
 
     _this.changePanel = function (panel) {
       _this.setState({
@@ -315,30 +751,32 @@ var Picker = function (_Component) {
     return _this;
   }
 
-  _createClass(Picker, [{
+  createClass(Picker, [{
     key: 'render',
     value: function render() {
       var _this2 = this;
 
       var className = classNames('datetime-picker', {
-        hide: !this.props.isOpen,
-        split: this.props.splitPanel,
-        'calendar-panel': this.state.panel === 'calendar',
-        'time-panel': this.state.panel === 'time'
+        split: this.props.splitPanel
       });
-      var props = blacklist(this.props, 'className', 'isOpen');
+      var props = blacklist(this.props, 'className', 'isOpen', 'splitPanel');
+      var _props$isOpen = this.props.isOpen;
+      var isOpen = _props$isOpen === undefined ? true : _props$isOpen;
+
 
       return React__default.createElement(
         'div',
-        { className: className },
+        { className: className, style: { display: isOpen ? 'block' : 'none' }, onClick: function onClick(evt) {
+            return evt.stopPropagation();
+          } },
         React__default.createElement(
           'div',
-          { className: 'panel-nav' },
+          { className: 'panel-nav', style: { display: this.props.splitPanel ? 'block' : 'none' } },
           React__default.createElement(
             'button',
             { type: 'button', onClick: function onClick() {
                 return _this2.changePanel('calendar');
-              } },
+              }, className: this.state.panel === 'calendar' ? 'active' : '' },
             React__default.createElement('i', { className: 'fa fa-calendar-o' }),
             'Date'
           ),
@@ -346,35 +784,26 @@ var Picker = function (_Component) {
             'button',
             { type: 'button', onClick: function onClick() {
                 return _this2.changePanel('time');
-              } },
+              }, className: this.state.panel === 'time' ? 'active' : '' },
             React__default.createElement('i', { className: 'fa fa-clock-o' }),
             'Time'
           )
         ),
-        React__default.createElement(Calendar, props),
-        React__default.createElement(Time, props)
+        React__default.createElement(Calendar, _extends({}, props, { style: { display: this.state.panel === 'calendar' || !this.props.splitPanel ? 'block' : 'none' } })),
+        React__default.createElement(Time, _extends({}, props, { style: { display: this.state.panel === 'time' || !this.props.splitPanel ? 'block' : 'none' } }))
       );
     }
   }]);
-
   return Picker;
 }(React.Component);
 
-var _createClass$3 = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck$3(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn$3(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits$3(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
 var Trigger = function (_Component) {
-  _inherits$3(Trigger, _Component);
+  inherits(Trigger, _Component);
 
   function Trigger() {
-    _classCallCheck$3(this, Trigger);
+    classCallCheck(this, Trigger);
 
-    var _this = _possibleConstructorReturn$3(this, (Trigger.__proto__ || Object.getPrototypeOf(Trigger)).call(this));
+    var _this = possibleConstructorReturn(this, (Trigger.__proto__ || Object.getPrototypeOf(Trigger)).call(this));
 
     _this.handleDocumentClick = function (evt) {
       if (!reactDom.findDOMNode(_this).contains(evt.target)) {
@@ -394,15 +823,15 @@ var Trigger = function (_Component) {
     return _this;
   }
 
-  _createClass$3(Trigger, [{
+  createClass(Trigger, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      document.addEventListener('click', this.handleDocumentClick, false);
+      window.addEventListener('click', this.handleDocumentClick, false);
     }
   }, {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
-      document.removeEventListener('click', this.handleDocumentClick, false);
+      window.removeEventListener('click', this.handleDocumentClick, false);
     }
   }, {
     key: 'render',
@@ -413,6 +842,7 @@ var Trigger = function (_Component) {
       var moment$$1 = _props.moment;
       var onChange = _props.onChange;
       var children = _props.children;
+      var splitPanel = _props.splitPanel;
 
 
       return React__default.createElement(
@@ -425,11 +855,10 @@ var Trigger = function (_Component) {
             } },
           children
         ),
-        React__default.createElement(Picker, { isOpen: this.state.isOpen, moment: moment$$1, onChange: onChange })
+        React__default.createElement(Picker, { isOpen: this.state.isOpen, moment: moment$$1, onChange: onChange, splitPanel: splitPanel })
       );
     }
   }]);
-
   return Trigger;
 }(React.Component);
 

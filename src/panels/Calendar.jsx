@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import classNames from 'classnames/bind';
 
-import Day from './Day';
-import Month from './Month';
-import Year from './Year';
+import Day from './Day.jsx';
+import Month from './Month.jsx';
+import Year from './Year.jsx';
 
 
 class Calendar extends Component {
