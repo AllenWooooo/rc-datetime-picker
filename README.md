@@ -23,5 +23,10 @@ Besides npm package, UMD module is placed under `dist/` directory:
 - dist/rc-datetime-picker.js
 - dist/rc-datetime-picker.min.js
 
+## Usage
+
+See the [demo] page.
+
 
 [Moment.js]: http://momentjs.com/
+[demo]: https://allenwooooo.github.io/rc-datetime-picker/

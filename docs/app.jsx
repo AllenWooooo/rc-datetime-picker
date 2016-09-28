@@ -3,10 +3,10 @@ import {render} from 'react-dom';
 import moment from 'moment';
 
 import {DatetimePicker, DatetimePickerTrigger} from '../src';
-import '../src/less/picker.less';
+import './app.less';
 
 
-class App extends Component {
+class InlinePicker extends Component {
   constructor() {
     super();
     this.state = {
@@ -23,16 +23,47 @@ class App extends Component {
   render() {
     return (
       <div>
-        <DatetimePicker moment={moment()} isOpen />
-        <DatetimePickerTrigger moment={this.state.moment} onChange={(moment) => this.handleChange(moment)}>
-          <input type="text" value={this.state.moment.format('YYYY-MM-DD HH:mm')} readOnly />
-        </DatetimePickerTrigger>
+        <span className="text">Datetime: {this.state.moment.format('YYYY/MM/DD HH:mm')}</span>
+        <DatetimePicker
+          moment={moment()}
+          onChange={this.handleChange}
+        />
       </div>
     );
   }
 }
 
+class PopupPicker extends Component {
+  constructor() {
+    super();
+    this.state = {
+      moment: moment()
+    };
+  }
+
+  handleChange = (moment) => {
+    this.setState({
+      moment
+    });
+  }
+
+  render() {
+    return (
+      <DatetimePickerTrigger moment={this.state.moment} onChange={this.handleChange}>
+        <input type="text" value={this.state.moment.format('YYYY/MM/DD HH:mm')} readOnly />
+        <span className="fa fa-calendar-o"></span>
+      </DatetimePickerTrigger>
+    );
+  }
+}
+
 render(
-  <App />,
-  document.getElementById('app')
+  <InlinePicker />,
+  document.getElementById('inline-picker')
 );
+
+render(
+  <PopupPicker />,
+  document.getElementById('popup-picker')
+);
+
