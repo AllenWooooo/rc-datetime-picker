@@ -192,9 +192,12 @@
 .datetime-trigger .datetime-picker {
   position: absolute;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  top: calc(100% + 8px);
+  top: 100%;
 }
-.datetime-trigger .datetime-picker:before {
+.datetime-picker-popup {
+  margin-top: 8px;
+}
+.datetime-picker-popup:before {
   content: "";
   position: absolute;
   background: #fff;

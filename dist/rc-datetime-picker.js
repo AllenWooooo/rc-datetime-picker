@@ -1,21 +1,23 @@
 /*
- * rc-datetime-picker v1.1.3
+ * rc-datetime-picker v1.1.4
  * https://github.com/AllenWooooo/rc-datetime-picker
  *
  * (c) 2016 Allen Wu
  * License: MIT
  */
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('react'), require('classnames/bind'), require('blacklist'), require('moment'), require('react-slider'), require('react-dom')) :
-  typeof define === 'function' && define.amd ? define(['exports', 'react', 'classnames/bind', 'blacklist', 'moment', 'react-slider', 'react-dom'], factory) :
-  (factory((global.rc-datetime-picker = global.rc-datetime-picker || {}),global.React,global.classNames,global.blacklist,global.moment,global.ReactSlider,global.reactDom));
-}(this, (function (exports,React,classNames,blacklist,moment,ReactSlider,reactDom) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('react'), require('classnames/bind'), require('blacklist'), require('moment'), require('react-slider'), require('react-dom'), require('react/lib/CSSPropertyOperations')) :
+  typeof define === 'function' && define.amd ? define(['exports', 'react', 'classnames/bind', 'blacklist', 'moment', 'react-slider', 'react-dom', 'react/lib/CSSPropertyOperations'], factory) :
+  (factory((global.rc-datetime-picker = global.rc-datetime-picker || {}),global.React,global.classNames,global.blacklist,global.moment,global.ReactSlider,global.ReactDOM,global.CSSPropertyOperations));
+}(this, (function (exports,React,classNames,blacklist,moment,ReactSlider,ReactDOM,CSSPropertyOperations) { 'use strict';
 
 var React__default = 'default' in React ? React['default'] : React;
 classNames = 'default' in classNames ? classNames['default'] : classNames;
 blacklist = 'default' in blacklist ? blacklist['default'] : blacklist;
 moment = 'default' in moment ? moment['default'] : moment;
 ReactSlider = 'default' in ReactSlider ? ReactSlider['default'] : ReactSlider;
+var ReactDOM__default = 'default' in ReactDOM ? ReactDOM['default'] : ReactDOM;
+CSSPropertyOperations = 'default' in CSSPropertyOperations ? CSSPropertyOperations['default'] : CSSPropertyOperations;
 
 var WEEKS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -756,7 +758,7 @@ var Picker = function (_Component) {
     value: function render() {
       var _this2 = this;
 
-      var className = classNames('datetime-picker', {
+      var className = classNames('datetime-picker', this.props.className, {
         split: this.props.splitPanel
       });
       var props = blacklist(this.props, 'className', 'isOpen', 'splitPanel');
@@ -797,6 +799,72 @@ var Picker = function (_Component) {
   return Picker;
 }(React.Component);
 
+var Portal = function (_React$Component) {
+  inherits(Portal, _React$Component);
+
+  function Portal() {
+    classCallCheck(this, Portal);
+    return possibleConstructorReturn(this, (Portal.__proto__ || Object.getPrototypeOf(Portal)).apply(this, arguments));
+  }
+
+  createClass(Portal, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.renderPortal(this.props);
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(props) {
+      this.renderPortal(props);
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      if (this.node) {
+        ReactDOM__default.unmountComponentAtNode(this.node);
+        document.body.removeChild(this.node);
+      }
+
+      this.portal = null;
+      this.node = null;
+    }
+  }, {
+    key: 'applyClassNameAndStyle',
+    value: function applyClassNameAndStyle(props) {
+      if (props.className) {
+        this.node.className = props.className;
+      }
+
+      if (props.style) {
+        CSSPropertyOperations.setValueForStyles(this.node, props.style, this._reactInternalInstance);
+      }
+    }
+  }, {
+    key: 'renderPortal',
+    value: function renderPortal(props) {
+      if (!this.node) {
+        this.node = document.createElement('div');
+        this.applyClassNameAndStyle(props);
+
+        document.body.appendChild(this.node);
+      } else {
+        this.applyClassNameAndStyle(props);
+      }
+
+      var children = props.children;
+
+
+      this.portal = ReactDOM__default.unstable_renderSubtreeIntoContainer(this, children, this.node);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return null;
+    }
+  }]);
+  return Portal;
+}(React__default.Component);
+
 var Trigger = function (_Component) {
   inherits(Trigger, _Component);
 
@@ -806,19 +874,29 @@ var Trigger = function (_Component) {
     var _this = possibleConstructorReturn(this, (Trigger.__proto__ || Object.getPrototypeOf(Trigger)).call(this));
 
     _this.handleDocumentClick = function (evt) {
-      if (!reactDom.findDOMNode(_this).contains(evt.target)) {
+      if (!ReactDOM.findDOMNode(_this).contains(evt.target)) {
         _this.togglePicker(false);
+      }
+    };
+
+    _this.handlePortalPosition = function () {
+      if (_this.state.isOpen) {
+        _this.setState({
+          pos: _this.getPosition()
+        });
       }
     };
 
     _this.togglePicker = function (isOpen) {
       _this.setState({
-        isOpen: isOpen
+        isOpen: isOpen,
+        pos: _this.getPosition()
       });
     };
 
     _this.state = {
-      isOpen: false
+      isOpen: false,
+      pos: {}
     };
     return _this;
   }
@@ -827,22 +905,72 @@ var Trigger = function (_Component) {
     key: 'componentDidMount',
     value: function componentDidMount() {
       window.addEventListener('click', this.handleDocumentClick, false);
+
+      if (this.props.appendToBody) {
+        window.addEventListener('scroll', this.handlePortalPosition, false);
+        window.addEventListener('resize', this.handlePortalPosition, false);
+      }
     }
   }, {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
       window.removeEventListener('click', this.handleDocumentClick, false);
+
+      if (this.props.appendToBody) {
+        window.removeEventListener('scroll', this.handlePortalPosition, false);
+        window.removeEventListener('resize', this.handlePortalPosition, false);
+      }
+    }
+  }, {
+    key: 'getPosition',
+    value: function getPosition() {
+      var elem = this.refs.trigger;
+      var elemBCR = elem.getBoundingClientRect();
+
+      return {
+        top: Math.round(elemBCR.top + elemBCR.height),
+        left: Math.round(elemBCR.left)
+      };
+    }
+  }, {
+    key: '_renderPortal',
+    value: function _renderPortal() {
+      var _state = this.state;
+      var pos = _state.pos;
+      var isOpen = _state.isOpen;
+
+      var style = {
+        display: isOpen ? 'block' : 'none',
+        position: 'fixed',
+        top: pos.top + 'px',
+        left: pos.left + 'px'
+      };
+
+      return React__default.createElement(
+        Portal,
+        { style: style },
+        this._renderPicker(true)
+      );
+    }
+  }, {
+    key: '_renderPicker',
+    value: function _renderPicker(isOpen) {
+      var _props = this.props;
+      var moment$$1 = _props.moment;
+      var onChange = _props.onChange;
+      var splitPanel = _props.splitPanel;
+
+
+      return React__default.createElement(Picker, { className: 'datetime-picker-popup', isOpen: isOpen, moment: moment$$1, onChange: onChange, splitPanel: splitPanel });
     }
   }, {
     key: 'render',
     value: function render() {
       var _this2 = this;
 
-      var _props = this.props;
-      var moment$$1 = _props.moment;
-      var onChange = _props.onChange;
-      var children = _props.children;
-      var splitPanel = _props.splitPanel;
+      var _props2 = this.props;
+      var children = _props2.children;
+      var appendToBody = _props2.appendToBody;
 
 
       return React__default.createElement(
@@ -852,10 +980,10 @@ var Trigger = function (_Component) {
           'div',
           { onClick: function onClick() {
               return _this2.togglePicker(true);
-            } },
+            }, ref: 'trigger' },
           children
         ),
-        React__default.createElement(Picker, { isOpen: this.state.isOpen, moment: moment$$1, onChange: onChange, splitPanel: splitPanel })
+        appendToBody ? this._renderPortal() : this._renderPicker(this.state.isOpen)
       );
     }
   }]);
