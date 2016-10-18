@@ -49,7 +49,7 @@ class PopupPicker extends Component {
 
   render() {
     return (
-      <DatetimePickerTrigger moment={this.state.moment} onChange={this.handleChange}>
+      <DatetimePickerTrigger moment={this.state.moment} onChange={this.handleChange} appendToBody>
         <input type="text" value={this.state.moment.format('YYYY/MM/DD HH:mm')} readOnly />
         <span className="fa fa-calendar-o"></span>
       </DatetimePickerTrigger>

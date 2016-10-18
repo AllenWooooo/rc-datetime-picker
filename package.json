@@ -5,6 +5,7 @@
   "main": "dist/rc-datetime-picker.cjs.js",
   "keywords": [
     "react",
+    "date",
     "datetime",
     "picker",
     "moment"

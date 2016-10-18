@@ -21,7 +21,7 @@ class Picker extends Component {
   }
 
   render() {
-    const className = classNames('datetime-picker', {
+    const className = classNames('datetime-picker', this.props.className, {
       split: this.props.splitPanel
     });
     const props = blacklist(this.props, 'className', 'isOpen', 'splitPanel');
