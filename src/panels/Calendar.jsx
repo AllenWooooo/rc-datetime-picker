@@ -23,9 +23,10 @@ class Calendar extends Component {
 
   handleSelect = (moment) => {
     const nextPanel = this.state.panel === 'year' ? 'month' : 'day';
+    const currentPanel = this.state.panel;
 
     this.changePanel(nextPanel, moment);
-    this.props.onChange && this.props.onChange(moment);
+    this.props.onChange && this.props.onChange(moment, currentPanel);
   }
 
   changePanel = (panel, moment = this.state.moment) => {

@@ -46,6 +46,16 @@ class Trigger extends Component {
     }
   }
 
+  handleChange = (moment, currentPanel) => {
+    if (currentPanel === 'day' && this.props.closeOnSelectDay) {
+      this.setState({
+        isOpen: false
+      });
+    }
+
+    this.props.onChange && this.props.onChange(moment);
+  }
+
   togglePicker = (isOpen) => {
     this.setState({
       isOpen,
@@ -80,10 +90,10 @@ class Trigger extends Component {
   }
 
   _renderPicker(isOpen) {
-    const {moment, onChange, splitPanel} = this.props;
+    const {moment, splitPanel} = this.props;
 
     return (
-      <DatetimePicker className="datetime-picker-popup" isOpen={isOpen} moment={moment} onChange={onChange} splitPanel={splitPanel}/>
+      <DatetimePicker className="datetime-picker-popup" isOpen={isOpen} moment={moment} onChange={this.handleChange} splitPanel={splitPanel}/>
     );
   }
 
