@@ -1,5 +1,5 @@
 /*
- * rc-datetime-picker v1.1.5
+ * rc-datetime-picker v1.1.6
  * https://github.com/AllenWooooo/rc-datetime-picker
  *
  * (c) 2016 Allen Wu
@@ -45,123 +45,6 @@ var chunk = function chunk(array, size) {
 
   return result;
 };
-
-var asyncGenerator = function () {
-  function AwaitValue(value) {
-    this.value = value;
-  }
-
-  function AsyncGenerator(gen) {
-    var front, back;
-
-    function send(key, arg) {
-      return new Promise(function (resolve, reject) {
-        var request = {
-          key: key,
-          arg: arg,
-          resolve: resolve,
-          reject: reject,
-          next: null
-        };
-
-        if (back) {
-          back = back.next = request;
-        } else {
-          front = back = request;
-          resume(key, arg);
-        }
-      });
-    }
-
-    function resume(key, arg) {
-      try {
-        var result = gen[key](arg);
-        var value = result.value;
-
-        if (value instanceof AwaitValue) {
-          Promise.resolve(value.value).then(function (arg) {
-            resume("next", arg);
-          }, function (arg) {
-            resume("throw", arg);
-          });
-        } else {
-          settle(result.done ? "return" : "normal", result.value);
-        }
-      } catch (err) {
-        settle("throw", err);
-      }
-    }
-
-    function settle(type, value) {
-      switch (type) {
-        case "return":
-          front.resolve({
-            value: value,
-            done: true
-          });
-          break;
-
-        case "throw":
-          front.reject(value);
-          break;
-
-        default:
-          front.resolve({
-            value: value,
-            done: false
-          });
-          break;
-      }
-
-      front = front.next;
-
-      if (front) {
-        resume(front.key, front.arg);
-      } else {
-        back = null;
-      }
-    }
-
-    this._invoke = send;
-
-    if (typeof gen.return !== "function") {
-      this.return = undefined;
-    }
-  }
-
-  if (typeof Symbol === "function" && Symbol.asyncIterator) {
-    AsyncGenerator.prototype[Symbol.asyncIterator] = function () {
-      return this;
-    };
-  }
-
-  AsyncGenerator.prototype.next = function (arg) {
-    return this._invoke("next", arg);
-  };
-
-  AsyncGenerator.prototype.throw = function (arg) {
-    return this._invoke("throw", arg);
-  };
-
-  AsyncGenerator.prototype.return = function (arg) {
-    return this._invoke("return", arg);
-  };
-
-  return {
-    wrap: function (fn) {
-      return function () {
-        return new AsyncGenerator(fn.apply(this, arguments));
-      };
-    },
-    await: function (value) {
-      return new AwaitValue(value);
-    }
-  };
-}();
-
-
-
-
 
 var classCallCheck = function (instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -880,8 +763,8 @@ var Picker = function (_Component) {
         split: this.props.splitPanel
       });
       var props = blacklist(this.props, 'className', 'isOpen', 'splitPanel');
-      var _props$isOpen = this.props.isOpen;
-      var isOpen = _props$isOpen === undefined ? true : _props$isOpen;
+      var _props$isOpen = this.props.isOpen,
+          isOpen = _props$isOpen === undefined ? true : _props$isOpen;
 
 
       return React__default.createElement(
@@ -1063,9 +946,9 @@ var Trigger = function (_Component) {
   }, {
     key: '_renderPortal',
     value: function _renderPortal() {
-      var _state = this.state;
-      var pos = _state.pos;
-      var isOpen = _state.isOpen;
+      var _state = this.state,
+          pos = _state.pos,
+          isOpen = _state.isOpen;
 
       var style = {
         display: isOpen ? 'block' : 'none',
@@ -1083,9 +966,9 @@ var Trigger = function (_Component) {
   }, {
     key: '_renderPicker',
     value: function _renderPicker(isOpen) {
-      var _props = this.props;
-      var moment$$1 = _props.moment;
-      var splitPanel = _props.splitPanel;
+      var _props = this.props,
+          moment$$1 = _props.moment,
+          splitPanel = _props.splitPanel;
 
 
       return React__default.createElement(Picker, { className: 'datetime-picker-popup', isOpen: isOpen, moment: moment$$1, onChange: this.handleChange, splitPanel: splitPanel });
@@ -1095,9 +978,9 @@ var Trigger = function (_Component) {
     value: function render() {
       var _this2 = this;
 
-      var _props2 = this.props;
-      var children = _props2.children;
-      var appendToBody = _props2.appendToBody;
+      var _props2 = this.props,
+          children = _props2.children,
+          appendToBody = _props2.appendToBody;
 
 
       return React__default.createElement(
