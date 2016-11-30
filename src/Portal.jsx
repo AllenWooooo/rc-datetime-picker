@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import CSSPropertyOperations from 'react-dom/lib/CSSPropertyOperations';
+import CSSPropertyOperations from './CSSPropertyOperations/index.js';
 import ReactDOM from 'react-dom';
 
 
