@@ -4,7 +4,7 @@ import blacklist from 'blacklist';
 
 import Calendar from './panels/Calendar.jsx';
 import Time from './panels/Time.jsx';
-import Buttons from './panels/Buttons';
+import Buttons from './panels/Buttons.jsx';
 
 
 class Picker extends Component {
