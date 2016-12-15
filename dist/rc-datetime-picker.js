@@ -1,5 +1,5 @@
 /*
- * rc-datetime-picker v1.3.7
+ * rc-datetime-picker v1.3.8
  * https://github.com/AllenWooooo/rc-datetime-picker
  *
  * (c) 2016 Allen Wu
@@ -1302,13 +1302,18 @@ var Trigger = function (_Component) {
     };
 
     _this.handleChange = function (moment$$1, currentPanel) {
-      if (currentPanel === 'day' && _this.props.closeOnSelectDay) {
+      var _this$props = _this.props,
+          closeOnSelectDay = _this$props.closeOnSelectDay,
+          onChange = _this$props.onChange;
+
+
+      if (currentPanel === 'day' && closeOnSelectDay) {
         _this.setState({
           isOpen: false
         });
       }
 
-      _this.props.onChange && _this.props.onChange(moment$$1);
+      onChange && onChange(moment$$1);
     };
 
     _this.togglePicker = function (isOpen) {
@@ -1348,23 +1353,12 @@ var Trigger = function (_Component) {
     };
 
     _this._renderPicker = function (isOpen) {
-      var _this$props = _this.props,
-          moment$$1 = _this$props.moment,
-          splitPanel = _this$props.splitPanel,
-          buttons = _this$props.buttons,
-          showTimePicker = _this$props.showTimePicker,
-          showCalendarPicker = _this$props.showCalendarPicker;
+      var props = blacklist(_this.props, 'className', 'appendToBody', 'children', 'onChange');
 
-
-      return React__default.createElement(Picker, {
+      return React__default.createElement(Picker, _extends({}, props, {
         className: 'datetime-picker-popup',
-        buttons: buttons,
         isOpen: isOpen,
-        moment: moment$$1,
-        onChange: _this.handleChange,
-        showTimePicker: showTimePicker,
-        showCalendarPicker: showCalendarPicker,
-        splitPanel: splitPanel });
+        onChange: _this.handleChange }));
     };
 
     _this.state = {
@@ -1416,7 +1410,7 @@ var Trigger = function (_Component) {
             }, ref: 'trigger' },
           children
         ),
-        appendToBody ? this._renderPortal() : this._renderPicker(this.state.isOpen)
+        appendToBody ? this._renderPortal() : this._renderPicker(isOpen)
       );
     }
   }]);
