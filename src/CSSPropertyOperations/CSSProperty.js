@@ -144,4 +144,4 @@ var CSSProperty = {
   shorthandPropertyExpansions: shorthandPropertyExpansions
 };
 
-module.exports = CSSProperty;
+export default CSSProperty;
