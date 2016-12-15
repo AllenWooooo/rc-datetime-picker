@@ -5,7 +5,7 @@ class Buttons extends Component {
   handleClick = (value) => {
     const {onChange} = this.props;
 
-    onChange && onChange(value);
+    onChange && onChange(value, 'day');
   }
 
   _renderButton = (key, value) => {
