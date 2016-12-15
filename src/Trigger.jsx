@@ -91,7 +91,7 @@ class Trigger extends Component {
   }
 
   _renderPicker = (isOpen) => {
-    const {moment, splitPanel, buttons} = this.props;    
+    const {moment, splitPanel, buttons, showTimePicker, showCalendarPicker} = this.props;    
     
     return (
       <DatetimePicker 
@@ -100,17 +100,19 @@ class Trigger extends Component {
         isOpen={isOpen} 
         moment={moment} 
         onChange={this.handleChange} 
+        showTimePicker={showTimePicker}
+        showCalendarPicker={showCalendarPicker}
         splitPanel={splitPanel} />
     );
   }
 
   render() {
-    const {children, appendToBody} = this.props;
-    const className = classNames('datetime-trigger', this.props.className);
+    const {children, appendToBody, className} = this.props;
+    const {isOpen} = this.state;
 
     return (
-      <div className={className}>
-        <div onClick={() => this.togglePicker(true)} ref="trigger">{children}</div>
+      <div className={`datetime-trigger ${className}`}>
+        <div onClick={() => this.togglePicker(!isOpen)} ref="trigger">{children}</div>
         {appendToBody ? this._renderPortal() : this._renderPicker(this.state.isOpen)}
       </div>
     );
