@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import moment from 'moment';
 import classNames from 'classnames/bind';
 
-import {WEEKS} from '../contants';
+import {WEEKS, DAY_FORMAT} from '../contants';
 import {range, chunk} from '../utils';
 
 
@@ -10,15 +10,15 @@ class Day extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      moment: props.moment.clone(),
-      selected: props.moment.clone()
+      moment: props.moment ? props.moment.clone() : moment(),
+      selected: props.moment ? props.moment.clone() : null
     };
   }
 
   componentWillReceiveProps(props) {
     this.setState({
-      moment: props.moment.clone(),
-      selected: props.moment.clone()
+      moment: props.moment ? props.moment.clone() : moment(),
+      selected: props.moment ? props.moment.clone() : null
     });
   }
 
@@ -31,7 +31,7 @@ class Day extends Component {
   select = (day, isSelected, isPrevMonth, isNextMonth) => {
     if (isSelected) return;
 
-    const _moment = this.state.moment;
+    const _moment = this.state.moment.clone();
 
     if (isPrevMonth) _moment.subtract(1, 'month');
     if (isNextMonth) _moment.add(1, 'month');
@@ -39,8 +39,8 @@ class Day extends Component {
     _moment.date(day);
 
     this.setState({
-      moment: _moment.clone(),
-      selected: _moment.clone()
+      moment: _moment,
+      selected: _moment
     });
     this.props.onSelect(_moment);
   }
@@ -57,7 +57,7 @@ class Day extends Component {
     const {selected} = this.state;
     const isPrevMonth = week === 0 && day > 7;
     const isNextMonth = week >= 4 && day <= 14;
-    const isSelected = !isPrevMonth && !isNextMonth && _moment.isSame(selected, 'month') && selected.date() === day;
+    const isSelected = selected ? !isPrevMonth && !isNextMonth && _moment.isSame(selected, 'month') && selected.date() === day : false;
     const className = classNames({
       'prev': isPrevMonth,
       'next': isNextMonth,
@@ -80,7 +80,7 @@ class Day extends Component {
       range(1, endOfThisMonth + 1),
       range(1, 42 - endOfThisMonth - firstDay + 1)
     );
-    const weeks = WEEKS;
+    const {weeks = WEEKS, dayFormat = DAY_FORMAT} = this.props;
 
     return (
       <div className="calendar-days" style={this.props.style}>
@@ -88,7 +88,7 @@ class Day extends Component {
           <button type="button" className="prev-month" onClick={() => this.changeMonth('prev')}>
             <i className="fa fa-angle-left"/>
           </button>
-          <span className="current-date" onClick={() => this.props.changePanel('month', _moment)}>{_moment.format('MMMM, YYYY')}</span>
+          <span className="current-date" onClick={() => this.props.changePanel('month', _moment)}>{_moment.format(dayFormat)}</span>
           <button type="button" className="next-month" onClick={() => this.changeMonth('next')}>
             <i className="fa fa-angle-right"/>
           </button>

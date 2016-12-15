@@ -9,15 +9,15 @@ class Year extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      moment: props.moment.clone(),
-      selected: props.moment.clone()
+      moment: props.moment ? props.moment.clone() : moment(),
+      selected: props.moment ? props.moment.clone() : null
     };
   }
 
   componentWillReceiveProps(props) {
     this.setState({
-      moment: props.moment.clone(),
-      selected: props.moment.clone()
+      moment: props.moment ? props.moment.clone() : moment(),
+      selected: props.moment ? props.moment.clone() : null
     });
   }
 
@@ -28,13 +28,13 @@ class Year extends Component {
   }
 
   select = (year) => {
-    const _moment = this.state.moment;
+    const _moment = this.state.moment.clone();
 
     _moment.year(year);
 
     this.setState({
-      moment: _moment.clone(),
-      selected: _moment.clone()
+      moment: _moment,
+      selected: _moment
     });
     this.props.onSelect(_moment);
   }
@@ -44,7 +44,7 @@ class Year extends Component {
     const _moment = this.state.moment;
     const firstYear = Math.floor(_moment.year() / 10) * 10;
     const {selected} = this.state;
-    const isSelected = selected.year() === year;
+    const isSelected = selected ? selected.year() === year : false;
     const className = classNames({
       'selected': isSelected,
       'now': now.year() === year,

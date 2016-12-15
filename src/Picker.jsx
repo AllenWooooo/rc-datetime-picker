@@ -4,6 +4,7 @@ import blacklist from 'blacklist';
 
 import Calendar from './panels/Calendar.jsx';
 import Time from './panels/Time.jsx';
+import Buttons from './panels/Buttons';
 
 
 class Picker extends Component {
@@ -21,24 +22,49 @@ class Picker extends Component {
   }
 
   render() {
+    const {
+      isOpen = true, 
+      buttons, 
+      splitPanel, 
+      showTimePicker = true, 
+      showCalendarPicker = true
+    } = this.props;
+    const {panel} = this.state;
+    const isTimePanel = panel === 'time';
+    const isCalendarPanel = panel === 'calendar';
     const className = classNames('datetime-picker', this.props.className, {
-      split: this.props.splitPanel
+      split: splitPanel
     });
-    const props = blacklist(this.props, 'className', 'isOpen', 'splitPanel');
-    const {isOpen = true} = this.props;
+    const props = blacklist(this.props, 'className', 'isOpen', 'splitPanel');    
 
     return (
       <div className={className} style={{display: isOpen ? 'block' : 'none'}} onClick={(evt) => evt.stopPropagation()}>
-        <div className="panel-nav" style={{display: this.props.splitPanel ? 'block' : 'none'}}>
-          <button type="button" onClick={() => this.changePanel('calendar')} className={this.state.panel === 'calendar' ? 'active' : ''}>
-            <i className="fa fa-calendar-o"></i>Date
-          </button>
-          <button type="button" onClick={() => this.changePanel('time')} className={this.state.panel === 'time' ? 'active' : ''}>
-            <i className="fa fa-clock-o"></i>Time
-          </button>
-        </div>
-        <Calendar {...props} style={{display: this.state.panel === 'calendar' || !this.props.splitPanel ? 'block' : 'none'}} />
-        <Time {...props} style={{display: this.state.panel === 'time' || !this.props.splitPanel ? 'block' : 'none'}} />
+        {buttons
+          ? <Buttons {...props} />
+          : undefined
+        }
+
+        {splitPanel
+          ? <div className="panel-nav">
+              <button type="button" onClick={() => this.changePanel('calendar')} className={isCalendarPanel ? 'active' : ''}>
+                <i className="fa fa-calendar-o"></i>Date
+              </button>
+              <button type="button" onClick={() => this.changePanel('time')} className={isTimePanel ? 'active' : ''}>
+                <i className="fa fa-clock-o"></i>Time
+              </button>
+            </div>
+          : undefined
+        }
+        
+        {showCalendarPicker
+          ? <Calendar {...props} style={{display: isCalendarPanel || !splitPanel ? 'block' : 'none'}} />
+          : undefined
+        }
+
+        {showTimePicker
+          ? <Time {...props} style={{display: isTimePanel || !splitPanel ? 'block' : 'none'}} />
+          : undefined
+        }
       </div>
     );
   }

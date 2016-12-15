@@ -10,15 +10,15 @@ class Month extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      moment: props.moment.clone(),
-      selected: props.moment.clone()
+      moment: props.moment ? props.moment.clone() : moment(),
+      selected: props.moment ? props.moment.clone() : null
     };
   }
 
   componentWillReceiveProps(props) {
     this.setState({
-      moment: props.moment.clone(),
-      selected: props.moment.clone()
+      moment: props.moment ? props.moment.clone() : moment(),
+      selected: props.moment ? props.moment.clone() : null
     });
   }
 
@@ -29,13 +29,13 @@ class Month extends Component {
   }
 
   select = (month) => {
-    const _moment = this.state.moment;
+    const _moment = this.state.moment.clone();
 
     _moment.month(month);
 
     this.setState({
-      moment: _moment.clone(),
-      selected: _moment.clone()
+      moment: _moment,
+      selected: _moment
     });
     this.props.onSelect(_moment);
   }
@@ -45,7 +45,7 @@ class Month extends Component {
     const _month = moment().month(month).month();
     const _moment = this.state.moment;
     const {selected} = this.state;
-    const isSelected = _moment.isSame(selected, 'year') && selected.month() === _month;
+    const isSelected = selected ? _moment.isSame(selected, 'year') && selected.month() === _month : false;
     const className = classNames({
       'selected': isSelected,
       'now': _moment.isSame(now, 'year') && now.month() === _month
@@ -58,7 +58,7 @@ class Month extends Component {
 
   render() {
     const _moment = this.state.moment;
-    const months = MONTHS;
+    const {months = MONTHS} = this.props;
 
     return (
       <div className="calendar-months" style={this.props.style}>

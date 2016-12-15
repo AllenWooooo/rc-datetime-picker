@@ -17,16 +17,19 @@ class Calendar extends Component {
 
   componentWillReceiveProps(props) {
     this.setState({
-      panel: 'day'
+      panel: 'day',
+      moment: props.moment
     });
   }
 
   handleSelect = (moment) => {
-    const nextPanel = this.state.panel === 'year' ? 'month' : 'day';
-    const currentPanel = this.state.panel;
+    const {panel} = this.state;
+    const {onChange} = this.props;
+    const nextPanel = panel === 'year' ? 'month' : 'day';
+    const currentPanel = panel;
 
     this.changePanel(nextPanel, moment);
-    this.props.onChange && this.props.onChange(moment, currentPanel);
+    onChange && onChange(moment, currentPanel);
   }
 
   changePanel = (panel, moment = this.state.moment) => {
@@ -43,16 +46,23 @@ class Calendar extends Component {
       onSelect: this.handleSelect,
       changePanel: this.changePanel
     };
+    const {panel} = this.state;
+    const isDayPanel = panel === 'day';
+    const isMonthPanel = panel === 'month';
+    const isYearPanel = panel === 'year';
 
     return (
       <div style={this.props.style}>
         <div className={className}>
-          <Day {...props}
-            style={{display: this.state.panel === 'day' ? 'block' : 'none'}} />
-          <Month {...props}
-            style={{display: this.state.panel === 'month' ? 'block' : 'none'}} />
-          <Year {...props}
-            style={{display: this.state.panel === 'year' ? 'block' : 'none'}} />
+          <Day 
+            {...props}
+            style={{display: isDayPanel ? 'block' : 'none'}} />
+          <Month 
+            {...props}
+            style={{display: isMonthPanel ? 'block' : 'none'}} />
+          <Year 
+            {...props}
+            style={{display: isYearPanel ? 'block' : 'none'}} />
         </div>
       </div>
     );
