@@ -1,6 +1,6 @@
 {
   "name": "rc-datetime-picker",
-  "version": "1.3.5",
+  "version": "1.3.6",
   "description": "React datetime picker by momentjs",
   "main": "dist/rc-datetime-picker.cjs.js",
   "keywords": [
