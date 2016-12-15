@@ -7,7 +7,7 @@ class Time extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      moment: moment ? props.moment.clone() : moment().hours(0).minutes(0)
+      moment: props.moment ? props.moment.clone() : moment().hours(0).minutes(0)
     };
   }
 
