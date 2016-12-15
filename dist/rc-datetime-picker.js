@@ -1,5 +1,5 @@
 /*
- * rc-datetime-picker v1.3.6
+ * rc-datetime-picker v1.3.7
  * https://github.com/AllenWooooo/rc-datetime-picker
  *
  * (c) 2016 Allen Wu
@@ -1351,7 +1351,9 @@ var Trigger = function (_Component) {
       var _this$props = _this.props,
           moment$$1 = _this$props.moment,
           splitPanel = _this$props.splitPanel,
-          buttons = _this$props.buttons;
+          buttons = _this$props.buttons,
+          showTimePicker = _this$props.showTimePicker,
+          showCalendarPicker = _this$props.showCalendarPicker;
 
 
       return React__default.createElement(Picker, {
@@ -1360,6 +1362,8 @@ var Trigger = function (_Component) {
         isOpen: isOpen,
         moment: moment$$1,
         onChange: _this.handleChange,
+        showTimePicker: showTimePicker,
+        showCalendarPicker: showCalendarPicker,
         splitPanel: splitPanel });
     };
 
@@ -1397,17 +1401,18 @@ var Trigger = function (_Component) {
 
       var _props = this.props,
           children = _props.children,
-          appendToBody = _props.appendToBody;
+          appendToBody = _props.appendToBody,
+          className = _props.className;
+      var isOpen = this.state.isOpen;
 
-      var className = classNames('datetime-trigger', this.props.className);
 
       return React__default.createElement(
         'div',
-        { className: className },
+        { className: 'datetime-trigger ' + className },
         React__default.createElement(
           'div',
           { onClick: function onClick() {
-              return _this2.togglePicker(true);
+              return _this2.togglePicker(!isOpen);
             }, ref: 'trigger' },
           children
         ),
