@@ -1,5 +1,5 @@
 /*
- * rc-datetime-picker v1.3.4
+ * rc-datetime-picker v1.3.5
  * https://github.com/AllenWooooo/rc-datetime-picker
  *
  * (c) 2016 Allen Wu
@@ -616,7 +616,7 @@ var Calendar = function (_Component) {
     };
 
     _this.state = {
-      moment: props.moment.clone(),
+      moment: props.moment,
       panel: 'day'
     };
     return _this;
