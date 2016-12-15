@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {render} from 'react-dom';
 import moment from 'moment';
 
-import {DatetimePicker, DatetimePickerTrigger} from '../dist/rc-datetime-picker.cjs.js';
+import {DatetimePicker, DatetimePickerTrigger} from '../src';
 import './app.less';
 
 
@@ -57,7 +57,7 @@ class PopupPicker extends Component {
     const value = datetime ? datetime.format('YYYY/MM/DD HH:mm') : '';
     
     return (
-      <DatetimePickerTrigger buttons={buttons} moment={datetime} onChange={this.handleChange} appendToBody>
+      <DatetimePickerTrigger buttons={buttons} moment={datetime} onChange={this.handleChange} appendToBody showTimePicker={false}>
         <input type="text" value={value} readOnly />
         <span className="fa fa-calendar-o"></span>
       </DatetimePickerTrigger>
