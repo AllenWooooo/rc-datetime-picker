@@ -1,5 +1,5 @@
 /*
- * rc-datetime-picker v1.2.1
+ * rc-datetime-picker v1.3.0
  * https://github.com/AllenWooooo/rc-datetime-picker
  *
  * (c) 2016 Allen Wu
@@ -20,6 +20,7 @@ var ReactDOM__default = 'default' in ReactDOM ? ReactDOM['default'] : ReactDOM;
 
 var WEEKS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+var DAY_FORMAT = 'MMMM, YYYY';
 
 var range = function range(start, end) {
   var length = Math.max(end - start, 0);
@@ -189,7 +190,7 @@ var Day = function (_Component) {
     _this.select = function (day, isSelected, isPrevMonth, isNextMonth) {
       if (isSelected) return;
 
-      var _moment = _this.state.moment;
+      var _moment = _this.state.moment.clone();
 
       if (isPrevMonth) _moment.subtract(1, 'month');
       if (isNextMonth) _moment.add(1, 'month');
@@ -197,15 +198,15 @@ var Day = function (_Component) {
       _moment.date(day);
 
       _this.setState({
-        moment: _moment.clone(),
-        selected: _moment.clone()
+        moment: _moment,
+        selected: _moment
       });
       _this.props.onSelect(_moment);
     };
 
     _this.state = {
-      moment: props.moment.clone(),
-      selected: props.moment.clone()
+      moment: props.moment ? props.moment.clone() : moment(),
+      selected: props.moment ? props.moment.clone() : null
     };
     return _this;
   }
@@ -214,8 +215,8 @@ var Day = function (_Component) {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(props) {
       this.setState({
-        moment: props.moment.clone(),
-        selected: props.moment.clone()
+        moment: props.moment ? props.moment.clone() : moment(),
+        selected: props.moment ? props.moment.clone() : null
       });
     }
   }, {
@@ -238,7 +239,7 @@ var Day = function (_Component) {
 
       var isPrevMonth = week === 0 && day > 7;
       var isNextMonth = week >= 4 && day <= 14;
-      var isSelected = !isPrevMonth && !isNextMonth && _moment.isSame(selected, 'month') && selected.date() === day;
+      var isSelected = selected ? !isPrevMonth && !isNextMonth && _moment.isSame(selected, 'month') && selected.date() === day : false;
       var className = classNames({
         'prev': isPrevMonth,
         'next': isNextMonth,
@@ -264,7 +265,12 @@ var Day = function (_Component) {
       var endOfThisMonth = _moment.clone().endOf('month').date();
       var endOfLastMonth = _moment.clone().subtract(1, 'month').endOf('month').date();
       var days = [].concat(range(endOfLastMonth - firstDay + 1, endOfLastMonth + 1), range(1, endOfThisMonth + 1), range(1, 42 - endOfThisMonth - firstDay + 1));
-      var weeks = WEEKS;
+      var _props = this.props,
+          _props$weeks = _props.weeks,
+          weeks = _props$weeks === undefined ? WEEKS : _props$weeks,
+          _props$dayFormat = _props.dayFormat,
+          dayFormat = _props$dayFormat === undefined ? DAY_FORMAT : _props$dayFormat;
+
 
       return React__default.createElement(
         'div',
@@ -284,7 +290,7 @@ var Day = function (_Component) {
             { className: 'current-date', onClick: function onClick() {
                 return _this3.props.changePanel('month', _moment);
               } },
-            _moment.format('MMMM, YYYY')
+            _moment.format(dayFormat)
           ),
           React__default.createElement(
             'button',
@@ -343,20 +349,20 @@ var Month = function (_Component) {
     };
 
     _this.select = function (month) {
-      var _moment = _this.state.moment;
+      var _moment = _this.state.moment.clone();
 
       _moment.month(month);
 
       _this.setState({
-        moment: _moment.clone(),
-        selected: _moment.clone()
+        moment: _moment,
+        selected: _moment
       });
       _this.props.onSelect(_moment);
     };
 
     _this.state = {
-      moment: props.moment.clone(),
-      selected: props.moment.clone()
+      moment: props.moment ? props.moment.clone() : moment(),
+      selected: props.moment ? props.moment.clone() : null
     };
     return _this;
   }
@@ -365,8 +371,8 @@ var Month = function (_Component) {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(props) {
       this.setState({
-        moment: props.moment.clone(),
-        selected: props.moment.clone()
+        moment: props.moment ? props.moment.clone() : moment(),
+        selected: props.moment ? props.moment.clone() : null
       });
     }
   }, {
@@ -379,7 +385,7 @@ var Month = function (_Component) {
       var _moment = this.state.moment;
       var selected = this.state.selected;
 
-      var isSelected = _moment.isSame(selected, 'year') && selected.month() === _month;
+      var isSelected = selected ? _moment.isSame(selected, 'year') && selected.month() === _month : false;
       var className = classNames({
         'selected': isSelected,
         'now': _moment.isSame(now, 'year') && now.month() === _month
@@ -399,7 +405,9 @@ var Month = function (_Component) {
       var _this3 = this;
 
       var _moment = this.state.moment;
-      var months = MONTHS;
+      var _props$months = this.props.months,
+          months = _props$months === undefined ? MONTHS : _props$months;
+
 
       return React__default.createElement(
         'div',
@@ -467,20 +475,20 @@ var Year = function (_Component) {
     };
 
     _this.select = function (year) {
-      var _moment = _this.state.moment;
+      var _moment = _this.state.moment.clone();
 
       _moment.year(year);
 
       _this.setState({
-        moment: _moment.clone(),
-        selected: _moment.clone()
+        moment: _moment,
+        selected: _moment
       });
       _this.props.onSelect(_moment);
     };
 
     _this.state = {
-      moment: props.moment.clone(),
-      selected: props.moment.clone()
+      moment: props.moment ? props.moment.clone() : moment(),
+      selected: props.moment ? props.moment.clone() : null
     };
     return _this;
   }
@@ -489,8 +497,8 @@ var Year = function (_Component) {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(props) {
       this.setState({
-        moment: props.moment.clone(),
-        selected: props.moment.clone()
+        moment: props.moment ? props.moment.clone() : moment(),
+        selected: props.moment ? props.moment.clone() : null
       });
     }
   }, {
@@ -503,7 +511,7 @@ var Year = function (_Component) {
       var firstYear = Math.floor(_moment.year() / 10) * 10;
       var selected = this.state.selected;
 
-      var isSelected = selected.year() === year;
+      var isSelected = selected ? selected.year() === year : false;
       var className = classNames({
         'selected': isSelected,
         'now': now.year() === year,
@@ -588,11 +596,14 @@ var Calendar = function (_Component) {
     var _this = possibleConstructorReturn(this, (Calendar.__proto__ || Object.getPrototypeOf(Calendar)).call(this, props));
 
     _this.handleSelect = function (moment$$1) {
-      var nextPanel = _this.state.panel === 'year' ? 'month' : 'day';
-      var currentPanel = _this.state.panel;
+      var panel = _this.state.panel;
+      var onChange = _this.props.onChange;
+
+      var nextPanel = panel === 'year' ? 'month' : 'day';
+      var currentPanel = panel;
 
       _this.changePanel(nextPanel, moment$$1);
-      _this.props.onChange && _this.props.onChange(moment$$1, currentPanel);
+      onChange && onChange(moment$$1, currentPanel);
     };
 
     _this.changePanel = function (panel) {
@@ -615,7 +626,8 @@ var Calendar = function (_Component) {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(props) {
       this.setState({
-        panel: 'day'
+        panel: 'day',
+        moment: props.moment
       });
     }
   }, {
@@ -627,6 +639,11 @@ var Calendar = function (_Component) {
         onSelect: this.handleSelect,
         changePanel: this.changePanel
       };
+      var panel = this.state.panel;
+
+      var isDayPanel = panel === 'day';
+      var isMonthPanel = panel === 'month';
+      var isYearPanel = panel === 'year';
 
       return React__default.createElement(
         'div',
@@ -635,11 +652,11 @@ var Calendar = function (_Component) {
           'div',
           { className: className },
           React__default.createElement(Day, _extends({}, props, {
-            style: { display: this.state.panel === 'day' ? 'block' : 'none' } })),
+            style: { display: isDayPanel ? 'block' : 'none' } })),
           React__default.createElement(Month, _extends({}, props, {
-            style: { display: this.state.panel === 'month' ? 'block' : 'none' } })),
+            style: { display: isMonthPanel ? 'block' : 'none' } })),
           React__default.createElement(Year, _extends({}, props, {
-            style: { display: this.state.panel === 'year' ? 'block' : 'none' } }))
+            style: { display: isYearPanel ? 'block' : 'none' } }))
         )
       );
     }
@@ -656,24 +673,32 @@ var Time = function (_Component) {
     var _this = possibleConstructorReturn(this, (Time.__proto__ || Object.getPrototypeOf(Time)).call(this, props));
 
     _this.handleChange = function (value, type) {
-      var moment$$1 = _this.props.moment;
+      var onChange = _this.props.onChange;
 
+      var _moment = _this.state.moment.clone();
 
-      moment$$1[type](value);
+      _moment[type](value);
 
       _this.setState({
-        moment: moment$$1
+        moment: _moment
       });
-      _this.props.onChange && _this.props.onChange(moment$$1);
+      onChange && onChange(_moment);
     };
 
     _this.state = {
-      moment: props.moment
+      moment: moment ? props.moment.clone() : moment().hours(0).minutes(0)
     };
     return _this;
   }
 
   createClass(Time, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(props) {
+      this.setState({
+        moment: props.moment ? props.moment.clone() : moment().hours(0).minutes(0)
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
       var _this2 = this;
@@ -733,6 +758,55 @@ var Time = function (_Component) {
   return Time;
 }(React.Component);
 
+var Buttons = function (_Component) {
+  inherits(Buttons, _Component);
+
+  function Buttons() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    classCallCheck(this, Buttons);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = possibleConstructorReturn(this, (_ref = Buttons.__proto__ || Object.getPrototypeOf(Buttons)).call.apply(_ref, [this].concat(args))), _this), _this.handleClick = function (value) {
+      var onChange = _this.props.onChange;
+
+
+      onChange && onChange(value);
+    }, _this._renderButton = function (key, value) {
+      return React__default.createElement(
+        "button",
+        { className: "btn", key: key, type: "button", onClick: _this.handleClick.bind(_this, value) },
+        key
+      );
+    }, _this._renderButtons = function () {
+      var buttons = _this.props.buttons;
+
+
+      return Object.keys(buttons).map(function (key) {
+        return _this._renderButton(key, buttons[key]);
+      });
+    }, _temp), possibleConstructorReturn(_this, _ret);
+  }
+
+  createClass(Buttons, [{
+    key: "render",
+    value: function render() {
+
+      return React__default.createElement(
+        "div",
+        { className: "buttons-bar" },
+        this._renderButtons()
+      );
+    }
+  }]);
+  return Buttons;
+}(React.Component);
+
 var Picker = function (_Component) {
   inherits(Picker, _Component);
 
@@ -758,27 +832,38 @@ var Picker = function (_Component) {
     value: function render() {
       var _this2 = this;
 
+      var _props = this.props,
+          _props$isOpen = _props.isOpen,
+          isOpen = _props$isOpen === undefined ? true : _props$isOpen,
+          buttons = _props.buttons,
+          splitPanel = _props.splitPanel,
+          _props$showTimePicker = _props.showTimePicker,
+          showTimePicker = _props$showTimePicker === undefined ? true : _props$showTimePicker,
+          _props$showCalendarPi = _props.showCalendarPicker,
+          showCalendarPicker = _props$showCalendarPi === undefined ? true : _props$showCalendarPi;
+      var panel = this.state.panel;
+
+      var isTimePanel = panel === 'time';
+      var isCalendarPanel = panel === 'calendar';
       var className = classNames('datetime-picker', this.props.className, {
-        split: this.props.splitPanel
+        split: splitPanel
       });
       var props = blacklist(this.props, 'className', 'isOpen', 'splitPanel');
-      var _props$isOpen = this.props.isOpen,
-          isOpen = _props$isOpen === undefined ? true : _props$isOpen;
-
 
       return React__default.createElement(
         'div',
         { className: className, style: { display: isOpen ? 'block' : 'none' }, onClick: function onClick(evt) {
             return evt.stopPropagation();
           } },
-        React__default.createElement(
+        buttons ? React__default.createElement(Buttons, props) : undefined,
+        splitPanel ? React__default.createElement(
           'div',
-          { className: 'panel-nav', style: { display: this.props.splitPanel ? 'block' : 'none' } },
+          { className: 'panel-nav' },
           React__default.createElement(
             'button',
             { type: 'button', onClick: function onClick() {
                 return _this2.changePanel('calendar');
-              }, className: this.state.panel === 'calendar' ? 'active' : '' },
+              }, className: isCalendarPanel ? 'active' : '' },
             React__default.createElement('i', { className: 'fa fa-calendar-o' }),
             'Date'
           ),
@@ -786,13 +871,13 @@ var Picker = function (_Component) {
             'button',
             { type: 'button', onClick: function onClick() {
                 return _this2.changePanel('time');
-              }, className: this.state.panel === 'time' ? 'active' : '' },
+              }, className: isTimePanel ? 'active' : '' },
             React__default.createElement('i', { className: 'fa fa-clock-o' }),
             'Time'
           )
-        ),
-        React__default.createElement(Calendar, _extends({}, props, { style: { display: this.state.panel === 'calendar' || !this.props.splitPanel ? 'block' : 'none' } })),
-        React__default.createElement(Time, _extends({}, props, { style: { display: this.state.panel === 'time' || !this.props.splitPanel ? 'block' : 'none' } }))
+        ) : undefined,
+        showCalendarPicker ? React__default.createElement(Calendar, _extends({}, props, { style: { display: isCalendarPanel || !splitPanel ? 'block' : 'none' } })) : undefined,
+        showTimePicker ? React__default.createElement(Time, _extends({}, props, { style: { display: isTimePanel || !splitPanel ? 'block' : 'none' } })) : undefined
       );
     }
   }]);
@@ -1082,10 +1167,17 @@ var Trigger = function (_Component) {
     value: function _renderPicker(isOpen) {
       var _props = this.props,
           moment$$1 = _props.moment,
-          splitPanel = _props.splitPanel;
+          splitPanel = _props.splitPanel,
+          buttons = _props.buttons;
 
 
-      return React__default.createElement(Picker, { className: 'datetime-picker-popup', isOpen: isOpen, moment: moment$$1, onChange: this.handleChange, splitPanel: splitPanel });
+      return React__default.createElement(Picker, {
+        className: 'datetime-picker-popup',
+        buttons: buttons,
+        isOpen: isOpen,
+        moment: moment$$1,
+        onChange: this.handleChange,
+        splitPanel: splitPanel });
     }
   }, {
     key: 'render',
@@ -1096,10 +1188,11 @@ var Trigger = function (_Component) {
           children = _props2.children,
           appendToBody = _props2.appendToBody;
 
+      var className = classNames('datetime-trigger', this.props.className);
 
       return React__default.createElement(
         'div',
-        { className: 'datetime-trigger' },
+        { className: className },
         React__default.createElement(
           'div',
           { onClick: function onClick() {
