@@ -1,5 +1,5 @@
 /*
- * rc-datetime-picker v1.3.9
+ * rc-datetime-picker v1.4.0
  * https://github.com/AllenWooooo/rc-datetime-picker
  *
  * (c) 2016 Allen Wu
@@ -204,6 +204,38 @@ var Day = function (_Component) {
       _this.props.onSelect(_moment);
     };
 
+    _this._renderWeek = function (week) {
+      return React__default.createElement(
+        'th',
+        { key: week },
+        week
+      );
+    };
+
+    _this._renderDay = function (day, week) {
+      var now = moment();
+      var _moment = _this.state.moment;
+      var selected = _this.state.selected;
+
+      var isPrevMonth = week === 0 && day > 7;
+      var isNextMonth = week >= 4 && day <= 14;
+      var isSelected = selected ? !isPrevMonth && !isNextMonth && _moment.isSame(selected, 'month') && selected.date() === day : false;
+      var className = classNames({
+        'prev': isPrevMonth,
+        'next': isNextMonth,
+        'selected': isSelected,
+        'now': !isPrevMonth && !isNextMonth && _moment.isSame(now, 'month') && now.date() === day
+      });
+
+      return React__default.createElement(
+        'td',
+        { key: day, className: className, onClick: function onClick() {
+            return _this.select(day, isSelected, isPrevMonth, isNextMonth);
+          } },
+        day
+      );
+    };
+
     _this.state = {
       moment: props.moment ? props.moment.clone() : moment(),
       selected: props.moment ? props.moment.clone() : null
@@ -220,45 +252,9 @@ var Day = function (_Component) {
       });
     }
   }, {
-    key: '_renderWeek',
-    value: function _renderWeek(week) {
-      return React__default.createElement(
-        'th',
-        { key: week },
-        week
-      );
-    }
-  }, {
-    key: '_renderDay',
-    value: function _renderDay(day, week) {
-      var _this2 = this;
-
-      var now = moment();
-      var _moment = this.state.moment;
-      var selected = this.state.selected;
-
-      var isPrevMonth = week === 0 && day > 7;
-      var isNextMonth = week >= 4 && day <= 14;
-      var isSelected = selected ? !isPrevMonth && !isNextMonth && _moment.isSame(selected, 'month') && selected.date() === day : false;
-      var className = classNames({
-        'prev': isPrevMonth,
-        'next': isNextMonth,
-        'selected': isSelected,
-        'now': !isPrevMonth && !isNextMonth && _moment.isSame(now, 'month') && now.date() === day
-      });
-
-      return React__default.createElement(
-        'td',
-        { key: day, className: className, onClick: function onClick() {
-            return _this2.select(day, isSelected, isPrevMonth, isNextMonth);
-          } },
-        day
-      );
-    }
-  }, {
     key: 'render',
     value: function render() {
-      var _this3 = this;
+      var _this2 = this;
 
       var _moment = this.state.moment;
       var firstDay = _moment.clone().date(1).day();
@@ -281,21 +277,21 @@ var Day = function (_Component) {
           React__default.createElement(
             'button',
             { type: 'button', className: 'prev-month', onClick: function onClick() {
-                return _this3.changeMonth('prev');
+                return _this2.changeMonth('prev');
               } },
             React__default.createElement('i', { className: 'fa fa-angle-left' })
           ),
           React__default.createElement(
             'span',
             { className: 'current-date', onClick: function onClick() {
-                return _this3.props.changePanel('month', _moment);
+                return _this2.props.changePanel('month', _moment);
               } },
             _moment.format(dayFormat)
           ),
           React__default.createElement(
             'button',
             { type: 'button', className: 'next-month', onClick: function onClick() {
-                return _this3.changeMonth('next');
+                return _this2.changeMonth('next');
               } },
             React__default.createElement('i', { className: 'fa fa-angle-right' })
           )
@@ -310,7 +306,7 @@ var Day = function (_Component) {
               'tr',
               null,
               weeks.map(function (week) {
-                return _this3._renderWeek(week);
+                return _this2._renderWeek(week);
               })
             )
           ),
@@ -322,7 +318,7 @@ var Day = function (_Component) {
                 'tr',
                 { key: idx },
                 week.map(function (day) {
-                  return _this3._renderDay(day, idx);
+                  return _this2._renderDay(day, idx);
                 })
               );
             })
@@ -360,6 +356,29 @@ var Month = function (_Component) {
       _this.props.onSelect(_moment);
     };
 
+    _this._renderMonth = function (month, idx, row) {
+      var now = moment();
+      var _month = moment().month(month).month();
+      var _moment = _this.state.moment;
+      var selected = _this.state.selected;
+
+      var isSelected = selected ? _moment.isSame(selected, 'year') && selected.month() === _month : false;
+      var className = classNames({
+        'selected': isSelected,
+        'now': _moment.isSame(now, 'year') && now.month() === _month
+      });
+      var months = _this.props.months;
+
+
+      return React__default.createElement(
+        'td',
+        { key: month, className: className, onClick: function onClick() {
+            return _this.select(_month);
+          } },
+        months ? months[idx + row * 3] : month
+      );
+    };
+
     _this.state = {
       moment: props.moment ? props.moment.clone() : moment(),
       selected: props.moment ? props.moment.clone() : null
@@ -376,38 +395,12 @@ var Month = function (_Component) {
       });
     }
   }, {
-    key: '_renderMonth',
-    value: function _renderMonth(month) {
-      var _this2 = this;
-
-      var now = moment();
-      var _month = moment().month(month).month();
-      var _moment = this.state.moment;
-      var selected = this.state.selected;
-
-      var isSelected = selected ? _moment.isSame(selected, 'year') && selected.month() === _month : false;
-      var className = classNames({
-        'selected': isSelected,
-        'now': _moment.isSame(now, 'year') && now.month() === _month
-      });
-
-      return React__default.createElement(
-        'td',
-        { key: month, className: className, onClick: function onClick() {
-            return _this2.select(_month);
-          } },
-        month
-      );
-    }
-  }, {
     key: 'render',
     value: function render() {
-      var _this3 = this;
+      var _this2 = this;
 
       var _moment = this.state.moment;
-      var _props$months = this.props.months,
-          months = _props$months === undefined ? MONTHS : _props$months;
-
+      var months = MONTHS;
 
       return React__default.createElement(
         'div',
@@ -418,21 +411,21 @@ var Month = function (_Component) {
           React__default.createElement(
             'button',
             { type: 'button', className: 'prev-month', onClick: function onClick() {
-                return _this3.changeYear('prev');
+                return _this2.changeYear('prev');
               } },
             React__default.createElement('i', { className: 'fa fa-angle-left' })
           ),
           React__default.createElement(
             'span',
             { className: 'current-date', onClick: function onClick() {
-                return _this3.props.changePanel('year', _moment);
+                return _this2.props.changePanel('year', _moment);
               } },
             _moment.format('YYYY')
           ),
           React__default.createElement(
             'button',
             { type: 'button', className: 'next-month', onClick: function onClick() {
-                return _this3.changeYear('next');
+                return _this2.changeYear('next');
               } },
             React__default.createElement('i', { className: 'fa fa-angle-right' })
           )
@@ -447,8 +440,8 @@ var Month = function (_Component) {
               return React__default.createElement(
                 'tr',
                 { key: idx },
-                _months.map(function (month) {
-                  return _this3._renderMonth(month);
+                _months.map(function (month, _idx) {
+                  return _this2._renderMonth(month, _idx, idx);
                 })
               );
             })
@@ -486,6 +479,29 @@ var Year = function (_Component) {
       _this.props.onSelect(_moment);
     };
 
+    _this._renderYear = function (year) {
+      var now = moment();
+      var _moment = _this.state.moment;
+      var firstYear = Math.floor(_moment.year() / 10) * 10;
+      var selected = _this.state.selected;
+
+      var isSelected = selected ? selected.year() === year : false;
+      var className = classNames({
+        'selected': isSelected,
+        'now': now.year() === year,
+        'prev': firstYear - 1 === year,
+        'next': firstYear + 10 === year
+      });
+
+      return React__default.createElement(
+        'td',
+        { key: year, className: className, onClick: function onClick() {
+            return _this.select(year);
+          } },
+        year
+      );
+    };
+
     _this.state = {
       moment: props.moment ? props.moment.clone() : moment(),
       selected: props.moment ? props.moment.clone() : null
@@ -502,35 +518,9 @@ var Year = function (_Component) {
       });
     }
   }, {
-    key: '_renderYear',
-    value: function _renderYear(year) {
-      var _this2 = this;
-
-      var now = moment();
-      var _moment = this.state.moment;
-      var firstYear = Math.floor(_moment.year() / 10) * 10;
-      var selected = this.state.selected;
-
-      var isSelected = selected ? selected.year() === year : false;
-      var className = classNames({
-        'selected': isSelected,
-        'now': now.year() === year,
-        'prev': firstYear - 1 === year,
-        'next': firstYear + 10 === year
-      });
-
-      return React__default.createElement(
-        'td',
-        { key: year, className: className, onClick: function onClick() {
-            return _this2.select(year);
-          } },
-        year
-      );
-    }
-  }, {
     key: 'render',
     value: function render() {
-      var _this3 = this;
+      var _this2 = this;
 
       var _moment = this.state.moment;
       var firstYear = Math.floor(_moment.year() / 10) * 10;
@@ -545,7 +535,7 @@ var Year = function (_Component) {
           React__default.createElement(
             'button',
             { type: 'button', className: 'prev-month', onClick: function onClick() {
-                return _this3.changePeriod('prev');
+                return _this2.changePeriod('prev');
               } },
             React__default.createElement('i', { className: 'fa fa-angle-left' })
           ),
@@ -559,7 +549,7 @@ var Year = function (_Component) {
           React__default.createElement(
             'button',
             { type: 'button', className: 'next-month', onClick: function onClick() {
-                return _this3.changePeriod('next');
+                return _this2.changePeriod('next');
               } },
             React__default.createElement('i', { className: 'fa fa-angle-right' })
           )
@@ -575,7 +565,7 @@ var Year = function (_Component) {
                 'tr',
                 { key: idx },
                 _years.map(function (year) {
-                  return _this3._renderYear(year);
+                  return _this2._renderYear(year);
                 })
               );
             })
@@ -626,9 +616,14 @@ var Calendar = function (_Component) {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(props) {
       this.setState({
-        panel: 'day',
         moment: props.moment
       });
+
+      if (!props.isOpen) {
+        this.setState({
+          panel: 'day'
+        });
+      }
     }
   }, {
     key: 'render',
@@ -636,6 +631,7 @@ var Calendar = function (_Component) {
       var _props = this.props,
           weeks = _props.weeks,
           months = _props.months,
+          dayFormat = _props.dayFormat,
           style = _props.style;
 
       var props = {
@@ -643,7 +639,8 @@ var Calendar = function (_Component) {
         onSelect: this.handleSelect,
         changePanel: this.changePanel,
         weeks: weeks,
-        months: months
+        months: months,
+        dayFormat: dayFormat
       };
       var panel = this.state.panel;
 
@@ -854,7 +851,7 @@ var Picker = function (_Component) {
       var className = classNames('datetime-picker', this.props.className, {
         split: splitPanel
       });
-      var props = blacklist(this.props, 'className', 'isOpen', 'splitPanel');
+      var props = blacklist(this.props, 'className', 'splitPanel');
 
       return React__default.createElement(
         'div',
