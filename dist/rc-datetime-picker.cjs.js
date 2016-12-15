@@ -1,5 +1,5 @@
 /*
- * rc-datetime-picker v1.3.1
+ * rc-datetime-picker v1.3.2
  * https://github.com/AllenWooooo/rc-datetime-picker
  *
  * (c) 2016 Allen Wu
@@ -778,11 +778,11 @@ var Buttons = function (_Component) {
       var onChange = _this.props.onChange;
 
 
-      onChange && onChange(value);
+      onChange && onChange(value, 'day');
     }, _this._renderButton = function (key, value) {
       return React__default.createElement(
-        "button",
-        { className: "btn", key: key, type: "button", onClick: _this.handleClick.bind(_this, value) },
+        'button',
+        { className: 'btn', key: key, type: 'button', onClick: _this.handleClick.bind(_this, value) },
         key
       );
     }, _this._renderButtons = function () {
@@ -796,12 +796,12 @@ var Buttons = function (_Component) {
   }
 
   createClass(Buttons, [{
-    key: "render",
+    key: 'render',
     value: function render() {
 
       return React__default.createElement(
-        "div",
-        { className: "buttons-bar" },
+        'div',
+        { className: 'buttons-bar' },
         this._renderButtons()
       );
     }
