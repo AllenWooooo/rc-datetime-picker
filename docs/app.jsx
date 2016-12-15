@@ -57,7 +57,7 @@ class PopupPicker extends Component {
     const value = datetime ? datetime.format('YYYY/MM/DD HH:mm') : '';
     
     return (
-      <DatetimePickerTrigger buttons={buttons} moment={datetime} onChange={this.handleChange} showTimePicker={false} closeOnSelectDay>
+      <DatetimePickerTrigger buttons={buttons} moment={datetime} onChange={this.handleChange} showTimePicker={false} closeOnSelectDay >
         <input type="text" value={value} readOnly />
         <span className="fa fa-calendar-o"></span>
       </DatetimePickerTrigger>
