@@ -1320,6 +1320,51 @@ var Trigger = function (_Component) {
       });
     };
 
+    _this.getPosition = function () {
+      var elem = _this.refs.trigger;
+      var elemBCR = elem.getBoundingClientRect();
+
+      return {
+        top: Math.round(elemBCR.top + elemBCR.height),
+        left: Math.round(elemBCR.left)
+      };
+    };
+
+    _this._renderPortal = function () {
+      var _this$state = _this.state,
+          pos = _this$state.pos,
+          isOpen = _this$state.isOpen;
+
+      var style = {
+        display: isOpen ? 'block' : 'none',
+        position: 'fixed',
+        top: pos.top + 'px',
+        left: pos.left + 'px'
+      };
+
+      return React__default.createElement(
+        Portal,
+        { style: style },
+        _this._renderPicker(true)
+      );
+    };
+
+    _this._renderPicker = function (isOpen) {
+      var _this$props = _this.props,
+          moment$$1 = _this$props.moment,
+          splitPanel = _this$props.splitPanel,
+          buttons = _this$props.buttons;
+
+
+      return React__default.createElement(Picker, {
+        className: 'datetime-picker-popup',
+        buttons: buttons,
+        isOpen: isOpen,
+        moment: moment$$1,
+        onChange: _this.handleChange,
+        splitPanel: splitPanel });
+    };
+
     _this.state = {
       isOpen: false,
       pos: {}
@@ -1348,61 +1393,13 @@ var Trigger = function (_Component) {
       }
     }
   }, {
-    key: 'getPosition',
-    value: function getPosition() {
-      var elem = this.refs.trigger;
-      var elemBCR = elem.getBoundingClientRect();
-
-      return {
-        top: Math.round(elemBCR.top + elemBCR.height),
-        left: Math.round(elemBCR.left)
-      };
-    }
-  }, {
-    key: '_renderPortal',
-    value: function _renderPortal() {
-      var _state = this.state,
-          pos = _state.pos,
-          isOpen = _state.isOpen;
-
-      var style = {
-        display: isOpen ? 'block' : 'none',
-        position: 'fixed',
-        top: pos.top + 'px',
-        left: pos.left + 'px'
-      };
-
-      return React__default.createElement(
-        Portal,
-        { style: style },
-        this._renderPicker(true)
-      );
-    }
-  }, {
-    key: '_renderPicker',
-    value: function _renderPicker(isOpen) {
-      var _props = this.props,
-          moment$$1 = _props.moment,
-          splitPanel = _props.splitPanel,
-          buttons = _props.buttons;
-
-
-      return React__default.createElement(Picker, {
-        className: 'datetime-picker-popup',
-        buttons: buttons,
-        isOpen: isOpen,
-        moment: moment$$1,
-        onChange: this.handleChange,
-        splitPanel: splitPanel });
-    }
-  }, {
     key: 'render',
     value: function render() {
       var _this2 = this;
 
-      var _props2 = this.props,
-          children = _props2.children,
-          appendToBody = _props2.appendToBody;
+      var _props = this.props,
+          children = _props.children,
+          appendToBody = _props.appendToBody;
 
       var className = classNames('datetime-trigger', this.props.className);
 

@@ -64,7 +64,7 @@ class Trigger extends Component {
     });
   }
 
-  getPosition() {
+  getPosition = () => {
     const elem = this.refs.trigger;
     const elemBCR = elem.getBoundingClientRect();
 
@@ -74,7 +74,7 @@ class Trigger extends Component {
     };
   }
 
-  _renderPortal() {
+  _renderPortal = () => {
     const {pos, isOpen} = this.state;
     const style = {
       display: isOpen ? 'block' : 'none',
@@ -90,7 +90,7 @@ class Trigger extends Component {
     );
   }
 
-  _renderPicker(isOpen) {
+  _renderPicker = (isOpen) => {
     const {moment, splitPanel, buttons} = this.props;    
     
     return (
