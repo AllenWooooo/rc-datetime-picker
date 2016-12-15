@@ -40,11 +40,13 @@ class Calendar extends Component {
   }
 
   render() {
-    const className = classNames('calendar', this.props.className);
+    const {weeks, months, style} = this.props;
     const props = {
       moment: this.state.moment,
       onSelect: this.handleSelect,
-      changePanel: this.changePanel
+      changePanel: this.changePanel,
+      weeks,
+      months
     };
     const {panel} = this.state;
     const isDayPanel = panel === 'day';
@@ -52,8 +54,8 @@ class Calendar extends Component {
     const isYearPanel = panel === 'year';
 
     return (
-      <div style={this.props.style}>
-        <div className={className}>
+      <div style={style}>
+        <div className="calendar">
           <Day 
             {...props}
             style={{display: isDayPanel ? 'block' : 'none'}} />
