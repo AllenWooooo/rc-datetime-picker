@@ -17,9 +17,14 @@ class Calendar extends Component {
 
   componentWillReceiveProps(props) {
     this.setState({
-      panel: 'day',
       moment: props.moment
     });
+
+    if (!props.isOpen) {
+      this.setState({
+        panel: 'day'
+      });
+    }
   }
 
   handleSelect = (moment) => {
@@ -40,13 +45,14 @@ class Calendar extends Component {
   }
 
   render() {
-    const {weeks, months, style} = this.props;
+    const {weeks, months, dayFormat, style} = this.props;
     const props = {
       moment: this.state.moment,
       onSelect: this.handleSelect,
       changePanel: this.changePanel,
       weeks,
-      months
+      months,
+      dayFormat
     };
     const {panel} = this.state;
     const isDayPanel = panel === 'day';

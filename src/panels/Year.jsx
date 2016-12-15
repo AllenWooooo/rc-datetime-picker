@@ -39,7 +39,7 @@ class Year extends Component {
     this.props.onSelect(_moment);
   }
 
-  _renderYear(year) {
+  _renderYear = (year) => {
     const now = moment();
     const _moment = this.state.moment;
     const firstYear = Math.floor(_moment.year() / 10) * 10;

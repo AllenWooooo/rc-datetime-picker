@@ -35,7 +35,7 @@ class Picker extends Component {
     const className = classNames('datetime-picker', this.props.className, {
       split: splitPanel
     });
-    const props = blacklist(this.props, 'className', 'isOpen', 'splitPanel');    
+    const props = blacklist(this.props, 'className', 'splitPanel');    
 
     return (
       <div className={className} style={{display: isOpen ? 'block' : 'none'}} onClick={(evt) => evt.stopPropagation()}>
