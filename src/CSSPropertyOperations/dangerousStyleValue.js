@@ -10,7 +10,8 @@
 
 'use strict';
 
-var CSSProperty = require('./CSSProperty');
+// var CSSProperty = require('./CSSProperty');
+import CSSProperty from './CSSProperty.js';
 var warning = require('fbjs/lib/warning');
 
 var isUnitlessNumber = CSSProperty.isUnitlessNumber;
@@ -75,4 +76,4 @@ function dangerousStyleValue(name, value, component) {
   return value + 'px';
 }
 
-module.exports = dangerousStyleValue;
+export default dangerousStyleValue;
