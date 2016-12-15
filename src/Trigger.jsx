@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {findDOMNode} from 'react-dom';
 import classNames from 'classnames/bind';
+import blacklist from 'blacklist';
 
 import DatetimePicker from './Picker.jsx';
 import Portal from './Portal.jsx';
@@ -48,13 +49,15 @@ class Trigger extends Component {
   }
 
   handleChange = (moment, currentPanel) => {
-    if (currentPanel === 'day' && this.props.closeOnSelectDay) {
+    const {closeOnSelectDay, onChange} = this.props;
+
+    if (currentPanel === 'day' && closeOnSelectDay) {
       this.setState({
         isOpen: false
       });
     }
 
-    this.props.onChange && this.props.onChange(moment);
+    onChange && onChange(moment);
   }
 
   togglePicker = (isOpen) => {
@@ -91,18 +94,14 @@ class Trigger extends Component {
   }
 
   _renderPicker = (isOpen) => {
-    const {moment, splitPanel, buttons, showTimePicker, showCalendarPicker} = this.props;    
+    const props = blacklist(this.props, 'className', 'appendToBody', 'children', 'onChange');  
     
     return (
       <DatetimePicker 
+        {...props}
         className="datetime-picker-popup" 
-        buttons={buttons}
         isOpen={isOpen} 
-        moment={moment} 
-        onChange={this.handleChange} 
-        showTimePicker={showTimePicker}
-        showCalendarPicker={showCalendarPicker}
-        splitPanel={splitPanel} />
+        onChange={this.handleChange} />
     );
   }
 
@@ -113,7 +112,7 @@ class Trigger extends Component {
     return (
       <div className={`datetime-trigger ${className}`}>
         <div onClick={() => this.togglePicker(!isOpen)} ref="trigger">{children}</div>
-        {appendToBody ? this._renderPortal() : this._renderPicker(this.state.isOpen)}
+        {appendToBody ? this._renderPortal() : this._renderPicker(isOpen)}
       </div>
     );
   }
