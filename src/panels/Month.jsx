@@ -40,7 +40,7 @@ class Month extends Component {
     this.props.onSelect(_moment);
   }
 
-  _renderMonth(month) {
+  _renderMonth = (month, idx, row) => {
     const now = moment();
     const _month = moment().month(month).month();
     const _moment = this.state.moment;
@@ -50,15 +50,16 @@ class Month extends Component {
       'selected': isSelected,
       'now': _moment.isSame(now, 'year') && now.month() === _month
     });
+    const {months} = this.props;
 
     return (
-      <td key={month} className={className} onClick={() => this.select(_month)}>{month}</td>
+      <td key={month} className={className} onClick={() => this.select(_month)}>{months ? months[idx + row * 3] : month}</td>
     );
   }
 
   render() {
     const _moment = this.state.moment;
-    const {months = MONTHS} = this.props;
+    const months = MONTHS;
 
     return (
       <div className="calendar-months" style={this.props.style}>
@@ -76,8 +77,8 @@ class Month extends Component {
             {chunk(months, 3).map((_months, idx) => {
               return (
                 <tr key={idx}>
-                  {_months.map((month) => {
-                    return this._renderMonth(month);
+                  {_months.map((month, _idx) => {
+                    return this._renderMonth(month, _idx, idx);
                   })}
                 </tr>
               );

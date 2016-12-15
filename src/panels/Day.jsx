@@ -45,13 +45,13 @@ class Day extends Component {
     this.props.onSelect(_moment);
   }
 
-  _renderWeek(week) {
+  _renderWeek = (week) => {
     return (
       <th key={week}>{week}</th>
     );
   }
 
-  _renderDay(day, week) {
+  _renderDay = (day, week) => {
     const now = moment();
     const _moment = this.state.moment;
     const {selected} = this.state;
