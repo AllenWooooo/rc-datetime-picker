@@ -10,7 +10,7 @@ class Calendar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      moment: props.moment.clone(),
+      moment: props.moment,
       panel: 'day'
     };
   }
