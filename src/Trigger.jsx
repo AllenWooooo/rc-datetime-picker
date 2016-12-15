@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {findDOMNode} from 'react-dom';
+import classNames from 'classnames/bind';
 
 import DatetimePicker from './Picker.jsx';
 import Portal from './Portal.jsx';
@@ -90,18 +91,25 @@ class Trigger extends Component {
   }
 
   _renderPicker(isOpen) {
-    const {moment, splitPanel} = this.props;
-
+    const {moment, splitPanel, buttons} = this.props;    
+    
     return (
-      <DatetimePicker className="datetime-picker-popup" isOpen={isOpen} moment={moment} onChange={this.handleChange} splitPanel={splitPanel}/>
+      <DatetimePicker 
+        className="datetime-picker-popup" 
+        buttons={buttons}
+        isOpen={isOpen} 
+        moment={moment} 
+        onChange={this.handleChange} 
+        splitPanel={splitPanel} />
     );
   }
 
   render() {
     const {children, appendToBody} = this.props;
+    const className = classNames('datetime-trigger', this.props.className);
 
     return (
-      <div className="datetime-trigger">
+      <div className={className}>
         <div onClick={() => this.togglePicker(true)} ref="trigger">{children}</div>
         {appendToBody ? this._renderPortal() : this._renderPicker(this.state.isOpen)}
       </div>

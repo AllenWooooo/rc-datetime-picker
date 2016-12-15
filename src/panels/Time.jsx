@@ -1,24 +1,32 @@
 import React, {Component} from 'react';
 import ReactSlider from 'react-slider';
+import moment from 'moment';
 
 
 class Time extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      moment: props.moment
+      moment: moment ? props.moment.clone() : moment().hours(0).minutes(0)
     };
   }
 
-  handleChange = (value, type) => {
-    const {moment} = this.props;
+  componentWillReceiveProps(props) {
+    this.setState({
+      moment: props.moment ? props.moment.clone() : moment().hours(0).minutes(0)
+    });
+  }
 
-    moment[type](value);
+  handleChange = (value, type) => {
+    const {onChange} = this.props;
+    const _moment = this.state.moment.clone();
+
+    _moment[type](value);
 
     this.setState({
-      moment
+      moment: _moment
     });
-    this.props.onChange && this.props.onChange(moment);
+    onChange && onChange(_moment);
   }
 
   render() {

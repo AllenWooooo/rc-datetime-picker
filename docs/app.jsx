@@ -37,20 +37,28 @@ class PopupPicker extends Component {
   constructor() {
     super();
     this.state = {
-      moment: moment()
+      datetime: moment()
     };
   }
 
   handleChange = (moment) => {
     this.setState({
-      moment
+      datetime: moment
     });
   }
 
   render() {
+    const buttons = {
+      'Today': moment(),
+      'Yesterday': moment().subtract(1, 'days'),
+      'Clear': null
+    };
+    const {datetime} = this.state;
+    const value = datetime ? datetime.format('YYYY/MM/DD HH:mm') : '';
+    
     return (
-      <DatetimePickerTrigger moment={this.state.moment} onChange={this.handleChange} appendToBody>
-        <input type="text" value={this.state.moment.format('YYYY/MM/DD HH:mm')} readOnly />
+      <DatetimePickerTrigger buttons={buttons} moment={datetime} onChange={this.handleChange} appendToBody>
+        <input type="text" value={value} readOnly />
         <span className="fa fa-calendar-o"></span>
       </DatetimePickerTrigger>
     );
