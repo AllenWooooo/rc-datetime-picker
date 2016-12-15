@@ -1,5 +1,5 @@
 /*
- * rc-datetime-picker v1.3.8
+ * rc-datetime-picker v1.3.9
  * https://github.com/AllenWooooo/rc-datetime-picker
  *
  * (c) 2016 Allen Wu
@@ -633,11 +633,17 @@ var Calendar = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var className = classNames('calendar', this.props.className);
+      var _props = this.props,
+          weeks = _props.weeks,
+          months = _props.months,
+          style = _props.style;
+
       var props = {
         moment: this.state.moment,
         onSelect: this.handleSelect,
-        changePanel: this.changePanel
+        changePanel: this.changePanel,
+        weeks: weeks,
+        months: months
       };
       var panel = this.state.panel;
 
@@ -647,10 +653,10 @@ var Calendar = function (_Component) {
 
       return React__default.createElement(
         'div',
-        { style: this.props.style },
+        { style: style },
         React__default.createElement(
           'div',
-          { className: className },
+          { className: 'calendar' },
           React__default.createElement(Day, _extends({}, props, {
             style: { display: isDayPanel ? 'block' : 'none' } })),
           React__default.createElement(Month, _extends({}, props, {
