@@ -189,8 +189,8 @@ var Day = function (_Component) {
       });
     };
 
-    _this.select = function (day, isSelected, isPrevMonth, isNextMonth) {
-      if (isSelected) return;
+    _this.select = function (day, isSelected, isDisabled, isPrevMonth, isNextMonth) {
+      if (isSelected || isDisabled) return;
 
       var _moment = _this.state.moment.clone();
 
@@ -217,22 +217,30 @@ var Day = function (_Component) {
     _this._renderDay = function (day, week) {
       var now = moment();
       var _moment = _this.state.moment;
+      var _this$props = _this.props,
+          max = _this$props.max,
+          min = _this$props.min;
       var selected = _this.state.selected;
 
       var isPrevMonth = week === 0 && day > 7;
       var isNextMonth = week >= 4 && day <= 14;
-      var isSelected = selected ? !isPrevMonth && !isNextMonth && _moment.isSame(selected, 'month') && selected.date() === day : false;
+      var month = isNextMonth ? _moment.clone().add(1, 'month') : isPrevMonth ? _moment.clone().subtract(1, 'month') : _moment.clone();
+      var isSelected = selected ? month.isSame(selected.clone().date(day), 'day') : false;
+      var disabledMax = max ? month.date(day).isAfter(max, 'day') : false;
+      var disabledMin = min ? month.date(day).isBefore(min, 'day') : false;
+      var isDisabled = disabledMax || disabledMin;
       var className = classNames({
-        'prev': isPrevMonth,
-        'next': isNextMonth,
-        'selected': isSelected,
-        'now': !isPrevMonth && !isNextMonth && _moment.isSame(now, 'month') && now.date() === day
+        prev: isPrevMonth,
+        next: isNextMonth,
+        selected: isSelected,
+        now: now.isSame(month.date(day), 'day'),
+        disabled: isDisabled
       });
 
       return React__default.createElement(
         'td',
         { key: day, className: className, onClick: function onClick() {
-            return _this.select(day, isSelected, isPrevMonth, isNextMonth);
+            return _this.select(day, isSelected, isDisabled, isPrevMonth, isNextMonth);
           } },
         day
       );
@@ -346,7 +354,8 @@ var Month = function (_Component) {
       });
     };
 
-    _this.select = function (month) {
+    _this.select = function (month, isDisabled) {
+      if (isDisabled) return;
       var _moment = _this.state.moment.clone();
 
       _moment.month(month);
@@ -360,22 +369,27 @@ var Month = function (_Component) {
 
     _this._renderMonth = function (month, idx, row) {
       var now = moment();
-      var _month = moment().month(month).month();
       var _moment = _this.state.moment;
+      var _this$props = _this.props,
+          max = _this$props.max,
+          min = _this$props.min,
+          months = _this$props.months;
       var selected = _this.state.selected;
 
-      var isSelected = selected ? _moment.isSame(selected, 'year') && selected.month() === _month : false;
+      var isSelected = selected ? _moment.isSame(selected.clone().month(month), 'month') : false;
+      var disabledMax = max ? _moment.clone().month(month).isAfter(max, 'month') : false;
+      var disabledMin = min ? _moment.clone().month(month).isBefore(min, 'month') : false;
+      var isDisabled = disabledMax || disabledMin;
       var className = classNames({
-        'selected': isSelected,
-        'now': _moment.isSame(now, 'year') && now.month() === _month
+        selected: isSelected,
+        now: now.isSame(_moment.clone().month(month), 'month'),
+        disabled: isDisabled
       });
-      var months = _this.props.months;
-
 
       return React__default.createElement(
         'td',
         { key: month, className: className, onClick: function onClick() {
-            return _this.select(_month);
+            return _this.select(month, isDisabled);
           } },
         months ? months[idx + row * 3] : month
       );
@@ -469,7 +483,8 @@ var Year = function (_Component) {
       });
     };
 
-    _this.select = function (year) {
+    _this.select = function (year, isDisabled) {
+      if (isDisabled) return;
       var _moment = _this.state.moment.clone();
 
       _moment.year(year);
@@ -485,20 +500,27 @@ var Year = function (_Component) {
       var now = moment();
       var _moment = _this.state.moment;
       var firstYear = Math.floor(_moment.year() / 10) * 10;
+      var _this$props = _this.props,
+          max = _this$props.max,
+          min = _this$props.min;
       var selected = _this.state.selected;
 
       var isSelected = selected ? selected.year() === year : false;
+      var disabledMax = max ? year > max.year() : false;
+      var disabledMin = min ? year < min.year() : false;
+      var isDisabled = disabledMax || disabledMin;
       var className = classNames({
-        'selected': isSelected,
-        'now': now.year() === year,
-        'prev': firstYear - 1 === year,
-        'next': firstYear + 10 === year
+        selected: isSelected,
+        now: now.year() === year,
+        prev: firstYear - 1 === year,
+        next: firstYear + 10 === year,
+        disabled: isDisabled
       });
 
       return React__default.createElement(
         'td',
         { key: year, className: className, onClick: function onClick() {
-            return _this.select(year);
+            return _this.select(year, isDisabled);
           } },
         year
       );
@@ -634,7 +656,9 @@ var Calendar = function (_Component) {
           weeks = _props.weeks,
           months = _props.months,
           dayFormat = _props.dayFormat,
-          style = _props.style;
+          style = _props.style,
+          max = _props.max,
+          min = _props.min;
 
       var props = {
         moment: this.state.moment,
@@ -642,7 +666,9 @@ var Calendar = function (_Component) {
         changePanel: this.changePanel,
         weeks: weeks,
         months: months,
-        dayFormat: dayFormat
+        dayFormat: dayFormat,
+        max: max,
+        min: min
       };
       var panel = this.state.panel;
 
@@ -1222,8 +1248,25 @@ var Portal = function (_React$Component) {
   inherits(Portal, _React$Component);
 
   function Portal() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
     classCallCheck(this, Portal);
-    return possibleConstructorReturn(this, (Portal.__proto__ || Object.getPrototypeOf(Portal)).apply(this, arguments));
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = possibleConstructorReturn(this, (_ref = Portal.__proto__ || Object.getPrototypeOf(Portal)).call.apply(_ref, [this].concat(args))), _this), _this.applyClassNameAndStyle = function (props) {
+      if (props.className) {
+        _this.node.className = props.className;
+      }
+
+      if (props.style) {
+        CSSPropertyOperations.setValueForStyles(_this.node, props.style, _this._reactInternalInstance);
+      }
+    }, _temp), possibleConstructorReturn(_this, _ret);
   }
 
   createClass(Portal, [{
@@ -1246,17 +1289,6 @@ var Portal = function (_React$Component) {
 
       this.portal = null;
       this.node = null;
-    }
-  }, {
-    key: 'applyClassNameAndStyle',
-    value: function applyClassNameAndStyle(props) {
-      if (props.className) {
-        this.node.className = props.className;
-      }
-
-      if (props.style) {
-        CSSPropertyOperations.setValueForStyles(this.node, props.style, this._reactInternalInstance);
-      }
     }
   }, {
     key: 'renderPortal',

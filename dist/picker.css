@@ -95,12 +95,19 @@
   background-color: #f0f0f0;
 }
 .datetime-picker .calendar table tbody tr td.prev,
-.datetime-picker .calendar table tbody tr td.next {
+.datetime-picker .calendar table tbody tr td.next,
+.datetime-picker .calendar table tbody tr td.disabled {
   color: #dedede;
 }
 .datetime-picker .calendar table tbody tr td.prev:hover,
-.datetime-picker .calendar table tbody tr td.next:hover {
+.datetime-picker .calendar table tbody tr td.next:hover,
+.datetime-picker .calendar table tbody tr td.disabled:hover {
   color: #c5c5c5;
+}
+.datetime-picker .calendar table tbody tr td.disabled:hover {
+  color: #dedede;
+  background-color: transparent;
+  cursor: not-allowed;
 }
 .datetime-picker .calendar table tbody tr td.now {
   color: #5cc4ef;
@@ -185,6 +192,27 @@
 .datetime-picker .time .sliders .slider .handle:active {
   background-color: #5cc4ef;
   border-color: #5cc4ef;
+}
+.datetime-picker .buttons-bar {
+  border-bottom: 1px solid #efefef;
+  padding: 8px;
+}
+.datetime-picker .buttons-bar .btn {
+  border: 0;
+  background: none;
+  cursor: pointer;
+  border-radius: 2px;
+  padding: 2px 4px;
+  outline: none;
+}
+.datetime-picker .buttons-bar .btn:hover {
+  background-color: #f0f0f0;
+}
+.datetime-picker .buttons-bar .btn:last-child {
+  float: right;
+}
+.datetime-picker .buttons-bar .btn:not(:first-child) {
+  margin-left: 5px;
 }
 .datetime-trigger {
   position: relative;
