@@ -109,11 +109,20 @@
             }
 
             &.prev,
-            &.next {
+            &.next,
+            &.disabled {
               color: #dedede;
 
               &:hover {
                 color: #c5c5c5;
+              }
+            }
+
+            &.disabled {
+              &:hover {
+                color: #dedede;
+                background-color: transparent;
+                cursor: not-allowed;
               }
             }
 
@@ -234,6 +243,7 @@
       cursor: pointer;
       border-radius: 2px;
       padding: 2px 4px;
+      outline: none;
 
       &:hover {
         background-color: #f0f0f0;
