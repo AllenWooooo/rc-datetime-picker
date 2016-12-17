@@ -44,11 +44,11 @@ class Month extends Component {
   _renderMonth = (month, idx, row) => {
     const now = moment();
     const _moment = this.state.moment;
-    const {max, min, months} = this.props;
+    const {maxDate, minDate, months} = this.props;
     const {selected} = this.state;
     const isSelected = selected ? _moment.isSame(selected.clone().month(month), 'month') : false;
-    const disabledMax = max ? _moment.clone().month(month).isAfter(max, 'month') : false;
-    const disabledMin = min ? _moment.clone().month(month).isBefore(min, 'month') : false;
+    const disabledMax = maxDate ? _moment.clone().month(month).isAfter(maxDate, 'month') : false;
+    const disabledMin = minDate ? _moment.clone().month(month).isBefore(minDate, 'month') : false;
     const isDisabled = disabledMax || disabledMin;
     const className = classNames({
       selected: isSelected,

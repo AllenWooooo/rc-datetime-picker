@@ -53,7 +53,7 @@ class PopupPicker extends Component {
     const buttons = {
       'Today': moment(),
       'Yesterday': moment().subtract(1, 'days'),
-      'Clear': null
+      'Clear': ''
     };
     const {datetime} = this.state;
     const value = datetime ? datetime.format('YYYY/MM/DD HH:mm') : '';
@@ -63,8 +63,6 @@ class PopupPicker extends Component {
         buttons={buttons} 
         moment={datetime} 
         onChange={this.handleChange} 
-        max={moment().add(5, 'days')}
-        min={moment().subtract(1, 'year')}
       >
         <input type="text" value={value} readOnly />
         <span className="fa fa-calendar-o"></span>
