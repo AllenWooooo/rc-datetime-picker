@@ -1,5 +1,5 @@
 /*
- * rc-datetime-picker v1.4.0
+ * rc-datetime-picker v1.4.1
  * https://github.com/AllenWooooo/rc-datetime-picker
  *
  * (c) 2016 Allen Wu
@@ -218,16 +218,16 @@ var Day = function (_Component) {
       var now = moment();
       var _moment = _this.state.moment;
       var _this$props = _this.props,
-          max = _this$props.max,
-          min = _this$props.min;
+          maxDate = _this$props.maxDate,
+          minDate = _this$props.minDate;
       var selected = _this.state.selected;
 
       var isPrevMonth = week === 0 && day > 7;
       var isNextMonth = week >= 4 && day <= 14;
       var month = isNextMonth ? _moment.clone().add(1, 'month') : isPrevMonth ? _moment.clone().subtract(1, 'month') : _moment.clone();
       var isSelected = selected ? month.isSame(selected.clone().date(day), 'day') : false;
-      var disabledMax = max ? month.date(day).isAfter(max, 'day') : false;
-      var disabledMin = min ? month.date(day).isBefore(min, 'day') : false;
+      var disabledMax = maxDate ? month.date(day).isAfter(maxDate, 'day') : false;
+      var disabledMin = minDate ? month.date(day).isBefore(minDate, 'day') : false;
       var isDisabled = disabledMax || disabledMin;
       var className = classNames({
         prev: isPrevMonth,
@@ -371,14 +371,14 @@ var Month = function (_Component) {
       var now = moment();
       var _moment = _this.state.moment;
       var _this$props = _this.props,
-          max = _this$props.max,
-          min = _this$props.min,
+          maxDate = _this$props.maxDate,
+          minDate = _this$props.minDate,
           months = _this$props.months;
       var selected = _this.state.selected;
 
       var isSelected = selected ? _moment.isSame(selected.clone().month(month), 'month') : false;
-      var disabledMax = max ? _moment.clone().month(month).isAfter(max, 'month') : false;
-      var disabledMin = min ? _moment.clone().month(month).isBefore(min, 'month') : false;
+      var disabledMax = maxDate ? _moment.clone().month(month).isAfter(maxDate, 'month') : false;
+      var disabledMin = minDate ? _moment.clone().month(month).isBefore(minDate, 'month') : false;
       var isDisabled = disabledMax || disabledMin;
       var className = classNames({
         selected: isSelected,
@@ -501,13 +501,13 @@ var Year = function (_Component) {
       var _moment = _this.state.moment;
       var firstYear = Math.floor(_moment.year() / 10) * 10;
       var _this$props = _this.props,
-          max = _this$props.max,
-          min = _this$props.min;
+          maxDate = _this$props.maxDate,
+          minDate = _this$props.minDate;
       var selected = _this.state.selected;
 
       var isSelected = selected ? selected.year() === year : false;
-      var disabledMax = max ? year > max.year() : false;
-      var disabledMin = min ? year < min.year() : false;
+      var disabledMax = maxDate ? year > maxDate.year() : false;
+      var disabledMin = minDate ? year < minDate.year() : false;
       var isDisabled = disabledMax || disabledMin;
       var className = classNames({
         selected: isSelected,
@@ -657,8 +657,8 @@ var Calendar = function (_Component) {
           months = _props.months,
           dayFormat = _props.dayFormat,
           style = _props.style,
-          max = _props.max,
-          min = _props.min;
+          maxDate = _props.maxDate,
+          minDate = _props.minDate;
 
       var props = {
         moment: this.state.moment,
@@ -667,8 +667,8 @@ var Calendar = function (_Component) {
         weeks: weeks,
         months: months,
         dayFormat: dayFormat,
-        max: max,
-        min: min
+        maxDate: maxDate,
+        minDate: minDate
       };
       var panel = this.state.panel;
 
@@ -734,8 +734,7 @@ var Time = function (_Component) {
     value: function render() {
       var _this2 = this;
 
-      var moment$$1 = this.state.moment;
-
+      var _moment = this.state.moment.clone();
 
       return React__default.createElement(
         'div',
@@ -749,7 +748,7 @@ var Time = function (_Component) {
             React__default.createElement(
               'span',
               { className: 'text' },
-              moment$$1.format('HH')
+              _moment.format('HH')
             ),
             React__default.createElement(
               'span',
@@ -759,7 +758,7 @@ var Time = function (_Component) {
             React__default.createElement(
               'span',
               { className: 'text' },
-              moment$$1.format('mm')
+              _moment.format('mm')
             )
           ),
           React__default.createElement(
@@ -770,7 +769,7 @@ var Time = function (_Component) {
               { className: 'slider-text' },
               'Hours:'
             ),
-            React__default.createElement(ReactSlider, { min: 0, max: 23, value: moment$$1.hour(), onChange: function onChange(value) {
+            React__default.createElement(ReactSlider, { min: 0, max: 23, value: _moment.hour(), onChange: function onChange(value) {
                 return _this2.handleChange(value, 'hours');
               }, withBars: true }),
             React__default.createElement(
@@ -778,7 +777,7 @@ var Time = function (_Component) {
               { className: 'slider-text' },
               'Minutes:'
             ),
-            React__default.createElement(ReactSlider, { min: 0, max: 59, value: moment$$1.minute(), onChange: function onChange(value) {
+            React__default.createElement(ReactSlider, { min: 0, max: 59, value: _moment.minute(), onChange: function onChange(value) {
                 return _this2.handleChange(value, 'minutes');
               }, withBars: true })
           )
