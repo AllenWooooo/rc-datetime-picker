@@ -44,11 +44,11 @@ class Year extends Component {
     const now = moment();
     const _moment = this.state.moment;
     const firstYear = Math.floor(_moment.year() / 10) * 10;
-    const {max, min} = this.props;
+    const {maxDate, minDate} = this.props;
     const {selected} = this.state;
     const isSelected = selected ? selected.year() === year : false;
-    const disabledMax = max ? year > max.year() : false;
-    const disabledMin = min ? year < min.year() : false;
+    const disabledMax = maxDate ? year > maxDate.year() : false;
+    const disabledMin = minDate ? year < minDate.year() : false;
     const isDisabled = disabledMax || disabledMin;
     const className = classNames({
       selected: isSelected,

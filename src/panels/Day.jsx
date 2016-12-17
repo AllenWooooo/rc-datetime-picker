@@ -54,7 +54,7 @@ class Day extends Component {
   _renderDay = (day, week) => {
     const now = moment();
     const _moment = this.state.moment;
-    const {max, min} = this.props;
+    const {maxDate, minDate} = this.props;
     const {selected} = this.state;
     const isPrevMonth = week === 0 && day > 7;
     const isNextMonth = week >= 4 && day <= 14;
@@ -64,8 +64,8 @@ class Day extends Component {
                     ? _moment.clone().subtract(1, 'month')
                     : _moment.clone();
     const isSelected = selected ? month.isSame(selected.clone().date(day), 'day') : false;
-    const disabledMax = max ? month.date(day).isAfter(max, 'day') : false;
-    const disabledMin = min ? month.date(day).isBefore(min, 'day') : false;
+    const disabledMax = maxDate ? month.date(day).isAfter(maxDate, 'day') : false;
+    const disabledMin = minDate ? month.date(day).isBefore(minDate, 'day') : false;
     const isDisabled = disabledMax || disabledMin;
     const className = classNames({
       prev: isPrevMonth,

@@ -30,21 +30,21 @@ class Time extends Component {
   }
 
   render() {
-    const {moment} = this.state;
+    const _moment = this.state.moment.clone();
 
     return (
       <div style={this.props.style}>
         <div className="time">
           <div className="show-time">
-            <span className="text">{moment.format('HH')}</span>
+            <span className="text">{_moment.format('HH')}</span>
             <span className="separater">:</span>
-            <span className="text">{moment.format('mm')}</span>
+            <span className="text">{_moment.format('mm')}</span>
           </div>
           <div className="sliders">
             <span className="slider-text">Hours:</span>
-            <ReactSlider min={0} max={23} value={moment.hour()} onChange={(value) => this.handleChange(value, 'hours')} withBars />
+            <ReactSlider min={0} max={23} value={_moment.hour()} onChange={(value) => this.handleChange(value, 'hours')} withBars />
             <span className="slider-text">Minutes:</span>
-            <ReactSlider min={0} max={59} value={moment.minute()} onChange={(value) => this.handleChange(value, 'minutes')} withBars />
+            <ReactSlider min={0} max={59} value={_moment.minute()} onChange={(value) => this.handleChange(value, 'minutes')} withBars />
           </div>
         </div>
       </div>
