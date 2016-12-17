@@ -27,7 +27,8 @@ class Year extends Component {
     });
   }
 
-  select = (year) => {
+  select = (year, isDisabled) => {
+    if (isDisabled) return;
     const _moment = this.state.moment.clone();
 
     _moment.year(year);
@@ -43,17 +44,22 @@ class Year extends Component {
     const now = moment();
     const _moment = this.state.moment;
     const firstYear = Math.floor(_moment.year() / 10) * 10;
+    const {max, min} = this.props;
     const {selected} = this.state;
     const isSelected = selected ? selected.year() === year : false;
+    const disabledMax = max ? year > max.year() : false;
+    const disabledMin = min ? year < min.year() : false;
+    const isDisabled = disabledMax || disabledMin;
     const className = classNames({
-      'selected': isSelected,
-      'now': now.year() === year,
-      'prev': firstYear - 1 === year,
-      'next': firstYear + 10 === year
+      selected: isSelected,
+      now: now.year() === year,
+      prev: firstYear - 1 === year,
+      next: firstYear + 10 === year,
+      disabled: isDisabled
     });
 
     return (
-      <td key={year} className={className} onClick={() => this.select(year)}>{year}</td>
+      <td key={year} className={className} onClick={() => this.select(year, isDisabled)}>{year}</td>
     );
   }
 

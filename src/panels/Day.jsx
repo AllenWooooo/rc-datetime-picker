@@ -28,8 +28,8 @@ class Day extends Component {
     });
   }
 
-  select = (day, isSelected, isPrevMonth, isNextMonth) => {
-    if (isSelected) return;
+  select = (day, isSelected, isDisabled, isPrevMonth, isNextMonth) => {
+    if (isSelected || isDisabled) return;
 
     const _moment = this.state.moment.clone();
 
@@ -54,19 +54,29 @@ class Day extends Component {
   _renderDay = (day, week) => {
     const now = moment();
     const _moment = this.state.moment;
+    const {max, min} = this.props;
     const {selected} = this.state;
     const isPrevMonth = week === 0 && day > 7;
     const isNextMonth = week >= 4 && day <= 14;
-    const isSelected = selected ? !isPrevMonth && !isNextMonth && _moment.isSame(selected, 'month') && selected.date() === day : false;
+    const month = isNextMonth 
+                  ? _moment.clone().add(1, 'month') 
+                  : isPrevMonth 
+                    ? _moment.clone().subtract(1, 'month')
+                    : _moment.clone();
+    const isSelected = selected ? month.isSame(selected.clone().date(day), 'day') : false;
+    const disabledMax = max ? month.date(day).isAfter(max, 'day') : false;
+    const disabledMin = min ? month.date(day).isBefore(min, 'day') : false;
+    const isDisabled = disabledMax || disabledMin;
     const className = classNames({
-      'prev': isPrevMonth,
-      'next': isNextMonth,
-      'selected': isSelected,
-      'now': !isPrevMonth && !isNextMonth && _moment.isSame(now, 'month') && now.date() === day
+      prev: isPrevMonth,
+      next: isNextMonth,
+      selected: isSelected,
+      now: now.isSame(month.date(day), 'day'),
+      disabled: isDisabled
     });
 
     return (
-      <td key={day} className={className} onClick={() => this.select(day, isSelected, isPrevMonth, isNextMonth)}>{day}</td>
+      <td key={day} className={className} onClick={() => this.select(day, isSelected, isDisabled, isPrevMonth, isNextMonth)}>{day}</td>
     );
   }
 

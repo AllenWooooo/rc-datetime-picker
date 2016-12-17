@@ -21,11 +21,13 @@ class InlinePicker extends Component {
   }
 
   render() {
+    const {moment} = this.state;
+
     return (
       <div>
-        <span className="text">Datetime: {this.state.moment.format('YYYY/MM/DD HH:mm')}</span>
+        <span className="text">Datetime: {moment.format('YYYY/MM/DD HH:mm')}</span>
         <DatetimePicker
-          moment={moment()}
+          moment={moment}
           onChange={this.handleChange}
         />
       </div>
@@ -57,7 +59,13 @@ class PopupPicker extends Component {
     const value = datetime ? datetime.format('YYYY/MM/DD HH:mm') : '';
     
     return (
-      <DatetimePickerTrigger buttons={buttons} moment={datetime} onChange={this.handleChange} showTimePicker={false} closeOnSelectDay >
+      <DatetimePickerTrigger 
+        buttons={buttons} 
+        moment={datetime} 
+        onChange={this.handleChange} 
+        max={moment().add(5, 'days')}
+        min={moment().subtract(1, 'year')}
+      >
         <input type="text" value={value} readOnly />
         <span className="fa fa-calendar-o"></span>
       </DatetimePickerTrigger>

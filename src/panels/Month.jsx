@@ -28,7 +28,8 @@ class Month extends Component {
     });
   }
 
-  select = (month) => {
+  select = (month, isDisabled) => {
+    if (isDisabled) return;
     const _moment = this.state.moment.clone();
 
     _moment.month(month);
@@ -42,18 +43,21 @@ class Month extends Component {
 
   _renderMonth = (month, idx, row) => {
     const now = moment();
-    const _month = moment().month(month).month();
     const _moment = this.state.moment;
+    const {max, min, months} = this.props;
     const {selected} = this.state;
-    const isSelected = selected ? _moment.isSame(selected, 'year') && selected.month() === _month : false;
+    const isSelected = selected ? _moment.isSame(selected.clone().month(month), 'month') : false;
+    const disabledMax = max ? _moment.clone().month(month).isAfter(max, 'month') : false;
+    const disabledMin = min ? _moment.clone().month(month).isBefore(min, 'month') : false;
+    const isDisabled = disabledMax || disabledMin;
     const className = classNames({
-      'selected': isSelected,
-      'now': _moment.isSame(now, 'year') && now.month() === _month
+      selected: isSelected,
+      now: now.isSame(_moment.clone().month(month), 'month'),
+      disabled: isDisabled
     });
-    const {months} = this.props;
 
     return (
-      <td key={month} className={className} onClick={() => this.select(_month)}>{months ? months[idx + row * 3] : month}</td>
+      <td key={month} className={className} onClick={() => this.select(month, isDisabled)}>{months ? months[idx + row * 3] : month}</td>
     );
   }
 

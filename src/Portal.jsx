@@ -22,7 +22,7 @@ class Portal extends React.Component {
     this.node = null;
   }
 
-  applyClassNameAndStyle(props) {
+  applyClassNameAndStyle = (props) => {
     if (props.className) {
       this.node.className = props.className;
     }
@@ -46,7 +46,7 @@ class Portal extends React.Component {
       this.applyClassNameAndStyle(props);
     }
 
-    let {children} = props;
+    const {children} = props;
 
     this.portal = ReactDOM.unstable_renderSubtreeIntoContainer(
       this,

@@ -223,6 +223,31 @@
     }
 
   }
+
+  .buttons-bar {
+    border-bottom: 1px solid #efefef;
+    padding: 8px;
+
+    .btn {
+      border: 0;
+      background: none;
+      cursor: pointer;
+      border-radius: 2px;
+      padding: 2px 4px;
+
+      &:hover {
+        background-color: #f0f0f0;
+      }
+
+      &:last-child {
+        float: right;
+      }
+
+      &:not(:first-child) {
+        margin-left: 5px;
+      }
+    }
+  }
 }
 
 .datetime-trigger {
