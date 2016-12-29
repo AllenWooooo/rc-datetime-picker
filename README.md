@@ -222,5 +222,11 @@ See the [demo] page.
       <td>false</td>
       <td>Whether to close the picker when selecting a date on day panel.</td>
     </tr>
+    <tr>
+      <td>disabled</td>
+      <td>Boolean</td>
+      <td>false</td>
+      <td>Disabled triggering.</td>
+    </tr>
   </tbody>
 </table>
