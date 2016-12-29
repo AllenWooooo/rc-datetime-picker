@@ -1,5 +1,5 @@
 /*
- * rc-datetime-picker v1.4.1
+ * rc-datetime-picker v1.4.2
  * https://github.com/AllenWooooo/rc-datetime-picker
  *
  * (c) 2016 Allen Wu
@@ -1351,6 +1351,11 @@ var Trigger = function (_Component) {
     };
 
     _this.togglePicker = function (isOpen) {
+      var disabled = _this.props.disabled;
+
+
+      if (disabled) return;
+
       _this.setState({
         isOpen: isOpen,
         pos: _this.getPosition()
