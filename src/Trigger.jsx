@@ -61,6 +61,10 @@ class Trigger extends Component {
   }
 
   togglePicker = (isOpen) => {
+    const {disabled} = this.props;
+    
+    if (disabled) return;
+
     this.setState({
       isOpen,
       pos: this.getPosition()
