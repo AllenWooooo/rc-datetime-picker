@@ -193,6 +193,17 @@
   background-color: #5cc4ef;
   border-color: #5cc4ef;
 }
+.datetime-picker .time .ok button {
+  outline: none;
+  border: 0;
+  padding: 8px;
+  background: #53c1ee;
+  color: #ffffff;
+  border-radius: 2px;
+  margin-right: 5px;
+  cursor: pointer;
+  white-space: nowrap;
+}
 .datetime-picker .buttons-bar {
   border-bottom: 1px solid #efefef;
   padding: 8px;

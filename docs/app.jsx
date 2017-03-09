@@ -61,7 +61,8 @@ class PopupPicker extends Component {
     return (
       <DatetimePickerTrigger 
         buttons={buttons} 
-        moment={datetime} 
+        moment={datetime}
+        showOkBtn={true} 
         onChange={this.handleChange} 
       >
         <input type="text" value={value} readOnly />
