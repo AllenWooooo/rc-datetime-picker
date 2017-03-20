@@ -66,10 +66,10 @@ class Month extends Component {
   render() {
     const _moment = this.state.moment;
     const months = MONTHS;
-    const {changePanel} = this.props;
+    const {changePanel, style} = this.props;
 
     return (
-      <div className="calendar-months" style={this.props.style}>
+      <div className="calendar-months" style={style}>
         <div className="calendar-nav">
           <button type="button" className="prev-month" onClick={this.changeYear.bind(this, 'prev')}>
             <i className="fa fa-angle-left"/>

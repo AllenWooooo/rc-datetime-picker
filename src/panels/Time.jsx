@@ -31,9 +31,10 @@ class Time extends Component {
 
   render() {
     const _moment = this.state.moment;
+    const {style} = this.props;
 
     return (
-      <div style={this.props.style}>
+      <div style={style}>
         <div className="time">
           <div className="show-time">
             <span className="text">{_moment.format('HH')}</span>
