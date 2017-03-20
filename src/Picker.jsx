@@ -4,7 +4,7 @@ import blacklist from 'blacklist';
 
 import Calendar from './panels/Calendar.jsx';
 import Time from './panels/Time.jsx';
-import Buttons from './panels/Buttons.jsx';
+import Shortcuts from './panels/Shortcuts.jsx';
 
 
 class Picker extends Component {
@@ -24,7 +24,7 @@ class Picker extends Component {
   render() {
     const {
       isOpen = true, 
-      buttons, 
+      shortcuts, 
       splitPanel, 
       showTimePicker = true, 
       showCalendarPicker = true
@@ -39,8 +39,8 @@ class Picker extends Component {
 
     return (
       <div className={className} style={{display: isOpen ? 'block' : 'none'}} onClick={(evt) => evt.stopPropagation()}>
-        {buttons
-          ? <Buttons {...props} />
+        {shortcuts
+          ? <Shortcuts {...props} />
           : undefined
         }
 

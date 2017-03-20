@@ -50,7 +50,7 @@ class PopupPicker extends Component {
   }
 
   render() {
-    const buttons = {
+    const shortcuts = {
       'Today': moment(),
       'Yesterday': moment().subtract(1, 'days'),
       'Clear': ''
@@ -60,7 +60,7 @@ class PopupPicker extends Component {
     
     return (
       <DatetimePickerTrigger 
-        buttons={buttons} 
+        shortcuts={shortcuts} 
         moment={datetime} 
         onChange={this.handleChange} 
       >
