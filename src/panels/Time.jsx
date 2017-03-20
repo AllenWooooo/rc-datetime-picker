@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import ReactSlider from 'react-slider';
-import moment from 'moment';
+import ReactSlider        from 'react-slider';
+import moment             from 'moment';
+import {CONFIRM_BTN_TEXT} from '../contants';
 
 
 class Time extends Component {
@@ -47,6 +48,12 @@ class Time extends Component {
             <span className="slider-text">Minutes:</span>
             <ReactSlider min={0} max={59} value={_moment.minute()} onChange={this.handleChange.bind(this, 'minutes')} withBars />
           </div>
+          {this.props.showOkBtn ?
+            <div className="ok btn">
+              <button onClick={this.props.byTimeOkBtnClose}>{CONFIRM_BTN_TEXT}</button>
+            </div>
+            : null
+          }
         </div>
       </div>
     );

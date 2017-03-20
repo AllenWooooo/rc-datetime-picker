@@ -223,6 +223,13 @@ See the [demo] page.
       <td>Whether to close the picker when selecting a date on day panel.</td>
     </tr>
     <tr>
+    <tr>
+      <td>showOkBtn</td>
+      <td>Boolean</td>
+      <td>false</td>
+      <td>Whether to close the picker when click a confirm button.</td>
+    </tr>
+    <tr>
       <td>disabled</td>
       <td>Boolean</td>
       <td>false</td>

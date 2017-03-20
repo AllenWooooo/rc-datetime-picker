@@ -100,13 +100,20 @@ class Trigger extends Component {
   _renderPicker = (isOpen) => {
     const props = blacklist(this.props, 'className', 'appendToBody', 'children', 'onChange');  
     
-    return (
+      return (
       <DatetimePicker 
         {...props}
         className="datetime-picker-popup" 
-        isOpen={isOpen} 
+        isOpen={isOpen}
+        byTimeOkBtnClose={::this.byTimeOkBtnClose}
         onChange={this.handleChange} />
     );
+  }
+
+  byTimeOkBtnClose(){
+    this.setState({
+      isOpen: false
+    });
   }
 
   render() {
