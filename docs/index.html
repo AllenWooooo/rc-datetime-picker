@@ -83,8 +83,15 @@ class App extends Component {
   }
 
   render() {
+    const shortcuts = {
+      'Today': moment(),
+      'Yesterday': moment().subtract(1, 'days'),
+      'Clear': ''
+    };
+
     return (
       &lt;DatetimePickerTrigger
+        shortcuts={shortcuts} 
         moment={this.state.moment}
         onChange={this.handleChange}&gt
         &lt;input type="text" value={this.state.moment.format('YYYY-MM-DD HH:mm')} readOnly /&gt;

@@ -88,10 +88,10 @@ See the [demo] page.
       <td>Enable `split-panel` mode.</td>
     </tr>
     <tr>
-      <td>buttons</td>
+      <td>shortcuts</td>
       <td>Object:{name: value}</td>
       <td></td>
-      <td>Add shortcut buttons on the top `buttons-bar` for selecting a date.</td>
+      <td>Add shortcuts on the top `shortcuts-bar` for selecting a date.</td>
     </tr>
     <tr>
       <td>maxDate</td>
@@ -175,10 +175,10 @@ See the [demo] page.
       <td>Enable `split-panel` mode.</td>
     </tr>
     <tr>
-      <td>buttons</td>
+      <td>shortcuts</td>
       <td>Object:{name: value}</td>
       <td></td>
-      <td>Add shortcut buttons on the top `buttons-bar` for selecting a date.</td>
+      <td>Add shortcuts on the top `shortcuts-bar` for selecting a date.</td>
     </tr>
     <tr>
       <td>maxDate</td>
