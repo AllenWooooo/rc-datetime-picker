@@ -46,10 +46,10 @@ class Picker extends Component {
 
         {splitPanel
           ? <div className="panel-nav">
-              <button type="button" onClick={() => this.changePanel('calendar')} className={isCalendarPanel ? 'active' : ''}>
+              <button type="button" onClick={this.changePanel.bind(this, 'calendar')} className={isCalendarPanel ? 'active' : ''}>
                 <i className="fa fa-calendar-o"></i>Date
               </button>
-              <button type="button" onClick={() => this.changePanel('time')} className={isTimePanel ? 'active' : ''}>
+              <button type="button" onClick={this.changePanel.bind(this, 'time')} className={isTimePanel ? 'active' : ''}>
                 <i className="fa fa-clock-o"></i>Time
               </button>
             </div>

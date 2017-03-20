@@ -10,21 +10,23 @@ class Day extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      moment: props.moment ? props.moment.clone() : moment(),
-      selected: props.moment ? props.moment.clone() : null
+      moment: props.moment || moment(),
+      selected: props.moment
     };
   }
 
   componentWillReceiveProps(props) {
     this.setState({
-      moment: props.moment ? props.moment.clone() : moment(),
-      selected: props.moment ? props.moment.clone() : null
+      moment: props.moment || moment(),
+      selected: props.moment
     });
   }
 
   changeMonth = (dir) => {
+    const _moment = this.state.moment.clone();
+
     this.setState({
-      moment: this.state.moment[dir === 'prev' ? 'subtract' : 'add'](1, 'month')
+      moment: _moment[dir === 'prev' ? 'subtract' : 'add'](1, 'month')
     });
   }
 
@@ -51,7 +53,7 @@ class Day extends Component {
     );
   }
 
-  _renderDay = (day, week) => {
+  _renderDay = (week, day) => {
     const now = moment();
     const _moment = this.state.moment;
     const {maxDate, minDate} = this.props;
@@ -76,7 +78,7 @@ class Day extends Component {
     });
 
     return (
-      <td key={day} className={className} onClick={() => this.select(day, isSelected, isDisabled, isPrevMonth, isNextMonth)}>{day}</td>
+      <td key={day} className={className} onClick={this.select.bind(this, day, isSelected, isDisabled, isPrevMonth, isNextMonth)}>{day}</td>
     );
   }
 
@@ -90,16 +92,16 @@ class Day extends Component {
       range(1, endOfThisMonth + 1),
       range(1, 42 - endOfThisMonth - firstDay + 1)
     );
-    const {weeks = WEEKS, dayFormat = DAY_FORMAT} = this.props;
+    const {weeks = WEEKS, dayFormat = DAY_FORMAT, style, changePanel} = this.props;
 
     return (
-      <div className="calendar-days" style={this.props.style}>
+      <div className="calendar-days" style={style}>
         <div className="calendar-nav">
-          <button type="button" className="prev-month" onClick={() => this.changeMonth('prev')}>
+          <button type="button" className="prev-month" onClick={this.changeMonth.bind(this, 'prev')}>
             <i className="fa fa-angle-left"/>
           </button>
-          <span className="current-date" onClick={() => this.props.changePanel('month', _moment)}>{_moment.format(dayFormat)}</span>
-          <button type="button" className="next-month" onClick={() => this.changeMonth('next')}>
+          <span className="current-date" onClick={changePanel.bind(this, 'month', _moment)}>{_moment.format(dayFormat)}</span>
+          <button type="button" className="next-month" onClick={this.changeMonth.bind(this, 'next')}>
             <i className="fa fa-angle-right"/>
           </button>
         </div>
@@ -111,9 +113,7 @@ class Day extends Component {
             {chunk(days, 7).map((week, idx) => {
               return (
                 <tr key={idx}>
-                  {week.map((day) => {
-                    return this._renderDay(day, idx);
-                  })}
+                  {week.map(this._renderDay.bind(this, idx))}
                 </tr>
               );
             })}

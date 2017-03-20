@@ -9,21 +9,23 @@ class Year extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      moment: props.moment ? props.moment.clone() : moment(),
-      selected: props.moment ? props.moment.clone() : null
+      moment: props.moment || moment(),
+      selected: props.moment
     };
   }
 
   componentWillReceiveProps(props) {
     this.setState({
-      moment: props.moment ? props.moment.clone() : moment(),
-      selected: props.moment ? props.moment.clone() : null
+      moment: props.moment || moment(),
+      selected: props.moment
     });
   }
 
   changePeriod = (dir) => {
+    const _moment = this.state.moment.clone();
+
     this.setState({
-      moment: this.state.moment[dir === 'prev' ? 'subtract' : 'add'](10, 'year')
+      moment: _moment[dir === 'prev' ? 'subtract' : 'add'](10, 'year')
     });
   }
 
@@ -59,23 +61,24 @@ class Year extends Component {
     });
 
     return (
-      <td key={year} className={className} onClick={() => this.select(year, isDisabled)}>{year}</td>
+      <td key={year} className={className} onClick={this.select.bind(this, year, isDisabled)}>{year}</td>
     );
   }
 
   render() {
     const _moment = this.state.moment;
+    const {style} = this.props;
     const firstYear = Math.floor(_moment.year() / 10) * 10;
     const years = range(firstYear - 1, firstYear + 11);
 
     return (
-      <div className="calendar-years" style={this.props.style}>
+      <div className="calendar-years" style={style}>
         <div className="calendar-nav">
-          <button type="button" className="prev-month" onClick={() => this.changePeriod('prev')}>
+          <button type="button" className="prev-month" onClick={this.changePeriod.bind(this, 'prev')}>
             <i className="fa fa-angle-left"/>
           </button>
           <span className="current-date disabled">{firstYear} - {firstYear + 9}</span>
-          <button type="button" className="next-month" onClick={() => this.changePeriod('next')}>
+          <button type="button" className="next-month" onClick={this.changePeriod.bind(this, 'next')}>
             <i className="fa fa-angle-right"/>
           </button>
         </div>
@@ -84,9 +87,7 @@ class Year extends Component {
             {chunk(years, 4).map((_years, idx) => {
               return (
                 <tr key={idx}>
-                  {_years.map((year) => {
-                    return this._renderYear(year);
-                  })}
+                  {_years.map(this._renderYear)}
                 </tr>
               );
             })}

@@ -10,21 +10,23 @@ class Month extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      moment: props.moment ? props.moment.clone() : moment(),
-      selected: props.moment ? props.moment.clone() : null
+      moment: props.moment || moment(),
+      selected: props.moment
     };
   }
 
   componentWillReceiveProps(props) {
     this.setState({
-      moment: props.moment ? props.moment.clone() : moment(),
-      selected: props.moment ? props.moment.clone() : null
+      moment: props.moment || moment(),
+      selected: props.moment
     });
   }
 
   changeYear = (dir) => {
+    const _moment = this.state.moment.clone();
+
     this.setState({
-      moment: this.state.moment[dir === 'prev' ? 'subtract' : 'add'](1, 'year')
+      moment: _moment[dir === 'prev' ? 'subtract' : 'add'](1, 'year')
     });
   }
 
@@ -41,7 +43,7 @@ class Month extends Component {
     this.props.onSelect(_moment);
   }
 
-  _renderMonth = (month, idx, row) => {
+  _renderMonth = (row, month, idx) => {
     const now = moment();
     const _moment = this.state.moment;
     const {maxDate, minDate, months} = this.props;
@@ -57,22 +59,23 @@ class Month extends Component {
     });
 
     return (
-      <td key={month} className={className} onClick={() => this.select(month, isDisabled)}>{months ? months[idx + row * 3] : month}</td>
+      <td key={month} className={className} onClick={this.select.bind(this, month, isDisabled)}>{months ? months[idx + row * 3] : month}</td>
     );
   }
 
   render() {
     const _moment = this.state.moment;
     const months = MONTHS;
+    const {changePanel} = this.props;
 
     return (
       <div className="calendar-months" style={this.props.style}>
         <div className="calendar-nav">
-          <button type="button" className="prev-month" onClick={() => this.changeYear('prev')}>
+          <button type="button" className="prev-month" onClick={this.changeYear.bind(this, 'prev')}>
             <i className="fa fa-angle-left"/>
           </button>
-          <span className="current-date" onClick={() => this.props.changePanel('year', _moment)}>{_moment.format('YYYY')}</span>
-          <button type="button" className="next-month" onClick={() => this.changeYear('next')}>
+          <span className="current-date" onClick={changePanel.bind(this, 'year', _moment)}>{_moment.format('YYYY')}</span>
+          <button type="button" className="next-month" onClick={this.changeYear.bind(this, 'next')}>
             <i className="fa fa-angle-right"/>
           </button>
         </div>
@@ -81,9 +84,7 @@ class Month extends Component {
             {chunk(months, 3).map((_months, idx) => {
               return (
                 <tr key={idx}>
-                  {_months.map((month, _idx) => {
-                    return this._renderMonth(month, _idx, idx);
-                  })}
+                  {_months.map(this._renderMonth.bind(this, idx))}
                 </tr>
               );
             })}

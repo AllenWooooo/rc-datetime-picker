@@ -115,7 +115,7 @@ class Trigger extends Component {
 
     return (
       <div className={`datetime-trigger ${className}`}>
-        <div onClick={() => this.togglePicker(!isOpen)} ref="trigger">{children}</div>
+        <div onClick={this.togglePicker.bind(this, !isOpen)} ref="trigger">{children}</div>
         {appendToBody ? this._renderPortal() : this._renderPicker(isOpen)}
       </div>
     );

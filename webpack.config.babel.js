@@ -1,11 +1,9 @@
-import webpack from 'webpack';
 import path from 'path';
 import minimist from 'minimist';
 
 
-let env = minimist(process.argv.slice(2)).ENV;
-
-let config = {
+const env = minimist(process.argv.slice(2)).ENV;
+const config = {
   devtool: 'eval',
   entry: {
     app: ['./docs/app.jsx']
