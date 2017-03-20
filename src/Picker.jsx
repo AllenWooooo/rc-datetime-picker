@@ -35,7 +35,7 @@ class Picker extends Component {
     const className = classNames('datetime-picker', this.props.className, {
       split: splitPanel
     });
-    const props = blacklist(this.props, 'className', 'splitPanel');    
+    const props = blacklist(this.props, 'className', 'splitPanel', 'isOpen');    
 
     return (
       <div className={className} style={{display: isOpen ? 'block' : 'none'}} onClick={(evt) => evt.stopPropagation()}>
@@ -57,7 +57,7 @@ class Picker extends Component {
         }
         
         {showCalendarPicker
-          ? <Calendar {...props} style={{display: isCalendarPanel || !splitPanel ? 'block' : 'none'}} />
+          ? <Calendar {...props} isOpen={isOpen} style={{display: isCalendarPanel || !splitPanel ? 'block' : 'none'}} />
           : undefined
         }
 
