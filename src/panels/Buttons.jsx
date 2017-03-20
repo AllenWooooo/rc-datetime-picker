@@ -11,7 +11,7 @@ class Buttons extends Component {
   _renderButton = (key, value) => {
     return (
       <button className="btn" key={key} type="button" onClick={this.handleClick.bind(this, value)}>{key}</button>
-    )
+    );
   }
 
   _renderButtons = () => {

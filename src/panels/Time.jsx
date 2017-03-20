@@ -7,17 +7,17 @@ class Time extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      moment: props.moment ? props.moment.clone() : moment().hours(0).minutes(0)
+      moment: props.moment || moment().hours(0).minutes(0)
     };
   }
 
   componentWillReceiveProps(props) {
     this.setState({
-      moment: props.moment ? props.moment.clone() : moment().hours(0).minutes(0)
+      moment: props.moment || moment().hours(0).minutes(0)
     });
   }
 
-  handleChange = (value, type) => {
+  handleChange = (type, value) => {
     const {onChange} = this.props;
     const _moment = this.state.moment.clone();
 
@@ -30,7 +30,7 @@ class Time extends Component {
   }
 
   render() {
-    const _moment = this.state.moment.clone();
+    const _moment = this.state.moment;
 
     return (
       <div style={this.props.style}>
@@ -42,9 +42,9 @@ class Time extends Component {
           </div>
           <div className="sliders">
             <span className="slider-text">Hours:</span>
-            <ReactSlider min={0} max={23} value={_moment.hour()} onChange={(value) => this.handleChange(value, 'hours')} withBars />
+            <ReactSlider min={0} max={23} value={_moment.hour()} onChange={this.handleChange.bind(this, 'hours')} withBars />
             <span className="slider-text">Minutes:</span>
-            <ReactSlider min={0} max={59} value={_moment.minute()} onChange={(value) => this.handleChange(value, 'minutes')} withBars />
+            <ReactSlider min={0} max={59} value={_moment.minute()} onChange={this.handleChange.bind(this, 'minutes')} withBars />
           </div>
         </div>
       </div>
