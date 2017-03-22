@@ -193,11 +193,11 @@
   background-color: #5cc4ef;
   border-color: #5cc4ef;
 }
-.datetime-picker .buttons-bar {
+.datetime-picker .shortcuts-bar {
   border-bottom: 1px solid #efefef;
   padding: 8px;
 }
-.datetime-picker .buttons-bar .btn {
+.datetime-picker .shortcuts-bar .btn {
   border: 0;
   background: none;
   cursor: pointer;
@@ -205,13 +205,13 @@
   padding: 2px 4px;
   outline: none;
 }
-.datetime-picker .buttons-bar .btn:hover {
+.datetime-picker .shortcuts-bar .btn:hover {
   background-color: #f0f0f0;
 }
-.datetime-picker .buttons-bar .btn:last-child {
+.datetime-picker .shortcuts-bar .btn:last-child {
   float: right;
 }
-.datetime-picker .buttons-bar .btn:not(:first-child) {
+.datetime-picker .shortcuts-bar .btn:not(:first-child) {
   margin-left: 5px;
 }
 .datetime-trigger {
