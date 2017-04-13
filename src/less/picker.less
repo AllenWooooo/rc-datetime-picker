@@ -140,6 +140,25 @@
                 background-color: darken(#5cc4ef, 2%);
                 color: #fff;
               }
+
+              &.start {
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
+              }
+
+              &.end {
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+              }
+
+              &.start.end {
+                border-radius: 4px;
+              }
+            }
+
+            &.between {
+              background-color: lighten(#5cc4ef, 33%);
+              border-radius: 0;
             }
           }
         }
@@ -260,6 +279,14 @@
   }
 }
 
+.datetime-range-picker {
+  border: 1px solid #dbdbdb;
+  background-color: #fff;
+  border-radius: 4px;
+  box-sizing: content-box;
+  z-index: 100;
+}
+
 .datetime-trigger {
   position: relative;
 
@@ -269,7 +296,17 @@
   }
 }
 
-.datetime-picker-popup {
+.datetime-range-trigger {
+  position: relative;
+
+  .datetime-range-picker {
+    position: absolute;
+    top: 100%;
+  }
+}
+
+.datetime-picker-popup,
+.datetime-range-picker-popup {
   margin-top: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
 

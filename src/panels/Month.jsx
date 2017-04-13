@@ -2,23 +2,21 @@ import React, {Component} from 'react';
 import moment from 'moment';
 import classNames from 'classnames/bind';
 
-import {MONTHS} from '../contants';
+import {MONTHS} from '../constants';
 import {chunk} from '../utils';
 
 
 class Month extends Component {
-  constructor(props) {
+   constructor(props) {
     super(props);
     this.state = {
-      moment: props.moment || moment(),
-      selected: props.moment
+      moment: props.moment
     };
   }
 
   componentWillReceiveProps(props) {
     this.setState({
-      moment: props.moment || moment(),
-      selected: props.moment
+      moment: props.moment
     });
   }
 
@@ -32,34 +30,43 @@ class Month extends Component {
 
   select = (month, isDisabled) => {
     if (isDisabled) return;
+    const {onSelect} = this.props;
     const _moment = this.state.moment.clone();
 
     _moment.month(month);
 
     this.setState({
-      moment: _moment,
-      selected: _moment
+      moment: _moment
     });
-    this.props.onSelect(_moment);
+    onSelect(_moment);
   }
 
   _renderMonth = (row, month, idx) => {
     const now = moment();
     const _moment = this.state.moment;
-    const {maxDate, minDate, months} = this.props;
-    const {selected} = this.state;
-    const isSelected = selected ? _moment.isSame(selected.clone().month(month), 'month') : false;
-    const disabledMax = maxDate ? _moment.clone().month(month).isAfter(maxDate, 'month') : false;
-    const disabledMin = minDate ? _moment.clone().month(month).isBefore(minDate, 'month') : false;
+    const {maxDate, minDate, months, selected, range, rangeAt} = this.props;
+    const currentMonth = _moment.clone().month(month);
+    const isSelected = selected 
+                       ? range 
+                         ? selected[rangeAt] ? currentMonth.isSame(selected[rangeAt], 'month') : false
+                         : currentMonth.isSame(selected, 'day')
+                       : false;
+    const disabledMax = maxDate ? currentMonth.isAfter(maxDate, 'month') : false;
+    const disabledMin = minDate ? currentMonth.isBefore(minDate, 'month') : false;
     const isDisabled = disabledMax || disabledMin;
     const className = classNames({
       selected: isSelected,
-      now: now.isSame(_moment.clone().month(month), 'month'),
+      now: now.isSame(currentMonth, 'month'),
       disabled: isDisabled
     });
 
     return (
-      <td key={month} className={className} onClick={this.select.bind(this, month, isDisabled)}>{months ? months[idx + row * 3] : month}</td>
+      <td 
+        key={month} 
+        className={className} 
+        onClick={this.select.bind(this, month, isDisabled)}>
+        {months ? months[idx + row * 3] : month}
+      </td>
     );
   }
 
