@@ -51,7 +51,7 @@ class Day extends Component {
   }
 
   _renderDay = (week, day) => {
-    const {maxDate, minDate, range, selected} = this.props;
+    const {maxDate, minDate, range, rangeAt, selected, dateLimit} = this.props;
     const now = moment();
     const _moment = this.state.moment;
     const isPrevMonth = week === 0 && day > 7;
@@ -62,17 +62,53 @@ class Day extends Component {
                     ? _moment.clone().subtract(1, 'month')
                     : _moment.clone();
     const currentDay = month.clone().date(day);
-    const start = selected && range ? (selected.start ? currentDay.isSame(selected.start, 'day') : false) : false; 
-    const end = selected && range ? (selected.end ? currentDay.isSame(selected.end, 'day') : false) : false; 
+    const start = selected && range 
+                  ? (selected.start ? currentDay.isSame(selected.start, 'day') : false) 
+                  : false; 
+    const end = selected && range
+                ? (selected.end ? currentDay.isSame(selected.end, 'day') : false) 
+                : false; 
     const between = selected && range ? (selected.start && selected.end ? currentDay.isBetween(selected.start, selected.end, 'day') : false) : false;
     const isSelected = selected 
                        ? range 
-                         ? start || end
+                         ? (start || end)
                          : currentDay.isSame(selected, 'day')
                        : false;
     const disabledMax = maxDate ? currentDay.isAfter(maxDate, 'day') : false;
     const disabledMin = minDate ? currentDay.isBefore(minDate, 'day') : false;
-    const isDisabled = disabledMax || disabledMin;
+    let disabled = false;
+    let limited = false;
+
+    if (range) {
+      if (rangeAt === 'start' && selected && selected.end) {
+        disabled = currentDay.isAfter(selected.end, 'day');
+      } else if (rangeAt === 'end' && selected && selected.start) {
+        disabled = currentDay.isBefore(selected.start, 'day');
+      }
+    }
+
+    if (dateLimit && range) {
+      const limitKey = Object.keys(dateLimit)[0];
+      const limitValue = dateLimit[limitKey];
+      let minLimitedDate, maxLimitedDate;
+
+      if (selected) {
+
+        if (rangeAt === 'start' && selected.end) {
+          maxLimitedDate = selected.end.clone();
+          minLimitedDate = maxLimitedDate.clone().subtract(limitValue, limitKey);
+        } else if (rangeAt === 'end' && selected.start) {
+          minLimitedDate = selected.start.clone();
+          maxLimitedDate = minLimitedDate.clone().add(limitValue, limitKey);
+        }
+
+        if (minLimitedDate && maxLimitedDate) {
+          limited = !currentDay.isBetween(minLimitedDate, maxLimitedDate, 'day', rangeAt === 'start' ? '(]' : '[)');
+        }
+      }
+    }
+
+    const isDisabled = disabledMax || disabledMin || disabled || limited;
     const className = classNames({
       prev: isPrevMonth,
       next: isNextMonth,
