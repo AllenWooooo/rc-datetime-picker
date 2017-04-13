@@ -1,5 +1,5 @@
 /*
- * rc-datetime-picker v1.5.1
+ * rc-datetime-picker v1.5.2
  * https://github.com/AllenWooooo/rc-datetime-picker
  *
  * (c) 2017 Allen Wu
@@ -226,7 +226,9 @@ var Day = function (_Component) {
           maxDate = _this$props2.maxDate,
           minDate = _this$props2.minDate,
           range$$1 = _this$props2.range,
-          selected = _this$props2.selected;
+          rangeAt = _this$props2.rangeAt,
+          selected = _this$props2.selected,
+          dateLimit = _this$props2.dateLimit;
 
       var now = moment();
       var _moment = _this.state.moment;
@@ -240,7 +242,40 @@ var Day = function (_Component) {
       var isSelected = selected ? range$$1 ? start || end : currentDay.isSame(selected, 'day') : false;
       var disabledMax = maxDate ? currentDay.isAfter(maxDate, 'day') : false;
       var disabledMin = minDate ? currentDay.isBefore(minDate, 'day') : false;
-      var isDisabled = disabledMax || disabledMin;
+      var disabled = false;
+      var limited = false;
+
+      if (range$$1) {
+        if (rangeAt === 'start' && selected && selected.end) {
+          disabled = currentDay.isAfter(selected.end, 'day');
+        } else if (rangeAt === 'end' && selected && selected.start) {
+          disabled = currentDay.isBefore(selected.start, 'day');
+        }
+      }
+
+      if (dateLimit && range$$1) {
+        var limitKey = Object.keys(dateLimit)[0];
+        var limitValue = dateLimit[limitKey];
+        var minLimitedDate = void 0,
+            maxLimitedDate = void 0;
+
+        if (selected) {
+
+          if (rangeAt === 'start' && selected.end) {
+            maxLimitedDate = selected.end.clone();
+            minLimitedDate = maxLimitedDate.clone().subtract(limitValue, limitKey);
+          } else if (rangeAt === 'end' && selected.start) {
+            minLimitedDate = selected.start.clone();
+            maxLimitedDate = minLimitedDate.clone().add(limitValue, limitKey);
+          }
+
+          if (minLimitedDate && maxLimitedDate) {
+            limited = !currentDay.isBetween(minLimitedDate, maxLimitedDate, 'day', rangeAt === 'start' ? '(]' : '[)');
+          }
+        }
+      }
+
+      var isDisabled = disabledMax || disabledMin || disabled || limited;
       var className = classNames({
         prev: isPrevMonth,
         next: isNextMonth,
@@ -387,13 +422,47 @@ var Month = function (_Component) {
           months = _this$props.months,
           selected = _this$props.selected,
           range$$1 = _this$props.range,
-          rangeAt = _this$props.rangeAt;
+          rangeAt = _this$props.rangeAt,
+          dateLimit = _this$props.dateLimit;
 
       var currentMonth = _moment.clone().month(month);
       var isSelected = selected ? range$$1 ? selected[rangeAt] ? currentMonth.isSame(selected[rangeAt], 'month') : false : currentMonth.isSame(selected, 'day') : false;
       var disabledMax = maxDate ? currentMonth.isAfter(maxDate, 'month') : false;
       var disabledMin = minDate ? currentMonth.isBefore(minDate, 'month') : false;
-      var isDisabled = disabledMax || disabledMin;
+      var disabled = false;
+      var limited = false;
+
+      if (range$$1) {
+        if (rangeAt === 'start' && selected && selected.end) {
+          disabled = selected.end && currentMonth.isAfter(selected.end, 'day');
+        } else if (rangeAt === 'end' && selected && selected.start) {
+          disabled = selected.start && currentMonth.isBefore(selected.start, 'day');
+        }
+      }
+
+      if (dateLimit && range$$1) {
+        var limitKey = Object.keys(dateLimit)[0];
+        var limitValue = dateLimit[limitKey];
+        var minLimitedDate = void 0,
+            maxLimitedDate = void 0;
+
+        if (selected) {
+
+          if (rangeAt === 'start' && selected.start && selected.end) {
+            maxLimitedDate = selected.end.clone();
+            minLimitedDate = maxLimitedDate.clone().subtract(limitValue, limitKey);
+          } else if (rangeAt === 'end' && selected.start && selected.end) {
+            minLimitedDate = selected.start.clone();
+            maxLimitedDate = minLimitedDate.clone().add(limitValue, limitKey);
+          }
+
+          if (minLimitedDate && maxLimitedDate) {
+            limited = !currentMonth.isBetween(minLimitedDate, maxLimitedDate, 'day', rangeAt === 'start' ? '(]' : '[)');
+          }
+        }
+      }
+
+      var isDisabled = disabledMax || disabledMin || disabled || limited;
       var className = classNames({
         selected: isSelected,
         now: now.isSame(currentMonth, 'month'),
@@ -516,12 +585,47 @@ var Year = function (_Component) {
           minDate = _this$props.minDate,
           selected = _this$props.selected,
           range$$1 = _this$props.range,
-          rangeAt = _this$props.rangeAt;
+          rangeAt = _this$props.rangeAt,
+          dateLimit = _this$props.dateLimit;
 
+      var currentYear = _moment.clone().year(year);
       var isSelected = selected ? range$$1 ? selected[rangeAt] ? selected[rangeAt].year() === year : false : selected.year() === year : false;
       var disabledMax = maxDate ? year > maxDate.year() : false;
       var disabledMin = minDate ? year < minDate.year() : false;
-      var isDisabled = disabledMax || disabledMin;
+      var disabled = false;
+      var limited = false;
+
+      if (range$$1) {
+        if (rangeAt === 'start' && selected && selected.end) {
+          disabled = selected.end && currentYear.isAfter(selected.end, 'day');
+        } else if (rangeAt === 'end' && selected && selected.start) {
+          disabled = selected.start && currentYear.isBefore(selected.start, 'day');
+        }
+      }
+
+      if (dateLimit && range$$1) {
+        var limitKey = Object.keys(dateLimit)[0];
+        var limitValue = dateLimit[limitKey];
+        var minLimitedDate = void 0,
+            maxLimitedDate = void 0;
+
+        if (selected) {
+
+          if (rangeAt === 'start' && selected.start && selected.end) {
+            maxLimitedDate = selected.end.clone();
+            minLimitedDate = maxLimitedDate.clone().subtract(limitValue, limitKey);
+          } else if (rangeAt === 'end' && selected.start && selected.end) {
+            minLimitedDate = selected.start.clone();
+            maxLimitedDate = minLimitedDate.clone().add(limitValue, limitKey);
+          }
+
+          if (minLimitedDate && maxLimitedDate) {
+            limited = !currentYear.isBetween(minLimitedDate, maxLimitedDate, 'day', rangeAt === 'start' ? '(]' : '[)');
+          }
+        }
+      }
+
+      var isDisabled = disabledMax || disabledMin || disabled || limited;
       var className = classNames({
         selected: isSelected,
         now: now.year() === year,
@@ -646,6 +750,7 @@ var Calendar = function (_Component) {
           style = _props.style,
           maxDate = _props.maxDate,
           minDate = _props.minDate,
+          dateLimit = _props.dateLimit,
           range = _props.range,
           rangeAt = _props.rangeAt;
 
@@ -659,6 +764,7 @@ var Calendar = function (_Component) {
         dayFormat: dayFormat,
         maxDate: maxDate,
         minDate: minDate,
+        dateLimit: dateLimit,
         range: range,
         rangeAt: rangeAt
       };
@@ -717,33 +823,30 @@ var _initialiseProps = function _initialiseProps() {
 
     var nextPanel = panel === 'year' ? 'month' : 'day';
     var _selected = _this2.props.moment;
+    var shouldChange = panel === 'day';
+
+    if (_selected && !shouldChange) {
+      if (range) {
+        shouldChange = rangeAt === 'start' ? _selected.start : _selected.end;
+      } else {
+        shouldChange = true;
+      }
+    }
 
     if (range) {
-      var copyed = _selected ? Object.assign(_selected, {}) : {};
+      var copyed = _selected ? _extends({}, _selected) : {};
 
-      if (panel === 'day') {
-        if (!copyed.start && !copyed.end || copyed.start && copyed.end) {
-          copyed.start = selected;
-          copyed.end = undefined;
-        } else {
-          if (selected.isBefore(copyed.start)) {
-            copyed.end = copyed.start;
-            copyed.start = selected;
-          } else {
-            copyed.end = selected;
-          }
-        }
-      } else {
-        copyed[rangeAt] = selected;
-      }
-
+      copyed[rangeAt] = selected;
       _selected = copyed;
     } else {
       _selected = selected;
     }
 
     _this2.changePanel(nextPanel, selected);
-    onChange && onChange(_selected, panel);
+
+    if (shouldChange) {
+      onChange && onChange(_selected, panel);
+    }
   };
 
   this.changePanel = function (panel) {
@@ -1470,75 +1573,81 @@ var Range = function (_Component) {
             { className: 'buttons' },
             React__default.createElement(
               'button',
-              { type: 'button', onClick: this.onConfirm },
+              { type: 'button', className: 'btn', onClick: this.onConfirm },
               confirmButtonText
             )
           )
         ),
         React__default.createElement(
-          'table',
+          'div',
           { className: 'datetime-range-picker-panel' },
           React__default.createElement(
-            'tbody',
+            'table',
             null,
             React__default.createElement(
-              'tr',
+              'tbody',
               null,
               React__default.createElement(
-                'td',
+                'tr',
                 null,
                 React__default.createElement(
-                  'span',
-                  null,
-                  startDateText
+                  'td',
+                  { className: 'datetime-text' },
+                  React__default.createElement(
+                    'span',
+                    { className: 'text-label' },
+                    startDateText
+                  ),
+                  React__default.createElement(
+                    'span',
+                    { className: 'text-value' },
+                    moment$$1 && moment$$1.start ? moment$$1.start.format(formatStyle) : undefined
+                  )
                 ),
                 React__default.createElement(
-                  'span',
-                  { className: 'time-text' },
-                  moment$$1 && moment$$1.start ? moment$$1.start.format(formatStyle) : undefined
+                  'td',
+                  { className: 'datetime-text' },
+                  React__default.createElement(
+                    'span',
+                    { className: 'text-label' },
+                    endDateText
+                  ),
+                  React__default.createElement(
+                    'span',
+                    { className: 'text-value' },
+                    moment$$1 && moment$$1.end ? moment$$1.end.format(formatStyle) : undefined
+                  )
                 )
               ),
               React__default.createElement(
-                'td',
+                'tr',
                 null,
                 React__default.createElement(
-                  'span',
+                  'td',
                   null,
-                  endDateText
+                  React__default.createElement(Picker, _extends({}, props, {
+                    isOpen: isOpen,
+                    className: 'range-start-picker',
+                    showTimePicker: showTimePicker,
+                    moment: moment$$1,
+                    range: true,
+                    rangeAt: 'start',
+                    onChange: this.handleChange
+                  }))
                 ),
                 React__default.createElement(
-                  'span',
-                  { className: 'time-text' },
-                  moment$$1 && moment$$1.end ? moment$$1.end.format(formatStyle) : undefined
+                  'td',
+                  null,
+                  React__default.createElement(Picker, _extends({}, props, {
+                    isOpen: isOpen,
+                    className: 'range-end-picker',
+                    showTimePicker: showTimePicker,
+                    moment: moment$$1,
+                    range: true,
+                    rangeAt: 'end',
+                    onChange: this.handleChange
+                  }))
                 )
-              )
-            ),
-            React__default.createElement(
-              'tr',
-              null,
-              React__default.createElement(
-                'td',
-                null,
-                React__default.createElement(Picker, _extends({}, props, {
-                  className: 'range-start-picker',
-                  showTimePicker: showTimePicker,
-                  moment: moment$$1,
-                  range: true,
-                  rangeAt: 'start',
-                  onChange: this.handleChange
-                }))
-              ),
-              React__default.createElement(
-                'td',
-                null,
-                React__default.createElement(Picker, _extends({}, props, {
-                  className: 'range-end-picker',
-                  showTimePicker: showTimePicker,
-                  moment: moment$$1,
-                  range: true,
-                  rangeAt: 'end',
-                  onChange: this.handleChange
-                }))
               )
             )
           )
