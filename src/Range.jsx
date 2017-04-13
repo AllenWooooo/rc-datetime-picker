@@ -47,15 +47,15 @@ class Range extends Component {
       startDateText = START_DATE_TEXT,
       endDateText = END_DATE_TEXT
     } = this.props;
-    const formatStyle = format || showTimePicker ? 'YYYY/MM/DD HH:mm' : 'YYYY/MM/DD';
+    const formatStyle = format || (showTimePicker ? 'YYYY/MM/DD HH:mm' : 'YYYY/MM/DD');
     const className = classNames('datetime-range-picker', this.props.className);
-    const props = blacklist(this.props, 'className', 'isOpen', 'format', 'moment', 'showTimePicker');
+    const props = blacklist(this.props, 'className', 'isOpen', 'format', 'moment', 'showTimePicker', 'shortcuts');
 
     return (
       <div className={className} style={{display: isOpen ? 'block' : 'none'}}>
         <div className="tools-bar">
           {shortcuts
-            ? <Shortcuts {...props} />
+            ? <Shortcuts {...props} shortcuts={shortcuts} />
             : undefined
           }
           <div className="buttons">
