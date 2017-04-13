@@ -48,33 +48,30 @@ class Calendar extends Component {
     const {onChange, range, rangeAt} = this.props;
     const nextPanel = panel === 'year' ? 'month' : 'day';
     let _selected = this.props.moment;
+    let shouldChange = panel === 'day';
+
+    if (_selected && !shouldChange) {
+      if (range) {
+        shouldChange = rangeAt === 'start' ? _selected.start : _selected.end;
+      } else {
+        shouldChange = true;
+      }
+    }
 
     if (range) {
-      const copyed = _selected ? Object.assign(_selected, {}) : {};
+      const copyed = _selected ? {..._selected} : {};
 
-      if (panel === 'day') {
-        if ((!copyed.start && !copyed.end) || (copyed.start && copyed.end)) {
-          copyed.start = selected;
-          copyed.end = undefined;
-        } else {
-          if (selected.isBefore(copyed.start)) {
-            copyed.end = copyed.start;
-            copyed.start = selected;
-          } else {
-            copyed.end = selected;
-          }
-        }
-      } else {
-        copyed[rangeAt] = selected;
-      }
-
+      copyed[rangeAt] = selected;
       _selected = copyed;
     } else {
       _selected = selected;
     }
-
+    
     this.changePanel(nextPanel, selected);
-    onChange && onChange(_selected, panel);
+
+    if (shouldChange) {
+      onChange && onChange(_selected, panel);
+    }
   }
 
   changePanel = (panel, moment = this.state.moment) => {
@@ -85,7 +82,7 @@ class Calendar extends Component {
   }
 
   render() {
-    const {weeks, months, dayFormat, style, maxDate, minDate, range, rangeAt} = this.props;
+    const {weeks, months, dayFormat, style, maxDate, minDate, dateLimit, range, rangeAt} = this.props;
     const props = {
       moment: this.state.moment,
       selected: this.props.moment,
@@ -96,6 +93,7 @@ class Calendar extends Component {
       dayFormat,
       maxDate,
       minDate,
+      dateLimit,
       range,
       rangeAt
     };

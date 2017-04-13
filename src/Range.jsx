@@ -59,48 +59,52 @@ class Range extends Component {
             : undefined
           }
           <div className="buttons">
-            <button type="button" onClick={this.onConfirm}>{confirmButtonText}</button>
+            <button type="button" className="btn" onClick={this.onConfirm}>{confirmButtonText}</button>
           </div>
         </div>
 
-        <table className="datetime-range-picker-panel">
-          <tbody>
-            <tr>
-              <td>
-                <span>{startDateText}</span>
-                <span className="time-text">{moment && moment.start ? moment.start.format(formatStyle) : undefined}</span>
-              </td>
-              <td>
-                <span>{endDateText}</span>
-                <span className="time-text">{moment && moment.end ? moment.end.format(formatStyle) : undefined}</span>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <DatetimePicker
-                  {...props}
-                  className="range-start-picker"
-                  showTimePicker={showTimePicker}
-                  moment={moment}
-                  range
-                  rangeAt="start"
-                  onChange={this.handleChange}
-                />
-              </td>
-              <td>
-                <DatetimePicker
-                  {...props}
-                  className="range-end-picker"
-                  showTimePicker={showTimePicker}
-                  moment={moment}
-                  range
-                  rangeAt='end'
-                  onChange={this.handleChange}
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div className="datetime-range-picker-panel">
+          <table>
+            <tbody>
+              <tr>
+                <td className="datetime-text">
+                  <span className="text-label">{startDateText}</span>
+                  <span className="text-value">{moment && moment.start ? moment.start.format(formatStyle) : undefined}</span>
+                </td>
+                <td className="datetime-text">
+                  <span className="text-label">{endDateText}</span>
+                  <span className="text-value">{moment && moment.end ? moment.end.format(formatStyle) : undefined}</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <DatetimePicker
+                    {...props}
+                    isOpen={isOpen}
+                    className="range-start-picker"
+                    showTimePicker={showTimePicker}
+                    moment={moment}
+                    range
+                    rangeAt="start"
+                    onChange={this.handleChange}
+                  />
+                </td>
+                <td>
+                  <DatetimePicker
+                    {...props}
+                    isOpen={isOpen}
+                    className="range-end-picker"
+                    showTimePicker={showTimePicker}
+                    moment={moment}
+                    range
+                    rangeAt='end'
+                    onChange={this.handleChange}
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     );
   }

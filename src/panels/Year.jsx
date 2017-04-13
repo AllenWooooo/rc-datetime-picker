@@ -44,7 +44,8 @@ class Year extends Component {
     const now = moment();
     const _moment = this.state.moment;
     const firstYear = Math.floor(_moment.year() / 10) * 10;
-    const {maxDate, minDate, selected, range, rangeAt} = this.props;
+    const {maxDate, minDate, selected, range, rangeAt, dateLimit} = this.props;
+    const currentYear = _moment.clone().year(year);
     const isSelected = selected 
                        ? range 
                          ? selected[rangeAt] ? selected[rangeAt].year() === year : false
@@ -52,7 +53,39 @@ class Year extends Component {
                        : false;
     const disabledMax = maxDate ? year > maxDate.year() : false;
     const disabledMin = minDate ? year < minDate.year() : false;
-    const isDisabled = disabledMax || disabledMin;
+    let disabled = false;
+    let limited = false;
+
+    if (range) {
+      if (rangeAt === 'start' && selected && selected.end) {
+        disabled = selected.end && currentYear.isAfter(selected.end, 'day');
+      } else if (rangeAt === 'end' && selected && selected.start) {
+        disabled = selected.start && currentYear.isBefore(selected.start, 'day');
+      }
+    }
+
+    if (dateLimit && range) {
+      const limitKey = Object.keys(dateLimit)[0];
+      const limitValue = dateLimit[limitKey];
+      let minLimitedDate, maxLimitedDate;
+
+      if (selected) {
+
+        if (rangeAt === 'start' && selected.start && selected.end) {
+          maxLimitedDate = selected.end.clone();
+          minLimitedDate = maxLimitedDate.clone().subtract(limitValue, limitKey);
+        } else if (rangeAt === 'end' && selected.start && selected.end) {
+          minLimitedDate = selected.start.clone();
+          maxLimitedDate = minLimitedDate.clone().add(limitValue, limitKey);
+        }
+
+        if (minLimitedDate && maxLimitedDate) {
+          limited = !currentYear.isBetween(minLimitedDate, maxLimitedDate, 'day', rangeAt === 'start' ? '(]' : '[)');
+        }
+      }
+    }
+
+    const isDisabled = disabledMax || disabledMin || disabled || limited;
     const className = classNames({
       selected: isSelected,
       now: now.year() === year,

@@ -44,7 +44,7 @@ class Month extends Component {
   _renderMonth = (row, month, idx) => {
     const now = moment();
     const _moment = this.state.moment;
-    const {maxDate, minDate, months, selected, range, rangeAt} = this.props;
+    const {maxDate, minDate, months, selected, range, rangeAt, dateLimit} = this.props;
     const currentMonth = _moment.clone().month(month);
     const isSelected = selected 
                        ? range 
@@ -53,7 +53,39 @@ class Month extends Component {
                        : false;
     const disabledMax = maxDate ? currentMonth.isAfter(maxDate, 'month') : false;
     const disabledMin = minDate ? currentMonth.isBefore(minDate, 'month') : false;
-    const isDisabled = disabledMax || disabledMin;
+    let disabled = false;
+    let limited = false;
+
+    if (range) {
+      if (rangeAt === 'start' && selected && selected.end) {
+        disabled = selected.end && currentMonth.isAfter(selected.end, 'day');
+      } else if (rangeAt === 'end' && selected && selected.start) {
+        disabled = selected.start && currentMonth.isBefore(selected.start, 'day');
+      }
+    }
+
+    if (dateLimit && range) {
+      const limitKey = Object.keys(dateLimit)[0];
+      const limitValue = dateLimit[limitKey];
+      let minLimitedDate, maxLimitedDate;
+
+      if (selected) {
+
+        if (rangeAt === 'start' && selected.start && selected.end) {
+          maxLimitedDate = selected.end.clone();
+          minLimitedDate = maxLimitedDate.clone().subtract(limitValue, limitKey);
+        } else if (rangeAt === 'end' && selected.start && selected.end) {
+          minLimitedDate = selected.start.clone();
+          maxLimitedDate = minLimitedDate.clone().add(limitValue, limitKey);
+        }
+
+        if (minLimitedDate && maxLimitedDate) {
+          limited = !currentMonth.isBetween(minLimitedDate, maxLimitedDate, 'day', rangeAt === 'start' ? '(]' : '[)');
+        }
+      }
+    }
+
+    const isDisabled = disabledMax || disabledMin || disabled || limited;
     const className = classNames({
       selected: isSelected,
       now: now.isSame(currentMonth, 'month'),
