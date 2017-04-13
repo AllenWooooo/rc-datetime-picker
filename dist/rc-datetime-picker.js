@@ -1,5 +1,5 @@
 /*
- * rc-datetime-picker v1.5.0
+ * rc-datetime-picker v1.5.1
  * https://github.com/AllenWooooo/rc-datetime-picker
  *
  * (c) 2017 Allen Wu
@@ -1452,9 +1452,9 @@ var Range = function (_Component) {
           _props$endDateText = _props.endDateText,
           endDateText = _props$endDateText === undefined ? END_DATE_TEXT : _props$endDateText;
 
-      var formatStyle = format || showTimePicker ? 'YYYY/MM/DD HH:mm' : 'YYYY/MM/DD';
+      var formatStyle = format || (showTimePicker ? 'YYYY/MM/DD HH:mm' : 'YYYY/MM/DD');
       var className = classNames('datetime-range-picker', this.props.className);
-      var props = blacklist(this.props, 'className', 'isOpen', 'format', 'moment', 'showTimePicker');
+      var props = blacklist(this.props, 'className', 'isOpen', 'format', 'moment', 'showTimePicker', 'shortcuts');
 
       return React__default.createElement(
         'div',
@@ -1462,7 +1462,7 @@ var Range = function (_Component) {
         React__default.createElement(
           'div',
           { className: 'tools-bar' },
-          shortcuts ? React__default.createElement(Shortcuts, props) : undefined,
+          shortcuts ? React__default.createElement(Shortcuts, _extends({}, props, { shortcuts: shortcuts })) : undefined,
           React__default.createElement(
             'div',
             { className: 'buttons' },
