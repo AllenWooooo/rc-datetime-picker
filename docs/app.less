@@ -55,7 +55,12 @@ code {
 }
 
 .example-code {
-  overflow: hidden;
+  
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
 
   pre {
     float: left;

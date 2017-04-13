@@ -7,26 +7,50 @@ class Time extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      moment: props.moment || moment().hours(0).minutes(0)
+      moment: this.getCurrentMoment(props)
     };
   }
 
   componentWillReceiveProps(props) {
     this.setState({
-      moment: props.moment || moment().hours(0).minutes(0)
+      moment: this.getCurrentMoment(props)
     });
   }
 
+  getCurrentMoment = (props) => {
+    const {range, rangeAt} = props;
+    let result = props.moment;
+
+    if (result) {
+      if (range) {
+        result = result[rangeAt] || moment().hours(0).minutes(0);
+      }
+    } else {
+      result = moment().hours(0).minutes(0);
+    }
+
+    return result;
+  }
+
   handleChange = (type, value) => {
-    const {onChange} = this.props;
+    const {onChange, range, rangeAt} = this.props;
     const _moment = this.state.moment.clone();
+    let selected = this.props.moment;
 
     _moment[type](value);
+
+    if (range) {
+      const copyed = selected ? Object.assign(selected, {}) : {};
+
+      copyed[rangeAt] = _moment;
+    } else {
+      selected = _moment;
+    }
 
     this.setState({
       moment: _moment
     });
-    onChange && onChange(_moment);
+    onChange && onChange(selected);
   }
 
   render() {

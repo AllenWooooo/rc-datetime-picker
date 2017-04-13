@@ -2,23 +2,21 @@ import React, {Component} from 'react';
 import moment from 'moment';
 import classNames from 'classnames/bind';
 
-import {WEEKS, DAY_FORMAT} from '../contants';
-import {range, chunk} from '../utils';
+import {WEEKS, DAY_FORMAT} from '../constants';
+import {range as arrayRange, chunk} from '../utils';
 
 
 class Day extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      moment: props.moment || moment(),
-      selected: props.moment
+      moment: props.moment
     };
   }
 
   componentWillReceiveProps(props) {
     this.setState({
-      moment: props.moment || moment(),
-      selected: props.moment
+      moment: props.moment
     });
   }
 
@@ -31,20 +29,19 @@ class Day extends Component {
   }
 
   select = (day, isSelected, isDisabled, isPrevMonth, isNextMonth) => {
-    if (isSelected || isDisabled) return;
-
+    if (isDisabled) return;
+    const {range, onSelect} = this.props;
     const _moment = this.state.moment.clone();
-
+    
     if (isPrevMonth) _moment.subtract(1, 'month');
     if (isNextMonth) _moment.add(1, 'month');
 
     _moment.date(day);
-
+    
     this.setState({
-      moment: _moment,
-      selected: _moment
+      moment: range ? this.state.moment : _moment
     });
-    this.props.onSelect(_moment);
+    onSelect(_moment);
   }
 
   _renderWeek = (week) => {
@@ -54,10 +51,9 @@ class Day extends Component {
   }
 
   _renderDay = (week, day) => {
+    const {maxDate, minDate, range, selected} = this.props;
     const now = moment();
     const _moment = this.state.moment;
-    const {maxDate, minDate} = this.props;
-    const {selected} = this.state;
     const isPrevMonth = week === 0 && day > 7;
     const isNextMonth = week >= 4 && day <= 14;
     const month = isNextMonth 
@@ -65,34 +61,50 @@ class Day extends Component {
                   : isPrevMonth 
                     ? _moment.clone().subtract(1, 'month')
                     : _moment.clone();
-    const isSelected = selected ? month.isSame(selected.clone().date(day), 'day') : false;
-    const disabledMax = maxDate ? month.date(day).isAfter(maxDate, 'day') : false;
-    const disabledMin = minDate ? month.date(day).isBefore(minDate, 'day') : false;
+    const currentDay = month.clone().date(day);
+    const start = selected && range ? (selected.start ? currentDay.isSame(selected.start, 'day') : false) : false; 
+    const end = selected && range ? (selected.end ? currentDay.isSame(selected.end, 'day') : false) : false; 
+    const between = selected && range ? (selected.start && selected.end ? currentDay.isBetween(selected.start, selected.end, 'day') : false) : false;
+    const isSelected = selected 
+                       ? range 
+                         ? start || end
+                         : currentDay.isSame(selected, 'day')
+                       : false;
+    const disabledMax = maxDate ? currentDay.isAfter(maxDate, 'day') : false;
+    const disabledMin = minDate ? currentDay.isBefore(minDate, 'day') : false;
     const isDisabled = disabledMax || disabledMin;
     const className = classNames({
       prev: isPrevMonth,
       next: isNextMonth,
       selected: isSelected,
-      now: now.isSame(month.date(day), 'day'),
-      disabled: isDisabled
+      now: now.isSame(currentDay, 'day'),
+      disabled: isDisabled,
+      start,
+      end,
+      between
     });
 
     return (
-      <td key={day} className={className} onClick={this.select.bind(this, day, isSelected, isDisabled, isPrevMonth, isNextMonth)}>{day}</td>
+      <td 
+        key={day} 
+        className={className} 
+        onClick={this.select.bind(this, day, isSelected, isDisabled, isPrevMonth, isNextMonth)}>
+        {day}
+      </td>
     );
   }
 
   render() {
+    const {weeks = WEEKS, dayFormat = DAY_FORMAT, style, changePanel} = this.props;
     const _moment = this.state.moment;
     const firstDay = _moment.clone().date(1).day();
     const endOfThisMonth = _moment.clone().endOf('month').date();
     const endOfLastMonth = _moment.clone().subtract(1, 'month').endOf('month').date();
     const days = [].concat(
-      range(endOfLastMonth - firstDay + 1, endOfLastMonth + 1),
-      range(1, endOfThisMonth + 1),
-      range(1, 42 - endOfThisMonth - firstDay + 1)
+      arrayRange(endOfLastMonth - firstDay + 1, endOfLastMonth + 1),
+      arrayRange(1, endOfThisMonth + 1),
+      arrayRange(1, 42 - endOfThisMonth - firstDay + 1)
     );
-    const {weeks = WEEKS, dayFormat = DAY_FORMAT, style, changePanel} = this.props;
 
     return (
       <div className="calendar-days" style={style}>
