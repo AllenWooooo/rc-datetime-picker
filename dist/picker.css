@@ -122,6 +122,21 @@
   background-color: #53c1ee;
   color: #fff;
 }
+.datetime-picker .calendar table tbody tr td.selected.start {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.datetime-picker .calendar table tbody tr td.selected.end {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.datetime-picker .calendar table tbody tr td.selected.start.end {
+  border-radius: 4px;
+}
+.datetime-picker .calendar table tbody tr td.between {
+  background-color: #f5fbfe;
+  border-radius: 0;
+}
 .datetime-picker .calendar .calendar-days table tbody tr td {
   width: 14.28571429%;
 }
@@ -214,6 +229,13 @@
 .datetime-picker .shortcuts-bar .btn:not(:first-child) {
   margin-left: 5px;
 }
+.datetime-range-picker {
+  border: 1px solid #dbdbdb;
+  background-color: #fff;
+  border-radius: 4px;
+  box-sizing: content-box;
+  z-index: 100;
+}
 .datetime-trigger {
   position: relative;
 }
@@ -221,11 +243,20 @@
   position: absolute;
   top: 100%;
 }
-.datetime-picker-popup {
+.datetime-range-trigger {
+  position: relative;
+}
+.datetime-range-trigger .datetime-range-picker {
+  position: absolute;
+  top: 100%;
+}
+.datetime-picker-popup,
+.datetime-range-picker-popup {
   margin-top: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
-.datetime-picker-popup:before {
+.datetime-picker-popup:before,
+.datetime-range-picker-popup:before {
   content: "";
   position: absolute;
   background: #fff;

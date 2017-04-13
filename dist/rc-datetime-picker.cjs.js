@@ -1,5 +1,5 @@
 /*
- * rc-datetime-picker v1.4.3
+ * rc-datetime-picker v1.5.0
  * https://github.com/AllenWooooo/rc-datetime-picker
  *
  * (c) 2017 Allen Wu
@@ -23,6 +23,9 @@ var ReactDOM__default = _interopDefault(ReactDOM);
 var WEEKS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 var DAY_FORMAT = 'MMMM, YYYY';
+var CONFIRM_BUTTON_TEXT = 'Confirm';
+var START_DATE_TEXT = 'Start Date:';
+var END_DATE_TEXT = 'End Date:';
 
 var range = function range(start, end) {
   var length = Math.max(end - start, 0);
@@ -192,7 +195,10 @@ var Day = function (_Component) {
     };
 
     _this.select = function (day, isSelected, isDisabled, isPrevMonth, isNextMonth) {
-      if (isSelected || isDisabled) return;
+      if (isDisabled) return;
+      var _this$props = _this.props,
+          range$$1 = _this$props.range,
+          onSelect = _this$props.onSelect;
 
       var _moment = _this.state.moment.clone();
 
@@ -202,10 +208,9 @@ var Day = function (_Component) {
       _moment.date(day);
 
       _this.setState({
-        moment: _moment,
-        selected: _moment
+        moment: range$$1 ? _this.state.moment : _moment
       });
-      _this.props.onSelect(_moment);
+      onSelect(_moment);
     };
 
     _this._renderWeek = function (week) {
@@ -217,38 +222,48 @@ var Day = function (_Component) {
     };
 
     _this._renderDay = function (week, day) {
+      var _this$props2 = _this.props,
+          maxDate = _this$props2.maxDate,
+          minDate = _this$props2.minDate,
+          range$$1 = _this$props2.range,
+          selected = _this$props2.selected;
+
       var now = moment();
       var _moment = _this.state.moment;
-      var _this$props = _this.props,
-          maxDate = _this$props.maxDate,
-          minDate = _this$props.minDate;
-      var selected = _this.state.selected;
-
       var isPrevMonth = week === 0 && day > 7;
       var isNextMonth = week >= 4 && day <= 14;
       var month = isNextMonth ? _moment.clone().add(1, 'month') : isPrevMonth ? _moment.clone().subtract(1, 'month') : _moment.clone();
-      var isSelected = selected ? month.isSame(selected.clone().date(day), 'day') : false;
-      var disabledMax = maxDate ? month.date(day).isAfter(maxDate, 'day') : false;
-      var disabledMin = minDate ? month.date(day).isBefore(minDate, 'day') : false;
+      var currentDay = month.clone().date(day);
+      var start = selected && range$$1 ? selected.start ? currentDay.isSame(selected.start, 'day') : false : false;
+      var end = selected && range$$1 ? selected.end ? currentDay.isSame(selected.end, 'day') : false : false;
+      var between = selected && range$$1 ? selected.start && selected.end ? currentDay.isBetween(selected.start, selected.end, 'day') : false : false;
+      var isSelected = selected ? range$$1 ? start || end : currentDay.isSame(selected, 'day') : false;
+      var disabledMax = maxDate ? currentDay.isAfter(maxDate, 'day') : false;
+      var disabledMin = minDate ? currentDay.isBefore(minDate, 'day') : false;
       var isDisabled = disabledMax || disabledMin;
       var className = classNames({
         prev: isPrevMonth,
         next: isNextMonth,
         selected: isSelected,
-        now: now.isSame(month.date(day), 'day'),
-        disabled: isDisabled
+        now: now.isSame(currentDay, 'day'),
+        disabled: isDisabled,
+        start: start,
+        end: end,
+        between: between
       });
 
       return React__default.createElement(
         'td',
-        { key: day, className: className, onClick: _this.select.bind(_this, day, isSelected, isDisabled, isPrevMonth, isNextMonth) },
+        {
+          key: day,
+          className: className,
+          onClick: _this.select.bind(_this, day, isSelected, isDisabled, isPrevMonth, isNextMonth) },
         day
       );
     };
 
     _this.state = {
-      moment: props.moment || moment(),
-      selected: props.moment
+      moment: props.moment
     };
     return _this;
   }
@@ -257,8 +272,7 @@ var Day = function (_Component) {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(props) {
       this.setState({
-        moment: props.moment || moment(),
-        selected: props.moment
+        moment: props.moment
       });
     }
   }, {
@@ -266,11 +280,6 @@ var Day = function (_Component) {
     value: function render() {
       var _this2 = this;
 
-      var _moment = this.state.moment;
-      var firstDay = _moment.clone().date(1).day();
-      var endOfThisMonth = _moment.clone().endOf('month').date();
-      var endOfLastMonth = _moment.clone().subtract(1, 'month').endOf('month').date();
-      var days = [].concat(range(endOfLastMonth - firstDay + 1, endOfLastMonth + 1), range(1, endOfThisMonth + 1), range(1, 42 - endOfThisMonth - firstDay + 1));
       var _props = this.props,
           _props$weeks = _props.weeks,
           weeks = _props$weeks === undefined ? WEEKS : _props$weeks,
@@ -279,6 +288,11 @@ var Day = function (_Component) {
           style = _props.style,
           changePanel = _props.changePanel;
 
+      var _moment = this.state.moment;
+      var firstDay = _moment.clone().date(1).day();
+      var endOfThisMonth = _moment.clone().endOf('month').date();
+      var endOfLastMonth = _moment.clone().subtract(1, 'month').endOf('month').date();
+      var days = [].concat(range(endOfLastMonth - firstDay + 1, endOfLastMonth + 1), range(1, endOfThisMonth + 1), range(1, 42 - endOfThisMonth - firstDay + 1));
 
       return React__default.createElement(
         'div',
@@ -352,15 +366,16 @@ var Month = function (_Component) {
 
     _this.select = function (month, isDisabled) {
       if (isDisabled) return;
+      var onSelect = _this.props.onSelect;
+
       var _moment = _this.state.moment.clone();
 
       _moment.month(month);
 
       _this.setState({
-        moment: _moment,
-        selected: _moment
+        moment: _moment
       });
-      _this.props.onSelect(_moment);
+      onSelect(_moment);
     };
 
     _this._renderMonth = function (row, month, idx) {
@@ -369,29 +384,34 @@ var Month = function (_Component) {
       var _this$props = _this.props,
           maxDate = _this$props.maxDate,
           minDate = _this$props.minDate,
-          months = _this$props.months;
-      var selected = _this.state.selected;
+          months = _this$props.months,
+          selected = _this$props.selected,
+          range$$1 = _this$props.range,
+          rangeAt = _this$props.rangeAt;
 
-      var isSelected = selected ? _moment.isSame(selected.clone().month(month), 'month') : false;
-      var disabledMax = maxDate ? _moment.clone().month(month).isAfter(maxDate, 'month') : false;
-      var disabledMin = minDate ? _moment.clone().month(month).isBefore(minDate, 'month') : false;
+      var currentMonth = _moment.clone().month(month);
+      var isSelected = selected ? range$$1 ? selected[rangeAt] ? currentMonth.isSame(selected[rangeAt], 'month') : false : currentMonth.isSame(selected, 'day') : false;
+      var disabledMax = maxDate ? currentMonth.isAfter(maxDate, 'month') : false;
+      var disabledMin = minDate ? currentMonth.isBefore(minDate, 'month') : false;
       var isDisabled = disabledMax || disabledMin;
       var className = classNames({
         selected: isSelected,
-        now: now.isSame(_moment.clone().month(month), 'month'),
+        now: now.isSame(currentMonth, 'month'),
         disabled: isDisabled
       });
 
       return React__default.createElement(
         'td',
-        { key: month, className: className, onClick: _this.select.bind(_this, month, isDisabled) },
+        {
+          key: month,
+          className: className,
+          onClick: _this.select.bind(_this, month, isDisabled) },
         months ? months[idx + row * 3] : month
       );
     };
 
     _this.state = {
-      moment: props.moment || moment(),
-      selected: props.moment
+      moment: props.moment
     };
     return _this;
   }
@@ -400,8 +420,7 @@ var Month = function (_Component) {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(props) {
       this.setState({
-        moment: props.moment || moment(),
-        selected: props.moment
+        moment: props.moment
       });
     }
   }, {
@@ -494,10 +513,12 @@ var Year = function (_Component) {
       var firstYear = Math.floor(_moment.year() / 10) * 10;
       var _this$props = _this.props,
           maxDate = _this$props.maxDate,
-          minDate = _this$props.minDate;
-      var selected = _this.state.selected;
+          minDate = _this$props.minDate,
+          selected = _this$props.selected,
+          range$$1 = _this$props.range,
+          rangeAt = _this$props.rangeAt;
 
-      var isSelected = selected ? selected.year() === year : false;
+      var isSelected = selected ? range$$1 ? selected[rangeAt] ? selected[rangeAt].year() === year : false : selected.year() === year : false;
       var disabledMax = maxDate ? year > maxDate.year() : false;
       var disabledMin = minDate ? year < minDate.year() : false;
       var isDisabled = disabledMax || disabledMin;
@@ -517,8 +538,7 @@ var Year = function (_Component) {
     };
 
     _this.state = {
-      moment: props.moment || moment(),
-      selected: props.moment
+      moment: props.moment
     };
     return _this;
   }
@@ -527,8 +547,7 @@ var Year = function (_Component) {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(props) {
       this.setState({
-        moment: props.moment || moment(),
-        selected: props.moment
+        moment: props.moment
       });
     }
   }, {
@@ -595,28 +614,10 @@ var Calendar = function (_Component) {
 
     var _this = possibleConstructorReturn(this, (Calendar.__proto__ || Object.getPrototypeOf(Calendar)).call(this, props));
 
-    _this.handleSelect = function (moment$$1) {
-      var panel = _this.state.panel;
-      var onChange = _this.props.onChange;
-
-      var nextPanel = panel === 'year' ? 'month' : 'day';
-      var currentPanel = panel;
-
-      _this.changePanel(nextPanel, moment$$1);
-      onChange && onChange(moment$$1, currentPanel);
-    };
-
-    _this.changePanel = function (panel) {
-      var moment$$1 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _this.state.moment;
-
-      _this.setState({
-        moment: moment$$1,
-        panel: panel
-      });
-    };
+    _initialiseProps.call(_this);
 
     _this.state = {
-      moment: props.moment,
+      moment: _this.getCurrentMoment(props),
       panel: 'day'
     };
     return _this;
@@ -626,7 +627,7 @@ var Calendar = function (_Component) {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(props) {
       this.setState({
-        moment: props.moment
+        moment: this.getCurrentMoment(props)
       });
 
       if (!props.isOpen) {
@@ -644,17 +645,22 @@ var Calendar = function (_Component) {
           dayFormat = _props.dayFormat,
           style = _props.style,
           maxDate = _props.maxDate,
-          minDate = _props.minDate;
+          minDate = _props.minDate,
+          range = _props.range,
+          rangeAt = _props.rangeAt;
 
       var props = {
         moment: this.state.moment,
+        selected: this.props.moment,
         onSelect: this.handleSelect,
         changePanel: this.changePanel,
         weeks: weeks,
         months: months,
         dayFormat: dayFormat,
         maxDate: maxDate,
-        minDate: minDate
+        minDate: minDate,
+        range: range,
+        rangeAt: rangeAt
       };
       var panel = this.state.panel;
 
@@ -681,6 +687,75 @@ var Calendar = function (_Component) {
   return Calendar;
 }(React.Component);
 
+var _initialiseProps = function _initialiseProps() {
+  var _this2 = this;
+
+  this.getCurrentMoment = function (props) {
+    var range = props.range,
+        rangeAt = props.rangeAt;
+
+    var now = _this2.state ? _this2.state.moment || moment() : moment();
+    var result = props.moment;
+
+    if (result) {
+      if (range) {
+        result = result[rangeAt] || now;
+      }
+    } else {
+      result = now;
+    }
+
+    return result;
+  };
+
+  this.handleSelect = function (selected) {
+    var panel = _this2.state.panel;
+    var _props2 = _this2.props,
+        onChange = _props2.onChange,
+        range = _props2.range,
+        rangeAt = _props2.rangeAt;
+
+    var nextPanel = panel === 'year' ? 'month' : 'day';
+    var _selected = _this2.props.moment;
+
+    if (range) {
+      var copyed = _selected ? Object.assign(_selected, {}) : {};
+
+      if (panel === 'day') {
+        if (!copyed.start && !copyed.end || copyed.start && copyed.end) {
+          copyed.start = selected;
+          copyed.end = undefined;
+        } else {
+          if (selected.isBefore(copyed.start)) {
+            copyed.end = copyed.start;
+            copyed.start = selected;
+          } else {
+            copyed.end = selected;
+          }
+        }
+      } else {
+        copyed[rangeAt] = selected;
+      }
+
+      _selected = copyed;
+    } else {
+      _selected = selected;
+    }
+
+    _this2.changePanel(nextPanel, selected);
+    onChange && onChange(_selected, panel);
+  };
+
+  this.changePanel = function (panel) {
+    var moment$$1 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _this2.state.moment;
+
+    _this2.setState({
+      moment: moment$$1,
+      panel: panel
+    });
+  };
+};
+
 var Time = function (_Component) {
   inherits(Time, _Component);
 
@@ -689,21 +764,10 @@ var Time = function (_Component) {
 
     var _this = possibleConstructorReturn(this, (Time.__proto__ || Object.getPrototypeOf(Time)).call(this, props));
 
-    _this.handleChange = function (type, value) {
-      var onChange = _this.props.onChange;
-
-      var _moment = _this.state.moment.clone();
-
-      _moment[type](value);
-
-      _this.setState({
-        moment: _moment
-      });
-      onChange && onChange(_moment);
-    };
+    _initialiseProps$1.call(_this);
 
     _this.state = {
-      moment: props.moment || moment().hours(0).minutes(0)
+      moment: _this.getCurrentMoment(props)
     };
     return _this;
   }
@@ -712,7 +776,7 @@ var Time = function (_Component) {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(props) {
       this.setState({
-        moment: props.moment || moment().hours(0).minutes(0)
+        moment: this.getCurrentMoment(props)
       });
     }
   }, {
@@ -769,6 +833,52 @@ var Time = function (_Component) {
   }]);
   return Time;
 }(React.Component);
+
+var _initialiseProps$1 = function _initialiseProps$1() {
+  var _this2 = this;
+
+  this.getCurrentMoment = function (props) {
+    var range = props.range,
+        rangeAt = props.rangeAt;
+
+    var result = props.moment;
+
+    if (result) {
+      if (range) {
+        result = result[rangeAt] || moment().hours(0).minutes(0);
+      }
+    } else {
+      result = moment().hours(0).minutes(0);
+    }
+
+    return result;
+  };
+
+  this.handleChange = function (type, value) {
+    var _props = _this2.props,
+        onChange = _props.onChange,
+        range = _props.range,
+        rangeAt = _props.rangeAt;
+
+    var _moment = _this2.state.moment.clone();
+    var selected = _this2.props.moment;
+
+    _moment[type](value);
+
+    if (range) {
+      var copyed = selected ? Object.assign(selected, {}) : {};
+
+      copyed[rangeAt] = _moment;
+    } else {
+      selected = _moment;
+    }
+
+    _this2.setState({
+      moment: _moment
+    });
+    onChange && onChange(selected);
+  };
+};
 
 var Shortcuts = function (_Component) {
   inherits(Shortcuts, _Component);
@@ -1291,6 +1401,154 @@ var Portal = function (_React$Component) {
   return Portal;
 }(React__default.Component);
 
+var Range = function (_Component) {
+  inherits(Range, _Component);
+
+  function Range(props) {
+    classCallCheck(this, Range);
+
+    var _this = possibleConstructorReturn(this, (Range.__proto__ || Object.getPrototypeOf(Range)).call(this, props));
+
+    _this.handleChange = function (moment$$1) {
+      _this.setState({
+        moment: moment$$1
+      });
+    };
+
+    _this.onConfirm = function () {
+      var moment$$1 = _this.state.moment;
+      var onChange = _this.props.onChange;
+
+
+      onChange && onChange(moment$$1);
+    };
+
+    _this.state = {
+      moment: props.moment
+    };
+    return _this;
+  }
+
+  createClass(Range, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(props) {
+      this.setState({
+        moment: props.moment
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var moment$$1 = this.state.moment;
+      var _props = this.props,
+          format = _props.format,
+          _props$showTimePicker = _props.showTimePicker,
+          showTimePicker = _props$showTimePicker === undefined ? false : _props$showTimePicker,
+          _props$isOpen = _props.isOpen,
+          isOpen = _props$isOpen === undefined ? true : _props$isOpen,
+          shortcuts = _props.shortcuts,
+          _props$confirmButtonT = _props.confirmButtonText,
+          confirmButtonText = _props$confirmButtonT === undefined ? CONFIRM_BUTTON_TEXT : _props$confirmButtonT,
+          _props$startDateText = _props.startDateText,
+          startDateText = _props$startDateText === undefined ? START_DATE_TEXT : _props$startDateText,
+          _props$endDateText = _props.endDateText,
+          endDateText = _props$endDateText === undefined ? END_DATE_TEXT : _props$endDateText;
+
+      var formatStyle = format || showTimePicker ? 'YYYY/MM/DD HH:mm' : 'YYYY/MM/DD';
+      var className = classNames('datetime-range-picker', this.props.className);
+      var props = blacklist(this.props, 'className', 'isOpen', 'format', 'moment', 'showTimePicker');
+
+      return React__default.createElement(
+        'div',
+        { className: className, style: { display: isOpen ? 'block' : 'none' } },
+        React__default.createElement(
+          'div',
+          { className: 'tools-bar' },
+          shortcuts ? React__default.createElement(Shortcuts, props) : undefined,
+          React__default.createElement(
+            'div',
+            { className: 'buttons' },
+            React__default.createElement(
+              'button',
+              { type: 'button', onClick: this.onConfirm },
+              confirmButtonText
+            )
+          )
+        ),
+        React__default.createElement(
+          'table',
+          { className: 'datetime-range-picker-panel' },
+          React__default.createElement(
+            'tbody',
+            null,
+            React__default.createElement(
+              'tr',
+              null,
+              React__default.createElement(
+                'td',
+                null,
+                React__default.createElement(
+                  'span',
+                  null,
+                  startDateText
+                ),
+                React__default.createElement(
+                  'span',
+                  { className: 'time-text' },
+                  moment$$1 && moment$$1.start ? moment$$1.start.format(formatStyle) : undefined
+                )
+              ),
+              React__default.createElement(
+                'td',
+                null,
+                React__default.createElement(
+                  'span',
+                  null,
+                  endDateText
+                ),
+                React__default.createElement(
+                  'span',
+                  { className: 'time-text' },
+                  moment$$1 && moment$$1.end ? moment$$1.end.format(formatStyle) : undefined
+                )
+              )
+            ),
+            React__default.createElement(
+              'tr',
+              null,
+              React__default.createElement(
+                'td',
+                null,
+                React__default.createElement(Picker, _extends({}, props, {
+                  className: 'range-start-picker',
+                  showTimePicker: showTimePicker,
+                  moment: moment$$1,
+                  range: true,
+                  rangeAt: 'start',
+                  onChange: this.handleChange
+                }))
+              ),
+              React__default.createElement(
+                'td',
+                null,
+                React__default.createElement(Picker, _extends({}, props, {
+                  className: 'range-end-picker',
+                  showTimePicker: showTimePicker,
+                  moment: moment$$1,
+                  range: true,
+                  rangeAt: 'end',
+                  onChange: this.handleChange
+                }))
+              )
+            )
+          )
+        )
+      );
+    }
+  }]);
+  return Range;
+}(React.Component);
+
 var Trigger = function (_Component) {
   inherits(Trigger, _Component);
 
@@ -1430,5 +1688,141 @@ var Trigger = function (_Component) {
   return Trigger;
 }(React.Component);
 
+var RangeTrigger = function (_Component) {
+  inherits(RangeTrigger, _Component);
+
+  function RangeTrigger() {
+    classCallCheck(this, RangeTrigger);
+
+    var _this = possibleConstructorReturn(this, (RangeTrigger.__proto__ || Object.getPrototypeOf(RangeTrigger)).call(this));
+
+    _this.handleDocumentClick = function (evt) {
+      if (!ReactDOM.findDOMNode(_this).contains(evt.target)) {
+        _this.togglePicker(false);
+      }
+    };
+
+    _this.handlePortalPosition = function () {
+      if (_this.state.isOpen) {
+        _this.setState({
+          pos: _this.getPosition()
+        });
+      }
+    };
+
+    _this.handleChange = function (moment$$1) {
+      var onChange = _this.props.onChange;
+
+
+      _this.setState({
+        isOpen: false
+      });
+      onChange && onChange(moment$$1);
+    };
+
+    _this.togglePicker = function (isOpen) {
+      var disabled = _this.props.disabled;
+
+
+      if (disabled) return;
+
+      _this.setState({
+        isOpen: isOpen,
+        pos: _this.getPosition()
+      });
+    };
+
+    _this.getPosition = function () {
+      var elem = _this.refs.trigger;
+      var elemBCR = elem.getBoundingClientRect();
+
+      return {
+        top: Math.round(elemBCR.top + elemBCR.height),
+        left: Math.round(elemBCR.left)
+      };
+    };
+
+    _this._renderPortal = function () {
+      var _this$state = _this.state,
+          pos = _this$state.pos,
+          isOpen = _this$state.isOpen;
+
+      var style = {
+        display: isOpen ? 'block' : 'none',
+        position: 'fixed',
+        top: pos.top + 'px',
+        left: pos.left + 'px'
+      };
+
+      return React__default.createElement(
+        Portal,
+        { style: style },
+        _this._renderPicker(true)
+      );
+    };
+
+    _this._renderPicker = function (isOpen) {
+      var props = blacklist(_this.props, 'className', 'appendToBody', 'children', 'onChange');
+
+      return React__default.createElement(Range, _extends({}, props, {
+        className: 'datetime-range-picker-popup',
+        isOpen: isOpen,
+        onChange: _this.handleChange }));
+    };
+
+    _this.state = {
+      isOpen: false,
+      pos: {}
+    };
+    return _this;
+  }
+
+  createClass(RangeTrigger, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      window.addEventListener('click', this.handleDocumentClick, false);
+
+      if (this.props.appendToBody) {
+        window.addEventListener('scroll', this.handlePortalPosition, false);
+        window.addEventListener('resize', this.handlePortalPosition, false);
+      }
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      window.removeEventListener('click', this.handleDocumentClick, false);
+
+      if (this.props.appendToBody) {
+        window.removeEventListener('scroll', this.handlePortalPosition, false);
+        window.removeEventListener('resize', this.handlePortalPosition, false);
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          children = _props.children,
+          appendToBody = _props.appendToBody,
+          className = _props.className;
+      var isOpen = this.state.isOpen;
+
+
+      return React__default.createElement(
+        'div',
+        { className: 'datetime-range-trigger ' + className },
+        React__default.createElement(
+          'div',
+          { onClick: this.togglePicker.bind(this, !isOpen), ref: 'trigger' },
+          children
+        ),
+        appendToBody ? this._renderPortal() : this._renderPicker(isOpen)
+      );
+    }
+  }]);
+  return RangeTrigger;
+}(React.Component);
+
 exports.DatetimePicker = Picker;
+exports.DatetimeRangePicker = Range;
 exports.DatetimePickerTrigger = Trigger;
+exports.DatetimeRangePickerTrigger = RangeTrigger;
