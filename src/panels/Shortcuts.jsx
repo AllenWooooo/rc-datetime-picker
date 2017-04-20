@@ -1,34 +1,34 @@
 import React, {Component} from 'react';
 import moment from 'moment';
 import classNames from 'classnames/bind';
-import {CUSTOME_BUTTON_TEXT} from '../constants';
+import {CUSTOM_BUTTON_TEXT} from '../constants';
 
 const isSameRange = (current, value) => {
   return current.start && current.end && current.start.isSame(value.start, 'day') && current.end.isSame(value.end, 'day')
 }
 
 class Shortcuts extends Component {
-  handleClick = (value, isCustome) => {
-    const {onChange, range, showCustomeButton} = this.props;
+  handleClick = (value, isCustom) => {
+    const {onChange, range, showCustomButton} = this.props;
 
     if (range) {
-      onChange && onChange(value, isCustome);
+      onChange && onChange(value, isCustom);
     } else {
       onChange && onChange(value, 'day');
     }
   }
 
   _renderShortcut = (key, value) => {
-    const {range, shortcuts, customeButtonText = CUSTOME_BUTTON_TEXT} = this.props;
+    const {range, shortcuts, customButtonText = CUSTOM_BUTTON_TEXT} = this.props;
     const current = this.props.moment;
     const selected = range 
-                      ? key !== 'custome' && isSameRange(current, value)
+                      ? key !== 'custom' && isSameRange(current, value)
                       : false;
-    const isCustomeSelected = range
-                       ? !Object.keys(shortcuts).some((_key) => isSameRange(current, shortcuts[_key])) && key === 'custome'
+    const isCustomSelected = range
+                       ? !Object.keys(shortcuts).some((_key) => isSameRange(current, shortcuts[_key])) && key === 'custom'
                        : false;
     const className = classNames('btn', {
-      selected: selected || isCustomeSelected
+      selected: selected || isCustomSelected
     });
 
     return (
@@ -36,18 +36,18 @@ class Shortcuts extends Component {
         className={className} 
         key={key} 
         type="button" 
-        onClick={this.handleClick.bind(this, value, key === 'custome')}>
-        {key === 'custome' ? customeButtonText : key}
+        onClick={this.handleClick.bind(this, value, key === 'custom')}>
+        {key === 'custom' ? customButtonText : key}
       </button>
     );
   }
 
   _renderShortcuts = () => {
-    const {shortcuts, showCustomeButton, customeRange} = this.props;
-    const renderShortcuts = showCustomeButton 
+    const {shortcuts, showCustomButton, customRange} = this.props;
+    const renderShortcuts = showCustomButton 
                              ? {
                                 ...shortcuts, 
-                                custome: customeRange || {
+                                custom: customRange || {
                                   start: moment().subtract(29, 'days'),
                                   end: moment().endOf('day')
                                 }} 

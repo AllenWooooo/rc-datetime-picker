@@ -4,4 +4,4 @@ export const DAY_FORMAT = 'MMMM, YYYY';
 export const CONFIRM_BUTTON_TEXT = 'Confirm';
 export const START_DATE_TEXT = 'Start Date:';
 export const END_DATE_TEXT = 'End Date:';
-export const CUSTOME_BUTTON_TEXT = 'Custome';
+export const CUSTOM_BUTTON_TEXT = 'Custom';
