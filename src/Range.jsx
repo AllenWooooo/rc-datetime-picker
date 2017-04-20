@@ -55,7 +55,7 @@ class Range extends Component {
       <div className={className} style={{display: isOpen ? 'block' : 'none'}}>
         <div className="tools-bar">
           {shortcuts
-            ? <Shortcuts {...props} shortcuts={shortcuts} />
+            ? <Shortcuts {...props} moment={moment || {}} range shortcuts={shortcuts} />
             : undefined
           }
           <div className="buttons">
