@@ -29,10 +29,10 @@ class Range extends Component {
     });
   }
 
-  handleShortcutChange = (moment, isCustome) => {
+  handleShortcutChange = (moment, isCustom) => {
     const {onChange} = this.props;
     
-    if (isCustome) {
+    if (isCustom) {
       this.setState({
         moment
       });
