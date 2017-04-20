@@ -1,5 +1,5 @@
 /*
- * rc-datetime-picker v1.5.2
+ * rc-datetime-picker v1.5.3
  * https://github.com/AllenWooooo/rc-datetime-picker
  *
  * (c) 2017 Allen Wu
@@ -26,6 +26,7 @@ var DAY_FORMAT = 'MMMM, YYYY';
 var CONFIRM_BUTTON_TEXT = 'Confirm';
 var START_DATE_TEXT = 'Start Date:';
 var END_DATE_TEXT = 'End Date:';
+var CUSTOME_BUTTON_TEXT = 'Custome';
 
 var range = function range(start, end) {
   var length = Math.max(end - start, 0);
@@ -983,6 +984,10 @@ var _initialiseProps$1 = function _initialiseProps$1() {
   };
 };
 
+var isSameRange = function isSameRange(current, value) {
+  return current.start && current.end && current.start.isSame(value.start, 'day') && current.end.isSame(value.end, 'day');
+};
+
 var Shortcuts = function (_Component) {
   inherits(Shortcuts, _Component);
 
@@ -993,8 +998,8 @@ var Shortcuts = function (_Component) {
 
     classCallCheck(this, Shortcuts);
 
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
+    for (var _len = arguments.length, args = Array(_len), _key2 = 0; _key2 < _len; _key2++) {
+      args[_key2] = arguments[_key2];
     }
 
     return _ret = (_temp = (_this = possibleConstructorReturn(this, (_ref = Shortcuts.__proto__ || Object.getPrototypeOf(Shortcuts)).call.apply(_ref, [this].concat(args))), _this), _this.handleClick = function (value) {
@@ -1003,16 +1008,38 @@ var Shortcuts = function (_Component) {
 
       onChange && onChange(value, 'day');
     }, _this._renderShortcut = function (key, value) {
+      var _this$props = _this.props,
+          moment$$1 = _this$props.moment,
+          range = _this$props.range,
+          shortcuts = _this$props.shortcuts,
+          _this$props$customeBu = _this$props.customeButtonText,
+          customeButtonText = _this$props$customeBu === undefined ? CUSTOME_BUTTON_TEXT : _this$props$customeBu;
+
+      var selected = range ? key !== 'custome' && isSameRange(moment$$1, value) : false;
+      var isCustomeSelected = range ? !Object.keys(shortcuts).some(function (_key) {
+        return isSameRange(moment$$1, shortcuts[_key]);
+      }) && key === 'custome' : false;
+      var className = classNames('btn', {
+        selected: selected || isCustomeSelected
+      });
+
       return React__default.createElement(
         'button',
-        { className: 'btn', key: key, type: 'button', onClick: _this.handleClick.bind(_this, value) },
-        key
+        {
+          className: className,
+          key: key,
+          type: 'button',
+          onClick: _this.handleClick.bind(_this, value) },
+        key === 'custome' ? customeButtonText : key
       );
     }, _this._renderShortcuts = function () {
-      var shortcuts = _this.props.shortcuts;
+      var _this$props2 = _this.props,
+          shortcuts = _this$props2.shortcuts,
+          showCustomeButton = _this$props2.showCustomeButton;
 
+      var renderShortcuts = showCustomeButton ? Object.assign(shortcuts, { 'custome': {} }) : shortcuts;
 
-      return Object.keys(shortcuts).map(function (key) {
+      return Object.keys(renderShortcuts).map(function (key) {
         return _this._renderShortcut(key, shortcuts[key]);
       });
     }, _temp), possibleConstructorReturn(_this, _ret);
@@ -1567,7 +1594,7 @@ var Range = function (_Component) {
         React__default.createElement(
           'div',
           { className: 'tools-bar' },
-          shortcuts ? React__default.createElement(Shortcuts, _extends({}, props, { shortcuts: shortcuts })) : undefined,
+          shortcuts ? React__default.createElement(Shortcuts, _extends({}, props, { moment: moment$$1 || {}, range: true, shortcuts: shortcuts })) : undefined,
           React__default.createElement(
             'div',
             { className: 'buttons' },
