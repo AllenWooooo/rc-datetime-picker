@@ -1,5 +1,5 @@
 /*
- * rc-datetime-picker v1.5.4
+ * rc-datetime-picker v1.5.5
  * https://github.com/AllenWooooo/rc-datetime-picker
  *
  * (c) 2017 Allen Wu
@@ -1002,22 +1002,29 @@ var Shortcuts = function (_Component) {
       args[_key2] = arguments[_key2];
     }
 
-    return _ret = (_temp = (_this = possibleConstructorReturn(this, (_ref = Shortcuts.__proto__ || Object.getPrototypeOf(Shortcuts)).call.apply(_ref, [this].concat(args))), _this), _this.handleClick = function (value) {
-      var onChange = _this.props.onChange;
-
-
-      onChange && onChange(value, 'day');
-    }, _this._renderShortcut = function (key, value) {
+    return _ret = (_temp = (_this = possibleConstructorReturn(this, (_ref = Shortcuts.__proto__ || Object.getPrototypeOf(Shortcuts)).call.apply(_ref, [this].concat(args))), _this), _this.handleClick = function (value, isCustome) {
       var _this$props = _this.props,
-          moment$$1 = _this$props.moment,
+          onChange = _this$props.onChange,
           range = _this$props.range,
-          shortcuts = _this$props.shortcuts,
-          _this$props$customeBu = _this$props.customeButtonText,
-          customeButtonText = _this$props$customeBu === undefined ? CUSTOME_BUTTON_TEXT : _this$props$customeBu;
+          showCustomeButton = _this$props.showCustomeButton;
 
-      var selected = range ? key !== 'custome' && isSameRange(moment$$1, value) : false;
+
+      if (range) {
+        onChange && onChange(value, isCustome);
+      } else {
+        onChange && onChange(value, 'day');
+      }
+    }, _this._renderShortcut = function (key, value) {
+      var _this$props2 = _this.props,
+          range = _this$props2.range,
+          shortcuts = _this$props2.shortcuts,
+          _this$props2$customeB = _this$props2.customeButtonText,
+          customeButtonText = _this$props2$customeB === undefined ? CUSTOME_BUTTON_TEXT : _this$props2$customeB;
+
+      var current = _this.props.moment;
+      var selected = range ? key !== 'custome' && isSameRange(current, value) : false;
       var isCustomeSelected = range ? !Object.keys(shortcuts).some(function (_key) {
-        return isSameRange(moment$$1, shortcuts[_key]);
+        return isSameRange(current, shortcuts[_key]);
       }) && key === 'custome' : false;
       var className = classNames('btn', {
         selected: selected || isCustomeSelected
@@ -1029,18 +1036,22 @@ var Shortcuts = function (_Component) {
           className: className,
           key: key,
           type: 'button',
-          onClick: _this.handleClick.bind(_this, value) },
+          onClick: _this.handleClick.bind(_this, value, key === 'custome') },
         key === 'custome' ? customeButtonText : key
       );
     }, _this._renderShortcuts = function () {
-      var _this$props2 = _this.props,
-          shortcuts = _this$props2.shortcuts,
-          showCustomeButton = _this$props2.showCustomeButton;
+      var _this$props3 = _this.props,
+          shortcuts = _this$props3.shortcuts,
+          showCustomeButton = _this$props3.showCustomeButton;
 
-      var renderShortcuts = showCustomeButton ? _extends({}, shortcuts, { 'custome': {} }) : shortcuts;
+      var renderShortcuts = showCustomeButton ? _extends({}, shortcuts, {
+        custome: {
+          start: moment().subtract(29, 'days'),
+          end: moment().endOf('day')
+        } }) : shortcuts;
 
       return Object.keys(renderShortcuts).map(function (key) {
-        return _this._renderShortcut(key, shortcuts[key]);
+        return _this._renderShortcut(key, renderShortcuts[key]);
       });
     }, _temp), possibleConstructorReturn(_this, _ret);
   }
@@ -1545,6 +1556,19 @@ var Range = function (_Component) {
       });
     };
 
+    _this.handleShortcutChange = function (moment$$1, isCustome) {
+      var onChange = _this.props.onChange;
+
+
+      if (isCustome) {
+        _this.setState({
+          moment: moment$$1
+        });
+      } else {
+        onChange && onChange(moment$$1);
+      }
+    };
+
     _this.onConfirm = function () {
       var moment$$1 = _this.state.moment;
       var onChange = _this.props.onChange;
@@ -1586,7 +1610,7 @@ var Range = function (_Component) {
 
       var formatStyle = format || (showTimePicker ? 'YYYY/MM/DD HH:mm' : 'YYYY/MM/DD');
       var className = classNames('datetime-range-picker', this.props.className);
-      var props = blacklist(this.props, 'className', 'isOpen', 'format', 'moment', 'showTimePicker', 'shortcuts');
+      var props = blacklist(this.props, 'className', 'isOpen', 'format', 'moment', 'showTimePicker', 'shortcuts', 'onChange');
 
       return React__default.createElement(
         'div',
@@ -1594,7 +1618,7 @@ var Range = function (_Component) {
         React__default.createElement(
           'div',
           { className: 'tools-bar' },
-          shortcuts ? React__default.createElement(Shortcuts, _extends({}, props, { moment: moment$$1 || {}, range: true, shortcuts: shortcuts })) : undefined,
+          shortcuts ? React__default.createElement(Shortcuts, _extends({}, props, { moment: moment$$1 || {}, range: true, shortcuts: shortcuts, onChange: this.handleShortcutChange })) : undefined,
           React__default.createElement(
             'div',
             { className: 'buttons' },
