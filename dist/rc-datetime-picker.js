@@ -1,5 +1,5 @@
 /*
- * rc-datetime-picker v1.5.3
+ * rc-datetime-picker v1.5.4
  * https://github.com/AllenWooooo/rc-datetime-picker
  *
  * (c) 2017 Allen Wu
@@ -1035,7 +1035,7 @@ var Shortcuts = function (_Component) {
           shortcuts = _this$props2.shortcuts,
           showCustomeButton = _this$props2.showCustomeButton;
 
-      var renderShortcuts = showCustomeButton ? Object.assign(shortcuts, { 'custome': {} }) : shortcuts;
+      var renderShortcuts = showCustomeButton ? _extends({}, shortcuts, { 'custome': {} }) : shortcuts;
 
       return Object.keys(renderShortcuts).map(function (key) {
         return _this._renderShortcut(key, shortcuts[key]);
