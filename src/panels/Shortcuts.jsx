@@ -38,7 +38,7 @@ class Shortcuts extends Component {
 
   _renderShortcuts = () => {
     const {shortcuts, showCustomeButton} = this.props;
-    const renderShortcuts = showCustomeButton ? Object.assign(shortcuts, {'custome': {}}) : shortcuts;
+    const renderShortcuts = showCustomeButton ? {...shortcuts, 'custome': {}} : shortcuts;
 
     return Object.keys(renderShortcuts).map((key) => {
       return this._renderShortcut(key, shortcuts[key]);
