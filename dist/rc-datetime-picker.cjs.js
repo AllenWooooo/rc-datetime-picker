@@ -1,5 +1,5 @@
 /*
- * rc-datetime-picker v1.5.5
+ * rc-datetime-picker v1.5.6
  * https://github.com/AllenWooooo/rc-datetime-picker
  *
  * (c) 2017 Allen Wu
@@ -26,7 +26,7 @@ var DAY_FORMAT = 'MMMM, YYYY';
 var CONFIRM_BUTTON_TEXT = 'Confirm';
 var START_DATE_TEXT = 'Start Date:';
 var END_DATE_TEXT = 'End Date:';
-var CUSTOME_BUTTON_TEXT = 'Custome';
+var CUSTOM_BUTTON_TEXT = 'Custom';
 
 var range = function range(start, end) {
   var length = Math.max(end - start, 0);
@@ -1002,15 +1002,15 @@ var Shortcuts = function (_Component) {
       args[_key2] = arguments[_key2];
     }
 
-    return _ret = (_temp = (_this = possibleConstructorReturn(this, (_ref = Shortcuts.__proto__ || Object.getPrototypeOf(Shortcuts)).call.apply(_ref, [this].concat(args))), _this), _this.handleClick = function (value, isCustome) {
+    return _ret = (_temp = (_this = possibleConstructorReturn(this, (_ref = Shortcuts.__proto__ || Object.getPrototypeOf(Shortcuts)).call.apply(_ref, [this].concat(args))), _this), _this.handleClick = function (value, isCustom) {
       var _this$props = _this.props,
           onChange = _this$props.onChange,
           range = _this$props.range,
-          showCustomeButton = _this$props.showCustomeButton;
+          showCustomButton = _this$props.showCustomButton;
 
 
       if (range) {
-        onChange && onChange(value, isCustome);
+        onChange && onChange(value, isCustom);
       } else {
         onChange && onChange(value, 'day');
       }
@@ -1018,16 +1018,16 @@ var Shortcuts = function (_Component) {
       var _this$props2 = _this.props,
           range = _this$props2.range,
           shortcuts = _this$props2.shortcuts,
-          _this$props2$customeB = _this$props2.customeButtonText,
-          customeButtonText = _this$props2$customeB === undefined ? CUSTOME_BUTTON_TEXT : _this$props2$customeB;
+          _this$props2$customBu = _this$props2.customButtonText,
+          customButtonText = _this$props2$customBu === undefined ? CUSTOM_BUTTON_TEXT : _this$props2$customBu;
 
       var current = _this.props.moment;
-      var selected = range ? key !== 'custome' && isSameRange(current, value) : false;
-      var isCustomeSelected = range ? !Object.keys(shortcuts).some(function (_key) {
+      var selected = range ? key !== 'custom' && isSameRange(current, value) : false;
+      var isCustomSelected = range ? !Object.keys(shortcuts).some(function (_key) {
         return isSameRange(current, shortcuts[_key]);
-      }) && key === 'custome' : false;
+      }) && key === 'custom' : false;
       var className = classNames('btn', {
-        selected: selected || isCustomeSelected
+        selected: selected || isCustomSelected
       });
 
       return React__default.createElement(
@@ -1036,16 +1036,17 @@ var Shortcuts = function (_Component) {
           className: className,
           key: key,
           type: 'button',
-          onClick: _this.handleClick.bind(_this, value, key === 'custome') },
-        key === 'custome' ? customeButtonText : key
+          onClick: _this.handleClick.bind(_this, value, key === 'custom') },
+        key === 'custom' ? customButtonText : key
       );
     }, _this._renderShortcuts = function () {
       var _this$props3 = _this.props,
           shortcuts = _this$props3.shortcuts,
-          showCustomeButton = _this$props3.showCustomeButton;
+          showCustomButton = _this$props3.showCustomButton,
+          customRange = _this$props3.customRange;
 
-      var renderShortcuts = showCustomeButton ? _extends({}, shortcuts, {
-        custome: {
+      var renderShortcuts = showCustomButton ? _extends({}, shortcuts, {
+        custom: customRange || {
           start: moment().subtract(29, 'days'),
           end: moment().endOf('day')
         } }) : shortcuts;
@@ -1556,11 +1557,11 @@ var Range = function (_Component) {
       });
     };
 
-    _this.handleShortcutChange = function (moment$$1, isCustome) {
+    _this.handleShortcutChange = function (moment$$1, isCustom) {
       var onChange = _this.props.onChange;
 
 
-      if (isCustome) {
+      if (isCustom) {
         _this.setState({
           moment: moment$$1
         });
