@@ -29,6 +29,18 @@ class Range extends Component {
     });
   }
 
+  handleShortcutChange = (moment, isCustome) => {
+    const {onChange} = this.props;
+    
+    if (isCustome) {
+      this.setState({
+        moment
+      });
+    } else {
+      onChange && onChange(moment);  
+    }
+  }
+
   onConfirm = () => {
     const {moment} = this.state;
     const {onChange} = this.props;
@@ -49,13 +61,13 @@ class Range extends Component {
     } = this.props;
     const formatStyle = format || (showTimePicker ? 'YYYY/MM/DD HH:mm' : 'YYYY/MM/DD');
     const className = classNames('datetime-range-picker', this.props.className);
-    const props = blacklist(this.props, 'className', 'isOpen', 'format', 'moment', 'showTimePicker', 'shortcuts');
+    const props = blacklist(this.props, 'className', 'isOpen', 'format', 'moment', 'showTimePicker', 'shortcuts', 'onChange');
 
     return (
       <div className={className} style={{display: isOpen ? 'block' : 'none'}}>
         <div className="tools-bar">
           {shortcuts
-            ? <Shortcuts {...props} moment={moment || {}} range shortcuts={shortcuts} />
+            ? <Shortcuts {...props} moment={moment || {}} range shortcuts={shortcuts} onChange={this.handleShortcutChange} />
             : undefined
           }
           <div className="buttons">
