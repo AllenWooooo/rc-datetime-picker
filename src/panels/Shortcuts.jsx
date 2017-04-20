@@ -43,11 +43,11 @@ class Shortcuts extends Component {
   }
 
   _renderShortcuts = () => {
-    const {shortcuts, showCustomeButton} = this.props;
+    const {shortcuts, showCustomeButton, customeRange} = this.props;
     const renderShortcuts = showCustomeButton 
                              ? {
                                 ...shortcuts, 
-                                custome: {
+                                custome: customeRange || {
                                   start: moment().subtract(29, 'days'),
                                   end: moment().endOf('day')
                                 }} 
