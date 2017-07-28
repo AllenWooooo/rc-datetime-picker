@@ -106,6 +106,24 @@ See the [demo] page.
       <td>Min Date limit.</td>
     </tr>
     <tr>
+      <td>minStep</td>
+      <td>Integer</td>
+      <td>1</td>
+      <td>React slider minutes step.</td>
+    </tr>
+    <tr>
+      <td>hourStep</td>
+      <td>Integer</td>
+      <td>1</td>
+      <td>React slider hours step.</td>
+    </tr>
+    <tr>
+      <td>showMin</td>
+      <td>Boolean</td>
+      <td>true</td>
+      <td>Whether to show the minutes slider</td>
+    </tr>
+    <tr>
       <td>weeks</td>
       <td>Array</td>
       <td>['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']</td>
@@ -191,6 +209,24 @@ See the [demo] page.
       <td>moment</td>
       <td></td>
       <td>Min Date limit.</td>
+    </tr>
+    <tr>
+      <td>minStep</td>
+      <td>Integer</td>
+      <td>1</td>
+      <td>React slider minutes step.</td>
+    </tr>
+    <tr>
+      <td>hourStep</td>
+      <td>Integer</td>
+      <td>1</td>
+      <td>React slider hours step.</td>
+    </tr>
+    <tr>
+      <td>showMin</td>
+      <td>Boolean</td>
+      <td>true</td>
+      <td>Whether to show the minutes slider</td>
     </tr>
     <tr>
       <td>weeks</td>
@@ -296,6 +332,24 @@ See the [demo] page.
       <td>moment</td>
       <td></td>
       <td>Min Date limit.</td>
+    </tr>
+    <tr>
+      <td>minStep</td>
+      <td>Integer</td>
+      <td>1</td>
+      <td>React slider minutes step.</td>
+    </tr>
+    <tr>
+      <td>hourStep</td>
+      <td>Integer</td>
+      <td>1</td>
+      <td>React slider hours step.</td>
+    </tr>
+    <tr>
+      <td>showMin</td>
+      <td>Boolean</td>
+      <td>true</td>
+      <td>Whether to show the minutes slider</td>
     </tr>
     <tr>
       <td>weeks</td>
@@ -433,6 +487,24 @@ See the [demo] page.
       <td>Min Date limit.</td>
     </tr>
     <tr>
+      <td>minStep</td>
+      <td>Integer</td>
+      <td>1</td>
+      <td>React slider minutes step.</td>
+    </tr>
+    <tr>
+      <td>hourStep</td>
+      <td>Integer</td>
+      <td>1</td>
+      <td>React slider hours step.</td>
+    </tr>
+    <tr>
+      <td>showMin</td>
+      <td>Boolean</td>
+      <td>true</td>
+      <td>Whether to show the minutes slider</td>
+    </tr>
+    <tr>
       <td>weeks</td>
       <td>Array</td>
       <td>['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']</td>
@@ -481,6 +553,12 @@ See the [demo] page.
       <td>Text for confirm button.</td>
     </tr>
     <tr>
+      <td>showDateText</td>
+      <td>Boolean</td>
+      <td>true</td>
+      <td>Whether to show the start and end dates as text.</td>
+    </tr>
+    <tr>
       <td>startDateText</td>
       <td>String</td>
       <td>Start Date:</td>
@@ -509,6 +587,12 @@ See the [demo] page.
       <td>Boolean</td>
       <td>false</td>
       <td>Disabled triggering.</td>
+    </tr>
+    <tr>
+      <td>validate</td>
+      <td>Function(datetime: {start: moment, end: moment})</td>
+      <td></td>
+      <td>A function that validates the current range before confirmation. It should return true if range is valid and a string describing the error otherwise.</td>
     </tr>
   </tbody>
 </table>

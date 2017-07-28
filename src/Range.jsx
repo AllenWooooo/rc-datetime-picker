@@ -13,7 +13,8 @@ class Range extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      moment: props.moment
+      moment: props.moment,
+      error: false
     };
   }
 
@@ -31,33 +32,40 @@ class Range extends Component {
 
   handleShortcutChange = (moment, isCustom) => {
     const {onChange} = this.props;
-    
+
     if (isCustom) {
       this.setState({
         moment
       });
     } else {
-      onChange && onChange(moment);  
+      onChange && onChange(moment);
     }
   }
 
   onConfirm = () => {
     const {moment} = this.state;
-    const {onChange} = this.props;
-    
-    onChange && onChange(moment);
+    const {onChange, validate} = this.props;
+
+    let valid = validate != undefined ? validate(moment) : true
+    if (valid == true) {
+      this.setState({error: false})
+      onChange && onChange(moment);
+    } else {
+      this.setState({error: valid})
+    }
   }
-  
+
   render() {
-    const {moment} = this.state;
+    const {moment, error} = this.state;
     const {
-      format, 
-      showTimePicker = false, 
+      format,
+      showTimePicker = false,
       isOpen = true,
       shortcuts,
       confirmButtonText = CONFIRM_BUTTON_TEXT,
       startDateText = START_DATE_TEXT,
-      endDateText = END_DATE_TEXT
+      endDateText = END_DATE_TEXT,
+      showDateText = false
     } = this.props;
     const formatStyle = format || (showTimePicker ? 'YYYY/MM/DD HH:mm' : 'YYYY/MM/DD');
     const className = classNames('datetime-range-picker', this.props.className);
@@ -70,6 +78,11 @@ class Range extends Component {
             ? <Shortcuts {...props} moment={moment || {}} range shortcuts={shortcuts} onChange={this.handleShortcutChange} />
             : undefined
           }
+          {error &&
+            <div className="error">
+              {error}
+            </div>
+          }
           <div className="buttons">
             <button type="button" className="btn" onClick={this.onConfirm}>{confirmButtonText}</button>
           </div>
@@ -78,16 +91,18 @@ class Range extends Component {
         <div className="datetime-range-picker-panel">
           <table>
             <tbody>
-              <tr>
-                <td className="datetime-text">
-                  <span className="text-label">{startDateText}</span>
-                  <span className="text-value">{moment && moment.start ? moment.start.format(formatStyle) : undefined}</span>
-                </td>
-                <td className="datetime-text">
-                  <span className="text-label">{endDateText}</span>
-                  <span className="text-value">{moment && moment.end ? moment.end.format(formatStyle) : undefined}</span>
-                </td>
-              </tr>
+              {showDateText && (
+                <tr>
+                  <td className="datetime-text">
+                    <span className="text-label">{startDateText}</span>
+                    <span className="text-value">{moment && moment.start ? moment.start.format(formatStyle) : undefined}</span>
+                  </td>
+                  <td className="datetime-text">
+                    <span className="text-label">{endDateText}</span>
+                    <span className="text-value">{moment && moment.end ? moment.end.format(formatStyle) : undefined}</span>
+                  </td>
+                </tr>
+              )}
               <tr>
                 <td>
                   <DatetimePicker

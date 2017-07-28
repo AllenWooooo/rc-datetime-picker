@@ -55,7 +55,12 @@ class Time extends Component {
 
   render() {
     const _moment = this.state.moment;
-    const {style} = this.props;
+    const {
+      hourStep = 1,
+      minStep = 1,
+      showMin = true,
+      style
+    } = this.props;
 
     return (
       <div style={style}>
@@ -67,9 +72,9 @@ class Time extends Component {
           </div>
           <div className="sliders">
             <span className="slider-text">Hours:</span>
-            <ReactSlider min={0} max={23} value={_moment.hour()} onChange={this.handleChange.bind(this, 'hours')} withBars />
-            <span className="slider-text">Minutes:</span>
-            <ReactSlider min={0} max={59} value={_moment.minute()} onChange={this.handleChange.bind(this, 'minutes')} withBars />
+            <ReactSlider min={0} max={23} step={hourStep} value={_moment.hour()} onChange={this.handleChange.bind(this, 'hours')} withBars />
+            {showMin && <span className="slider-text">Minutes:</span>}
+            {showMin && <ReactSlider min={0} max={59} step={minStep}  value={_moment.minute()} onChange={this.handleChange.bind(this, 'minutes')} withBars />}
           </div>
         </div>
       </div>
