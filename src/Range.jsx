@@ -13,7 +13,8 @@ class Range extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      moment: props.moment
+      moment: props.moment,
+      error: false
     };
   }
 
@@ -43,13 +44,19 @@ class Range extends Component {
 
   onConfirm = () => {
     const {moment} = this.state;
-    const {onChange} = this.props;
+    const {onChange, validate} = this.props;
 
-    onChange && onChange(moment);
+    let valid = validate != undefined ? validate(moment) : true
+    if (valid == true) {
+      this.setState({error: false})
+      onChange && onChange(moment);
+    } else {
+      this.setState({error: valid})
+    }
   }
 
   render() {
-    const {moment} = this.state;
+    const {moment, error} = this.state;
     const {
       format,
       showTimePicker = false,
@@ -70,6 +77,11 @@ class Range extends Component {
           {shortcuts
             ? <Shortcuts {...props} moment={moment || {}} range shortcuts={shortcuts} onChange={this.handleShortcutChange} />
             : undefined
+          }
+          {error &&
+            <div className="error">
+              {error}
+            </div>
           }
           <div className="buttons">
             <button type="button" className="btn" onClick={this.onConfirm}>{confirmButtonText}</button>
