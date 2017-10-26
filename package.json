@@ -31,7 +31,7 @@
   "dependencies": {
     "blacklist": "^1.1.4",
     "classnames": "^2.2.5",
-    "react-slider": "^0.7.0"
+    "react-slider": "^0.9.0"
   },
   "devDependencies": {
     "moment": "^2.17.1",
