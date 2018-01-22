@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
-import {findDOMNode} from 'react-dom';
 import classNames from 'classnames/bind';
 import blacklist from 'blacklist';
 
 import DatetimePicker from './Picker.jsx';
-import Portal from './Portal.jsx';
 import Shortcuts from './panels/Shortcuts.jsx';
 import {CONFIRM_BUTTON_TEXT, START_DATE_TEXT, END_DATE_TEXT} from './constants.js';
 

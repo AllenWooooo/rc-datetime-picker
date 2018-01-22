@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import {Component} from 'react';
 import CSSPropertyOperations from './CSSPropertyOperations/index.js';
 import ReactDOM from 'react-dom';
 
 
-class Portal extends React.Component {
+class Portal extends Component {
   componentDidMount() {
     this.renderPortal(this.props);
   }

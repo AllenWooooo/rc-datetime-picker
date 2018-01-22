@@ -47,10 +47,10 @@ class Year extends Component {
     const {maxDate, minDate, selected, range, rangeAt, dateLimit} = this.props;
     const currentYear = _moment.clone().year(year);
     const isSelected = selected 
-                       ? range 
-                         ? selected[rangeAt] ? selected[rangeAt].year() === year : false
-                         : selected.year() === year
-                       : false;
+      ? range 
+        ? selected[rangeAt] ? selected[rangeAt].year() === year : false
+        : selected.year() === year
+      : false;
     const disabledMax = maxDate ? year > maxDate.year() : false;
     const disabledMin = minDate ? year < minDate.year() : false;
     let disabled = false;

@@ -1,8 +1,8 @@
 import path from 'path';
-import minimist from 'minimist';
+import {argv} from 'yargs';
 
 
-const env = minimist(process.argv.slice(2)).ENV;
+const env = argv.env;
 const config = {
   devtool: 'eval',
   entry: {
@@ -13,28 +13,35 @@ const config = {
     filename: 'app.js'
   },
   module: {
-    preloaders: [
+    rules: [
       {
         test: /\.jsx$/,
         exclude: /node_modules/,
-        loader: 'eslint'
-      }
-    ],
-    loaders: [
+        enforce: 'pre',
+        use: [
+          'eslint-loader'
+        ]
+      },
       {
         test: /\.(jsx|js)$/,
         exclude: /node_modules/,
-        loader: 'babel'
+        use: [
+          'babel-loader'
+        ]
       },
       {
         test: /\.(less|css)$/,
         exclude: /node_modules/,
-        loader: 'style!css!less'
+        use: [
+          'style-loader',
+          'css-loader',
+          'less-loader'
+        ]
       }
     ]
   },
   resolve: {
-    extensions: ['', '.js', '.jsx', '.json']
+    extensions: ['.js', '.jsx', '.json']
   }
 };
 

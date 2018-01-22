@@ -57,23 +57,27 @@ class Day extends Component {
     const isPrevMonth = week === 0 && day > 7;
     const isNextMonth = week >= 4 && day <= 14;
     const month = isNextMonth 
-                  ? _moment.clone().add(1, 'month') 
-                  : isPrevMonth 
-                    ? _moment.clone().subtract(1, 'month')
-                    : _moment.clone();
+      ? _moment.clone().add(1, 'month') 
+      : isPrevMonth 
+        ? _moment.clone().subtract(1, 'month')
+        : _moment.clone();
     const currentDay = month.clone().date(day);
     const start = selected && range 
-                  ? (selected.start ? currentDay.isSame(selected.start, 'day') : false) 
-                  : false; 
+      ? (selected.start ? currentDay.isSame(selected.start, 'day') : false) 
+      : false; 
     const end = selected && range
-                ? (selected.end ? currentDay.isSame(selected.end, 'day') : false) 
-                : false; 
-    const between = selected && range ? (selected.start && selected.end ? currentDay.isBetween(selected.start, selected.end, 'day') : false) : false;
+      ? (selected.end ? currentDay.isSame(selected.end, 'day') : false) 
+      : false; 
+    const between = selected && range 
+      ? (selected.start && selected.end 
+        ? currentDay.isBetween(selected.start, selected.end, 'day') 
+        : false) 
+      : false;
     const isSelected = selected 
-                       ? range 
-                         ? (start || end)
-                         : currentDay.isSame(selected, 'day')
-                       : false;
+      ? range 
+        ? (start || end)
+        : currentDay.isSame(selected, 'day')
+      : false;
     const disabledMax = maxDate ? currentDay.isAfter(maxDate, 'day') : false;
     const disabledMin = minDate ? currentDay.isBefore(minDate, 'day') : false;
     let disabled = false;
