@@ -42,10 +42,12 @@ function buildCJS() {
       babel(babelOptions)
     ]
   }).then(function (bundle) {
-    return write('dist/rc-datetime-picker.cjs.js', bundle.generate({
+    bundle.generate({
       format: 'cjs',
       banner: banner
-    }).code);
+    }).then(({ code }) => {
+      return write('dist/rc-datetime-picker.cjs.js', code);
+    });
   });
 }
 
@@ -57,11 +59,13 @@ function buildUmdDev() {
       babel(babelOptions)
     ]
   }).then(function (bundle) {
-    return write('dist/rc-datetime-picker.js', bundle.generate({
+    bundle.generate({
       format: 'umd',
       banner: banner,
-      moduleName: 'rc-datetime-picker'
-    }).code);
+      name: 'rc-datetime-picker'
+    }).then(({ code }) => {
+      return write('dist/rc-datetime-picker.js', code);
+    });
   });
 }
 
@@ -73,15 +77,16 @@ function buildUmdProd() {
       babel(babelOptions)
     ]
   }).then(function (bundle) {
-    var code = bundle.generate({
+    bundle.generate({
       format: 'umd',
-      moduleName: 'rc-datetime-picker'
-    }).code;
-    var minified = banner + '\n' + uglify.minify(code, {
-      fromString: true,
-      compress: true
-    }).code;
-    return write('dist/rc-datetime-picker.min.js', minified);
+      name: 'rc-datetime-picker'
+    }).then(({ code }) => {
+      var minified = banner + '\n' + uglify.minify(code, {
+        fromString: true,
+        compress: true
+      }).code;
+      return write('dist/rc-datetime-picker.min.js', minified);
+    });
   });
 }
 
