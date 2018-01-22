@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {findDOMNode} from 'react-dom';
-import classNames from 'classnames/bind';
 import blacklist from 'blacklist';
 
 import DatetimeRangePicker from './Range.jsx';

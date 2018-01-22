@@ -7,7 +7,7 @@ import {chunk} from '../utils';
 
 
 class Month extends Component {
-   constructor(props) {
+  constructor(props) {
     super(props);
     this.state = {
       moment: props.moment
@@ -47,10 +47,10 @@ class Month extends Component {
     const {maxDate, minDate, months, selected, range, rangeAt, dateLimit} = this.props;
     const currentMonth = _moment.clone().month(month);
     const isSelected = selected 
-                       ? range 
-                         ? selected[rangeAt] ? currentMonth.isSame(selected[rangeAt], 'month') : false
-                         : currentMonth.isSame(selected, 'day')
-                       : false;
+      ? range 
+        ? selected[rangeAt] ? currentMonth.isSame(selected[rangeAt], 'month') : false
+        : currentMonth.isSame(selected, 'day')
+      : false;
     const disabledMax = maxDate ? currentMonth.isAfter(maxDate, 'month') : false;
     const disabledMin = minDate ? currentMonth.isBefore(minDate, 'month') : false;
     let disabled = false;

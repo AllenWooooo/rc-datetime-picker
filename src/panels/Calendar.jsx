@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import classNames from 'classnames/bind';
 import moment from 'moment';
 
 import Day from './Day.jsx';
