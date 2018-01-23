@@ -123,6 +123,12 @@ See the [demo] page.
       <td>'MMMM, YYYY'</td>
       <td>Formatting current date of the day panel.</td>
     </tr>
+    <tr>
+      <td>minPanel</td>
+      <td>String</td>
+      <td>'day'</td>
+      <td>Min panel for select.</td>
+    </tr>
   </tbody>
 </table>
 
@@ -227,6 +233,12 @@ See the [demo] page.
       <td>Boolean</td>
       <td>false</td>
       <td>Disabled triggering.</td>
+    </tr>
+    <tr>
+      <td>minPanel</td>
+      <td>String</td>
+      <td>'day'</td>
+      <td>Min panel for select.</td>
     </tr>
   </tbody>
 </table>
@@ -362,6 +374,12 @@ See the [demo] page.
       <td>Object: {name: value}</td>
       <td></td>
       <td>Date range limt.</td>
+    </tr>
+    <tr>
+      <td>minPanel</td>
+      <td>String</td>
+      <td>'day'</td>
+      <td>Min panel for select.</td>
     </tr>
   </tbody>
 </table>
@@ -509,6 +527,12 @@ See the [demo] page.
       <td>Boolean</td>
       <td>false</td>
       <td>Disabled triggering.</td>
+    </tr>
+    <tr>
+      <td>minPanel</td>
+      <td>String</td>
+      <td>'day'</td>
+      <td>Min panel for select.</td>
     </tr>
   </tbody>
 </table>

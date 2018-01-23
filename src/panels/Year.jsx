@@ -46,6 +46,17 @@ class Year extends Component {
     const firstYear = Math.floor(_moment.year() / 10) * 10;
     const {maxDate, minDate, selected, range, rangeAt, dateLimit} = this.props;
     const currentYear = _moment.clone().year(year);
+    const start = selected && range 
+      ? (selected.start ? currentYear.isSame(selected.start, 'year') : false) 
+      : false; 
+    const end = selected && range
+      ? (selected.end ? currentYear.isSame(selected.end, 'year') : false) 
+      : false; 
+    const between = selected && range 
+      ? (selected.start && selected.end 
+        ? currentYear.isBetween(selected.start, selected.end, 'year') 
+        : false) 
+      : false;
     const isSelected = selected 
       ? range 
         ? selected[rangeAt] ? selected[rangeAt].year() === year : false
@@ -91,7 +102,10 @@ class Year extends Component {
       now: now.year() === year,
       prev: firstYear - 1 === year,
       next: firstYear + 10 === year,
-      disabled: isDisabled
+      disabled: isDisabled,
+      start,
+      end,
+      between
     });
 
     return (

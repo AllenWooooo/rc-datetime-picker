@@ -75,7 +75,7 @@ class Day extends Component {
       : false;
     const isSelected = selected 
       ? range 
-        ? (start || end)
+        ? (rangeAt === 'start' && start || rangeAt === 'end' && end)
         : currentDay.isSame(selected, 'day')
       : false;
     const disabledMax = maxDate ? currentDay.isAfter(maxDate, 'day') : false;
