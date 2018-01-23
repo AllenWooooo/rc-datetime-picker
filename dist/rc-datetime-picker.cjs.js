@@ -1,5 +1,5 @@
 /*
- * rc-datetime-picker v1.6.0
+ * rc-datetime-picker v1.6.1
  * https://github.com/AllenWooooo/rc-datetime-picker
  *
  * (c) 2018 Allen Wu
@@ -193,7 +193,7 @@ var Day = function (_Component) {
       var start = selected && range$$1 ? selected.start ? currentDay.isSame(selected.start, 'day') : false : false;
       var end = selected && range$$1 ? selected.end ? currentDay.isSame(selected.end, 'day') : false : false;
       var between = selected && range$$1 ? selected.start && selected.end ? currentDay.isBetween(selected.start, selected.end, 'day') : false : false;
-      var isSelected = selected ? range$$1 ? start || end : currentDay.isSame(selected, 'day') : false;
+      var isSelected = selected ? range$$1 ? rangeAt === 'start' && start || rangeAt === 'end' && end : currentDay.isSame(selected, 'day') : false;
       var disabledMax = maxDate ? currentDay.isAfter(maxDate, 'day') : false;
       var disabledMin = minDate ? currentDay.isBefore(minDate, 'day') : false;
       var disabled = false;
@@ -380,6 +380,9 @@ var Month = function (_Component) {
           dateLimit = _this$props.dateLimit;
 
       var currentMonth = _moment.clone().month(month);
+      var start = selected && range$$1 ? selected.start ? currentMonth.isSame(selected.start, 'month') : false : false;
+      var end = selected && range$$1 ? selected.end ? currentMonth.isSame(selected.end, 'month') : false : false;
+      var between = selected && range$$1 ? selected.start && selected.end ? currentMonth.isBetween(selected.start, selected.end, 'month') : false : false;
       var isSelected = selected ? range$$1 ? selected[rangeAt] ? currentMonth.isSame(selected[rangeAt], 'month') : false : currentMonth.isSame(selected, 'day') : false;
       var disabledMax = maxDate ? currentMonth.isAfter(maxDate, 'month') : false;
       var disabledMin = minDate ? currentMonth.isBefore(minDate, 'month') : false;
@@ -420,7 +423,10 @@ var Month = function (_Component) {
       var className = classNames({
         selected: isSelected,
         now: now.isSame(currentMonth, 'month'),
-        disabled: isDisabled
+        disabled: isDisabled,
+        start: start,
+        end: end,
+        between: between
       });
 
       return React__default.createElement(
@@ -543,6 +549,9 @@ var Year = function (_Component) {
           dateLimit = _this$props.dateLimit;
 
       var currentYear = _moment.clone().year(year);
+      var start = selected && range$$1 ? selected.start ? currentYear.isSame(selected.start, 'year') : false : false;
+      var end = selected && range$$1 ? selected.end ? currentYear.isSame(selected.end, 'year') : false : false;
+      var between = selected && range$$1 ? selected.start && selected.end ? currentYear.isBetween(selected.start, selected.end, 'year') : false : false;
       var isSelected = selected ? range$$1 ? selected[rangeAt] ? selected[rangeAt].year() === year : false : selected.year() === year : false;
       var disabledMax = maxDate ? year > maxDate.year() : false;
       var disabledMin = minDate ? year < minDate.year() : false;
@@ -585,7 +594,10 @@ var Year = function (_Component) {
         now: now.year() === year,
         prev: firstYear - 1 === year,
         next: firstYear + 10 === year,
-        disabled: isDisabled
+        disabled: isDisabled,
+        start: start,
+        end: end,
+        between: between
       });
 
       return React__default.createElement(
@@ -664,6 +676,9 @@ var Year = function (_Component) {
   return Year;
 }(React.Component);
 
+// import moment from 'moment';
+var moment$1 = require('moment');
+
 var Calendar = function (_Component) {
   inherits(Calendar, _Component);
 
@@ -676,7 +691,7 @@ var Calendar = function (_Component) {
 
     _this.state = {
       moment: _this.getCurrentMoment(props),
-      panel: 'day'
+      panel: props.minPanel || 'day'
     };
     return _this;
   }
@@ -690,7 +705,7 @@ var Calendar = function (_Component) {
 
       if (!props.isOpen) {
         this.setState({
-          panel: 'day'
+          panel: props.minPanel || 'day'
         });
       }
     }
@@ -754,7 +769,7 @@ var _initialiseProps = function _initialiseProps() {
     var range = props.range,
         rangeAt = props.rangeAt;
 
-    var now = _this2.state ? _this2.state.moment || moment() : moment();
+    var now = _this2.state ? _this2.state.moment || moment$1() : moment$1();
     var result = props.moment;
 
     if (result) {
@@ -773,11 +788,12 @@ var _initialiseProps = function _initialiseProps() {
     var _props2 = _this2.props,
         onChange = _props2.onChange,
         range = _props2.range,
-        rangeAt = _props2.rangeAt;
+        rangeAt = _props2.rangeAt,
+        minPanel = _props2.minPanel;
 
-    var nextPanel = panel === 'year' ? 'month' : 'day';
+    var nextPanel = (panel === 'year' ? 'month' : 'day') === 'month' ? minPanel === 'year' ? 'year' : 'month' : minPanel === 'month' ? 'month' : 'day';
     var _selected = _this2.props.moment;
-    var shouldChange = panel === 'day';
+    var shouldChange = panel === minPanel;
 
     if (_selected && !shouldChange) {
       if (range) {
