@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import moment from 'moment';
+// import moment from 'moment';
+const moment = require('moment');
 
 import Day from './Day.jsx';
 import Month from './Month.jsx';
@@ -10,7 +11,7 @@ class Calendar extends Component {
     super(props);
     this.state = {
       moment: this.getCurrentMoment(props),
-      panel: 'day'
+      panel: props.minPanel || 'day'
     };
   }
 
@@ -21,7 +22,7 @@ class Calendar extends Component {
 
     if (!props.isOpen) {
       this.setState({
-        panel: 'day'
+        panel: props.minPanel || 'day'
       });
     }
   }
@@ -44,10 +45,12 @@ class Calendar extends Component {
 
   handleSelect = (selected) => {
     const {panel} = this.state;
-    const {onChange, range, rangeAt} = this.props;
-    const nextPanel = panel === 'year' ? 'month' : 'day';
+    const {onChange, range, rangeAt, minPanel} = this.props;
+    const nextPanel = (panel === 'year' ? 'month' : 'day') === 'month' 
+      ? minPanel === 'year' ? 'year' : 'month'
+      : minPanel === 'month' ? 'month' : 'day';
     let _selected = this.props.moment;
-    let shouldChange = panel === 'day';
+    let shouldChange = panel === minPanel;
 
     if (_selected && !shouldChange) {
       if (range) {

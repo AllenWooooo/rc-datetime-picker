@@ -46,6 +46,17 @@ class Month extends Component {
     const _moment = this.state.moment;
     const {maxDate, minDate, months, selected, range, rangeAt, dateLimit} = this.props;
     const currentMonth = _moment.clone().month(month);
+    const start = selected && range 
+      ? (selected.start ? currentMonth.isSame(selected.start, 'month') : false) 
+      : false; 
+    const end = selected && range
+      ? (selected.end ? currentMonth.isSame(selected.end, 'month') : false) 
+      : false; 
+    const between = selected && range 
+      ? (selected.start && selected.end 
+        ? currentMonth.isBetween(selected.start, selected.end, 'month') 
+        : false) 
+      : false;
     const isSelected = selected 
       ? range 
         ? selected[rangeAt] ? currentMonth.isSame(selected[rangeAt], 'month') : false
@@ -89,7 +100,10 @@ class Month extends Component {
     const className = classNames({
       selected: isSelected,
       now: now.isSame(currentMonth, 'month'),
-      disabled: isDisabled
+      disabled: isDisabled,
+      start,
+      end,
+      between
     });
 
     return (
