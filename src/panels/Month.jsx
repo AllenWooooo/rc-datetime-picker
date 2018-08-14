@@ -42,10 +42,11 @@ class Month extends Component {
   }
 
   _renderMonth = (row, month, idx) => {
+    const monthIndex = idx + row * 3;
     const now = moment();
     const _moment = this.state.moment;
     const {maxDate, minDate, months, selected, range, rangeAt, dateLimit} = this.props;
-    const currentMonth = _moment.clone().month(month);
+    const currentMonth = _moment.clone().month(monthIndex);
     const start = selected && range 
       ? (selected.start ? currentMonth.isSame(selected.start, 'month') : false) 
       : false; 
@@ -110,8 +111,8 @@ class Month extends Component {
       <td 
         key={month} 
         className={className} 
-        onClick={this.select.bind(this, month, isDisabled)}>
-        {months ? months[idx + row * 3] : month}
+        onClick={this.select.bind(this, monthIndex, isDisabled)}>
+        {months ? months[monthIndex] : month}
       </td>
     );
   }
