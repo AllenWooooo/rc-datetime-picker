@@ -366,6 +366,7 @@ var Month = function (_Component) {
     };
 
     _this._renderMonth = function (row, month, idx) {
+      var monthIndex = idx + row * 3;
       var now = moment();
       var _moment = _this.state.moment;
       var _this$props = _this.props,
@@ -377,7 +378,7 @@ var Month = function (_Component) {
           rangeAt = _this$props.rangeAt,
           dateLimit = _this$props.dateLimit;
 
-      var currentMonth = _moment.clone().month(month);
+      var currentMonth = _moment.clone().month(monthIndex);
       var start = selected && range$$1 ? selected.start ? currentMonth.isSame(selected.start, 'month') : false : false;
       var end = selected && range$$1 ? selected.end ? currentMonth.isSame(selected.end, 'month') : false : false;
       var between = selected && range$$1 ? selected.start && selected.end ? currentMonth.isBetween(selected.start, selected.end, 'month') : false : false;
@@ -432,8 +433,8 @@ var Month = function (_Component) {
         {
           key: month,
           className: className,
-          onClick: _this.select.bind(_this, month, isDisabled) },
-        months ? months[idx + row * 3] : month
+          onClick: _this.select.bind(_this, monthIndex, isDisabled) },
+        months ? months[monthIndex] : month
       );
     };
 
