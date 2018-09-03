@@ -791,7 +791,7 @@ var _initialiseProps = function _initialiseProps() {
 
     var nextPanel = (panel === 'year' ? 'month' : 'day') === 'month' ? minPanel === 'year' ? 'year' : 'month' : minPanel === 'month' ? 'month' : 'day';
     var _selected = _this2.props.moment;
-    var shouldChange = panel === minPanel;
+    var shouldChange = panel === minPanel || !_selected && selected;
 
     if (_selected && !shouldChange) {
       if (range) {
