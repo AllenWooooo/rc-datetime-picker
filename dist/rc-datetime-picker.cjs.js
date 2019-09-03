@@ -2,7 +2,7 @@
  * rc-datetime-picker v1.6.1
  * https://github.com/AllenWooooo/rc-datetime-picker
  *
- * (c) 2018 Allen Wu
+ * (c) 2019 Allen Wu
  * License: MIT
  */
 'use strict';
@@ -428,6 +428,8 @@ var Month = function (_Component) {
         end: end,
         between: between
       });
+      // eslint-disable-next-line no-console
+      console.log('month', month);
 
       return React__default.createElement(
         'td',
@@ -458,7 +460,7 @@ var Month = function (_Component) {
       var _this2 = this;
 
       var _moment = this.state.moment;
-      var months = MONTHS;
+      var months = this.props.months || MONTHS;
       var _props = this.props,
           changePanel = _props.changePanel,
           style = _props.style;
