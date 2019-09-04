@@ -118,7 +118,7 @@ class Month extends Component {
 
   render() {
     const _moment = this.state.moment;
-    const months = MONTHS;
+    const months = this.props.months || MONTHS;
     const {changePanel, style} = this.props;
 
     return (
